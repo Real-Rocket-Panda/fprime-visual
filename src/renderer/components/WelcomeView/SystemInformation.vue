@@ -33,11 +33,13 @@
   </v-card>
 </template>
 
-<script>
-  export default {
+<script lang='ts'>
+  import Vue from 'vue';
+
+  export default Vue.extend({
     data () {
       return {
-        electron: process.versions['atom-shell'],
+        electron: (process.versions as any)['atom-shell'],
         name: 'landing-page',
         node: process.versions.node,
         path: '/',
@@ -45,7 +47,7 @@
         vue: require('vue/package.json').version
       }
     }
-  }
+  });
 </script>
 
 <style scoped>

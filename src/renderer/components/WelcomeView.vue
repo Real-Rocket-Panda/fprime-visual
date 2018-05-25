@@ -43,18 +43,19 @@
   </v-layout>
 </template>
 
-<script>
-  import SystemInformation from './WelcomeView/SystemInformation'
+<script lang='ts'>
+  import Vue from 'vue';
+  import SystemInformation from './WelcomeView/SystemInformation.vue';
 
-  export default {
+  export default Vue.extend({
     name: 'welcome',
     components: { SystemInformation },
     methods: {
-      open (link) {
+      open (link : string) {
         this.$electron.shell.openExternal(link)
       }
     }
-  }
+  });
 </script>
 
 <style scoped>

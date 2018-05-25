@@ -85,8 +85,10 @@
   </div>
 </template>
 
-<script>
-  export default {
+<script lang='ts'>
+  import Vue from 'vue';
+
+  export default Vue.extend({
     name: 'fprime-visual',
     data: () => ({
       clipped: false,
@@ -101,7 +103,7 @@
       rightDrawer: false,
       title: 'Vuetify.js'
     })
-  }
+  });
 </script>
 
 <style>
