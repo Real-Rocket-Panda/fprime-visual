@@ -25,8 +25,11 @@ delete webpackConfig.externals
 delete webpackConfig.output.libraryTarget
 
 // apply vue option to apply isparta-loader on js
-webpackConfig.module.rules
-  .find(rule => rule.use.loader === 'vue-loader').use.options.loaders.js = 'babel-loader'
+for (let rule of webpackConfig.module.rules) {
+  if (rule.use && rule.use.rule === "vue-loader") {
+    rule.use.options.js = "babel-loader"
+  }
+}
 
 module.exports = config => {
   config.set({
@@ -48,7 +51,9 @@ module.exports = config => {
       }
     },
     frameworks: ['mocha', 'chai'],
-    files: ['./index.js'],
+    files: [
+      './index.js'
+    ],
     preprocessors: {
       './index.js': ['webpack', 'sourcemap']
     },
