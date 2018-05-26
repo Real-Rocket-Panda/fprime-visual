@@ -15,7 +15,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "test": "npm run unit && npm run e2e",
+    "test": "npm run fprime-test && npm run ui-test && npm run e2e",
     "ui-test": "karma start test/ui/karma.conf.js",
     "fprime-test": "karma start test/fprime/karma.conf.js",
     "postinstall": "",
