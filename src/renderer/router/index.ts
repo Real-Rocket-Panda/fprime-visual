@@ -1,23 +1,23 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from "vue";
+import Router from "vue-router";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'welcome-view',
-      component: require('@/components/WelcomeView').default
+      component: require("@/components/WelcomeView").default,
+      name: "welcome-view",
+      path: "/",
     },
     {
-      path: '/inspire',
-      name: 'inspire',
-      component: require('@/components/InspireView').default
+      component: require("@/components/InspireView").default,
+      name: "inspire",
+      path: "/inspire",
     },
     {
-      path: '*',
-      redirect: '/'
-    }
-  ]
+      path: "*",
+      redirect: "/",
+    },
+  ],
 });

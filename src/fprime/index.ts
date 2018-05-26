@@ -1,3 +1,3 @@
 export default {
-  hello: 'Greetings! Electron + Vue + Typescript'
-}
+  hello: "Greetings! Electron + Vue + Typescript",
+};
