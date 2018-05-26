@@ -16,7 +16,8 @@
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit && npm run e2e",
-    "unit": "karma start test/unit/karma.conf.js",
+    "ui-test": "karma start test/ui/karma.conf.js",
+    "fprime-test": "karma start test/fprime/karma.conf.js",
     "postinstall": ""
   },
   "build": {
@@ -93,6 +94,7 @@
     "karma-mocha": "^1.2.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "^0.0.31",
+    "karma-typescript": "^3.0.12",
     "karma-webpack": "^2.0.1",
     "mocha": "^3.0.2",
     "multispinner": "^0.2.1",

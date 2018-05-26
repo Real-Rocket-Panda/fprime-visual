@@ -1,6 +1,8 @@
 // tsconfig.json
 {
   "compilerOptions": {
+    "baseUrl": "./src/",
+    "outDir": "./build/",
     // this aligns with Vue's browser support
     "target": "es5",
     // this enables stricter inference for data properties on `this`
@@ -11,6 +13,13 @@
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "baseUrl": "./src/"
-  }
+    "sourceMap": true,
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

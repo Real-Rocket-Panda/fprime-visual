@@ -9,6 +9,6 @@ describe('WelcomeView.vue', () => {
       render: h => h(WelcomeView)
     }).$mount();
 
-    expect(vm.$el.querySelector('.title')!.textContent).to.contain('Welcome to the Electron-vue + Vuetify template.');
+    expect(vm.$el.querySelector('.title')!.textContent).to.contain('Greetings! Electron + Vue + Typescript');
   });
 });
