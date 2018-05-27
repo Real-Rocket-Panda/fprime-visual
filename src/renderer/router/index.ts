@@ -5,19 +5,14 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    {
-      component: require("@/components/WelcomeView").default,
-      name: "welcome-view",
-      path: "/",
-    },
-    {
-      component: require("@/components/InspireView").default,
-      name: "inspire",
-      path: "/inspire",
-    },
-    {
-      path: "*",
-      redirect: "/",
-    },
+    // {
+    //   component: require("@/components/ViewList").default,
+    //   name: "view-list",
+    //   path: "/viewList",
+    // },
+    // {
+    //   path: "*",
+    //   redirect: "/",
+    // },
   ],
 });
