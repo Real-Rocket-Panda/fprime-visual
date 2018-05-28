@@ -20,12 +20,12 @@
       </v-navigation-drawer>
       
       <!-- app main content -->
-      <v-content>
-        <view-tabs></view-tabs>
+      <v-content :style="'padding-bottom:'+footerHeight+'px'">
+        <router-view></router-view>
       </v-content>
 
       <!-- app footer -->
-      <v-footer app fixed height=25 style="min-height: 20px">
+      <v-footer app fixed :height="footerHeight" style="min-height: 20px">
         <span class="ml-2 caption">&copy; 2017 Rocket Panda</span>
       </v-footer>
     </v-app>
@@ -40,6 +40,12 @@ import ViewTabs from "./components/ViewTabs.vue";
 export default Vue.extend({
   name: "fprime-visual",
   components: {ViewList, ViewTabs},
+  data() {
+    return {
+      footerHeight: 24  // Vuetify cannot calculate the footer height and
+                        // content height correctly. Manually set here.
+    };
+  },
 });
 </script>
 

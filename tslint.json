@@ -14,7 +14,8 @@
     "no-console": [false],
     "no-var-requires": false,
     "prefer-for-of": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "object-literal-sort-keys": false
   },
   "jsRules": {
     "max-line-length": {

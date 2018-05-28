@@ -15,8 +15,10 @@ if (!process.env.IS_WEB) {
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
-new Vue({
+const app = new Vue({
   components: { App },
   router,
   template: "<App/>",
-}).$mount("#app");
+});
+app.$router.replace("/view");
+app.$mount("#app");

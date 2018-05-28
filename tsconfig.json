@@ -2,6 +2,9 @@
 {
   "compilerOptions": {
     "baseUrl": "./src/",
+    "paths": {
+      "@/*": ["renderer/*"]
+    },
     "outDir": "./build/",
     // this aligns with Vue's browser support
     "target": "es5",

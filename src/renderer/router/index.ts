@@ -1,18 +1,26 @@
 import Vue from "vue";
 import Router from "vue-router";
+import ViewTabs from "@/components/ViewTabs.vue";
+import ViewContent from "@/components/ViewContent.vue";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      component: ViewTabs,
+      path: "/view/:viewType/:viewName",
+      children: [
+        { path: "edit", component: ViewContent },
+      ],
+    },
     // {
-    //   component: require("@/components/ViewList").default,
-    //   name: "view-list",
-    //   path: "/viewList",
+    //   component: ViewTabs,
+    //   path: "/view/:viewType/:viewName/:action",
     // },
-    // {
-    //   path: "*",
-    //   redirect: "/",
-    // },
+    {
+      component: ViewTabs,
+      path: "/view",
+    },
   ],
 });

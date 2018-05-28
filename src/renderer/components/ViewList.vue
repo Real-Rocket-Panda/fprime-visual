@@ -8,30 +8,20 @@
 
 <script lang='ts'>
 import Vue from "vue";
+import { GetViewList, LoadViewByName } from "@/store";
+import { Route } from "vue-router/types/router";
 
 export default Vue.extend({
   name: "view-list",
-  data() {
-    return {
-      items: [
-        {
-          name: "Function Views",
-          children: [{ name: "Topology1" }]
-        },
-        {
-          name: "Component Views",
-          children: [{ name: "Component1" }, { name: "Component2" }]
-        },
-        {
-          name: "Instance Centric Views",
-          children: [
-            { name: "Instance1" },
-            { name: "Instance2" },
-            { name: "Instance3" }
-          ]
-        }
-      ]
-    };
+  computed: {
+    items: GetViewList
+  },
+  watch: {
+    '$route'(to: Route) {
+      if (to.params.viewName) {
+        LoadViewByName(to.params.viewName);
+      }
+    }
   }
 });
 </script>
@@ -41,4 +31,20 @@ export default Vue.extend({
 .NavigationLevel__parent:hover {
   color: #757575;
 }
+
+.TreeNavigation {
+  user-select: none;
+}
+
+.NavigationItem > a {
+  color: inherit;
+  text-decoration: inherit;
+  display: inline-block;
+}
+
+span.NavigationItem {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
 </style>
