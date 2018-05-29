@@ -8,19 +8,18 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
+      path: "/",
       component: ViewTabs,
-      path: "/view/:viewType/:viewName",
-      children: [
-        { path: "edit", component: ViewContent },
-      ],
     },
-    // {
-    //   component: ViewTabs,
-    //   path: "/view/:viewType/:viewName/:action",
-    // },
     {
+      path: "/view/:viewType/:viewName",
       component: ViewTabs,
-      path: "/view",
+      children: [
+        {
+          path: "edit",
+          component: ViewContent,
+        },
+      ],
     },
   ],
 });

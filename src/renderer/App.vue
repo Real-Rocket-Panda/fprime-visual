@@ -20,14 +20,13 @@
       </v-navigation-drawer>
       
       <!-- app main content -->
-      <v-content :style="'padding-bottom:'+footerHeight+'px'">
-        <router-view></router-view>
+      <v-content>
+        <router-view :height="25"></router-view>
+        <message-panel :offset="24"></message-panel>
       </v-content>
 
       <!-- app footer -->
-      <v-footer app fixed :height="footerHeight" style="min-height: 20px">
-        <span class="ml-2 caption">&copy; 2017 Rocket Panda</span>
-      </v-footer>
+      <message-footer :height="24"></message-footer>
     </v-app>
   </div>
 </template>
@@ -36,16 +35,12 @@
 import Vue from "vue";
 import ViewList from "./components/ViewList.vue";
 import ViewTabs from "./components/ViewTabs.vue";
+import MessageFooter from "./components/MessageFooter.vue";
+import MessagePanel from "./components/MessagePanel.vue";
 
 export default Vue.extend({
   name: "fprime-visual",
-  components: {ViewList, ViewTabs},
-  data() {
-    return {
-      footerHeight: 24  // Vuetify cannot calculate the footer height and
-                        // content height correctly. Manually set here.
-    };
-  },
+  components: { ViewList, ViewTabs, MessageFooter, MessagePanel },
 });
 </script>
 

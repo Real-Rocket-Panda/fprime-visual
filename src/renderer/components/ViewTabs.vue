@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <v-tabs :height="25">
+  <div style="height:100%">
+    <v-tabs :height="height">
       <v-tab
         v-for="i in items"
         :key="i.id"
         ripple
         router
         :to="getViewRoute(i)"
+        class="view-tab-item"
       >
-          <span>{{ i.name }}</span>
+          <span style="text-transform: none;">{{ i.name }}</span>
           <v-btn
             icon
             style="width:16px;height:16px"
@@ -25,13 +26,15 @@
 <script lang="ts">
 import Vue from "vue";
 import { Event } from "electron";
-import { IViewItem, opened, CloseViewByName, GetViewRoute } from "@/store";
+import View from "@/store/view";
+import { IViewItem } from "@/store/view";
 
 export default Vue.extend({
+  props: ["height"],
   name: "view-tabs",
   methods: {
     getViewRoute(item: IViewItem): string {
-      return GetViewRoute(item);
+      return View.GetViewRoute(item);
     },
     /**
      * User clicks the close button to close a tab. The cases:
@@ -41,7 +44,7 @@ export default Vue.extend({
     closeTab(event: Event) {
       let viewName = (event.target as Element)
         .firstElementChild!.getAttribute("data-id")!;
-      let idx = CloseViewByName(viewName);
+      let idx = View.CloseViewByName(viewName);
       if (this.items.length === 0) {
         this.$router.replace("/view");
       } else if (viewName === this.$route.params.viewName) {
@@ -51,11 +54,15 @@ export default Vue.extend({
     },
   },
   data() {
-    return { items: opened };
+    return { items: View.state.opened };
   }
 });
 </script>
 
 <style>
+.view-tab-item > .tabs__item {
+  padding-left: 10px;
+  padding-right: 0px;
+}
 </style>
 

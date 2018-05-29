@@ -6,12 +6,12 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { GetViewByName } from "@/store";
+import View from "@/store/view";
 
 export default Vue.extend({
   computed: {
     item(): string {
-      return GetViewByName(this.$route.params.viewName).diagram;
+      return View.GetViewByName(this.$route.params.viewName).diagram;
     }
   }
 })
