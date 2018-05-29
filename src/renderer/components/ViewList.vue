@@ -8,18 +8,20 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import { GetViewList, LoadViewByName } from "@/store";
+import View from "@/store/view";
 import { Route } from "vue-router/types/router";
 
 export default Vue.extend({
   name: "view-list",
   computed: {
-    items: GetViewList
+    items() {
+      return View.GetViewList();
+    },
   },
   watch: {
     '$route'(to: Route) {
       if (to.params.viewName) {
-        LoadViewByName(to.params.viewName);
+        View.LoadViewByName(to.params.viewName);
       }
     }
   }

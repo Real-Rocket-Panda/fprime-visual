@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <cytoscape style="height:500px;" :config="config" :preConfig="preConfig"></cytoscape>
+  <div style="height:100%;">
+    <cytoscape style="height:100%;" :config="config" :preConfig="preConfig"></cytoscape>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { GetViewByName } from "@/store";
 import coseBilkent from "cytoscape-cose-bilkent";
 import fprimes from "fprime";
+import View from "@/store/view";
 
 export default Vue.extend({
   methods: {
@@ -18,7 +18,7 @@ export default Vue.extend({
   },
   computed: {
     item(): string {
-      return GetViewByName(this.$route.params.viewName).diagram;
+      return View.GetViewByName(this.$route.params.viewName).diagram;
     }
   },
   data () {

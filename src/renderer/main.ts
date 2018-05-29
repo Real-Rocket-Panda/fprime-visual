@@ -24,5 +24,5 @@ const app = new Vue({
   router,
   template: "<App/>",
 });
-app.$router.replace("/view");
+app.$router.replace("/");
 app.$mount("#app");
