@@ -54,6 +54,7 @@ export default Vue.extend({
   width: 100%;
   position: fixed;
   box-shadow: 0px -0.5px 1px #BDBDBD;
+  background-color: white;
 }
 
 .message-panel-active {
