@@ -6,8 +6,12 @@ import "vuetify/dist/vuetify.css";
 import App from "./App.vue";
 import router from "./router";
 
+import "vue-cytoscape/dist/vue-cytoscape.css";
+import VueCytoscape from "vue-cytoscape";
+
 Vue.use(Vuetify);
 Vue.use(VueTreeNavigation);
+Vue.use(VueCytoscape);
 
 if (!process.env.IS_WEB) {
   Vue.use(require("vue-electron"));

@@ -6,8 +6,8 @@ import ViewContent from "@/components/ViewContent.vue";
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+   routes: [
+   {
       component: ViewTabs,
       path: "/view/:viewType/:viewName",
       children: [
@@ -22,5 +22,5 @@ export default new Router({
       component: ViewTabs,
       path: "/view",
     },
-  ],
+   ],
 });
