@@ -6,6 +6,7 @@ import ViewContent from "@/components/ViewContent.vue";
 Vue.use(Router);
 
 export default new Router({
+
   routes: [
     {
       path: "/",
@@ -21,5 +22,5 @@ export default new Router({
         },
       ],
     },
-  ],
+   ],
 });
