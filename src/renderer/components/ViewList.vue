@@ -24,6 +24,19 @@ export default Vue.extend({
         View.LoadViewByName(to.params.viewName);
       }
     }
+  },
+  mounted() {
+    const pars = document.getElementsByClassName("NavigationLevel__parent");
+    for (let i = 0; i < pars.length; i++) {
+      const par = pars[i];
+      const item = par.lastElementChild!;
+      item.addEventListener("click", function(e: Event) {
+        const toggle = item.previousElementSibling!;
+        if (!toggle.classList.contains("NavigationToggle--closed")) {
+          item.previousElementSibling!.dispatchEvent(new Event("click"));
+        }
+      });
+    }
   }
 });
 </script>
