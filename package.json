@@ -56,6 +56,7 @@
     }
   },
   "dependencies": {
+    "cytoscape-automove": "^1.9.0",
     "cytoscape-cose-bilkent": "^4.0.0",
     "vue": "^2.5.16",
     "vue-cytoscape": "^0.1.2",
