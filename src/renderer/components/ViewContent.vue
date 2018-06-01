@@ -10,6 +10,8 @@ import { GetViewByName } from "@/store";
 import coseBilkent from "cytoscape-cose-bilkent";
 import automove from "cytoscape-automove";
 import fprimes from "fprime";
+import jquery from "jquery";
+import edgeBendEditing from "cytoscape-edge-bend-editing";
 
 function generateBox(comp: any, port:any): any{
   let offset = 12;
@@ -42,6 +44,7 @@ export default Vue.extend({
     preConfig(cy: any) {
       cy.use(coseBilkent); 
       cy.use(automove);
+      edgeBendEditing( cy, jquery ); // register extension
     },
     afterCreated(cy: any) {
       cy.automove({
@@ -77,6 +80,27 @@ export default Vue.extend({
       cy.$("#c1").on("mouseup", function(){
         rules_ = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
       });
+
+      // edge-bend-editing
+      let options: any = {
+            // this function specifies the positions of bend points
+            bendPositionsFunction: function(ele: any) {
+              return ele.data('bendPointPositions');
+            },
+            // whether to initilize bend points on creation of this extension automatically
+            initBendPointsAutomatically: true,
+            // whether the bend editing operations are undoable (requires cytoscape-undo-redo.js)
+            undoable: false,
+            // the size of bend shape is obtained by multipling width of edge with this parameter
+            bendShapeSizeFactor: 6,
+            // whether to start the plugin in the enabled state
+            enabled: true,
+            // title of add bend point menu item (User may need to adjust width of menu items according to length of this option)
+            //addBendMenuItemTitle: "Add Bend Point",
+            // title of remove bend point menu item (User may need to adjust width of menu items according to length of this option)
+            //removeBendMenuItemTitle: "Remove Bend Point"
+          };
+      let instance: any = cy.edgeBendEditing( options );
     },
   },
   computed: {

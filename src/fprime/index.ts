@@ -12,6 +12,8 @@ export default {
       {
         selector: "edge",
         style: {
+          "segment-distances": [-70,50],
+          "segment-weights": [0.5,0.7],
           "curve-style": "segments",
           "line-color": "#9dbaea",
           "target-arrow-color": "#9dbaea",
@@ -66,15 +68,15 @@ export default {
           position: { x: 60, y: 120}},
 
         { data: { id: "c2"},
-          position: { x: 400, y: 100},
+          position: { x: 400, y: 240},
           classes: "Component"},
 
         { data: { id: "c2_p1"},
           classes: "Port",
-          position: { x: 340, y: 70}},
+          position: { x: 340, y: 210}},
       ],
       edges: [
-        { data: { source: "c1_p1", target: "c2_p1" } }
+        { data: { id: "e1", source: "c1_p1", target: "c2_p1" } }
       ],
     },
   },
