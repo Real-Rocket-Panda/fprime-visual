@@ -5,18 +5,18 @@ export default {
     boxSelectionEnabled: false,
 
     layout: {
-      name: "preset",
+      name: "breadthfirst"
     },
 
     style: [
       {
         selector: "edge",
         style: {
-          "segment-distances": [-70,50],
-          "segment-weights": [0.5,0.7],
-          "curve-style": "segments",
+          //"segment-distances": [-70,50],
+          //"segment-weights": [0.5,0.7],
+          //"curve-style": "segments",
           "line-color": "#9dbaea",
-          "target-arrow-color": "#9dbaea",
+          //"target-arrow-color": "#9dbaea",
           //"target-arrow-shape": "triangle",
           "width": 2,
         },
@@ -74,9 +74,23 @@ export default {
         { data: { id: "c2_p1"},
           classes: "Port",
           position: { x: 340, y: 210}},
+
+        { data: { id: "c3" },
+          classes: "Component",
+          //renderedPosition: { x: 0, y: 0},
+          position: { x: 0, y: 100} },
+        { data: { id: "c3_p1"},
+          classes: "Port",
+          position: { x: 60, y: 70}},
+
+        { data: { id: "c3_p2"},
+          classes: "Port",
+          position: { x: 60, y: 120}},
       ],
       edges: [
-        { data: { id: "e1", source: "c1_p1", target: "c2_p1" } }
+        { data: { id: "e1", source: "c1_p1", target: "c2_p1" } },
+        { data: { id: "e2", source: "c1_p2", target: "c3_p1" } },
+        { data: { id: "e3", source: "c3_p2", target: "c2_p1" } }
       ],
     },
   },

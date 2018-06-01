@@ -56,29 +56,44 @@ export default Vue.extend({
         nodesMatching: cy.$("#c2_p1"),
         reposition: "drag",
         dragWith: cy.$("#c2")
-      });   
+      });  
+      cy.automove({
+        nodesMatching: cy.$("#c3_p1 ,#c3_p2"),
+        reposition: "drag",
+        dragWith: cy.$("#c3")
+      });  
 
-
-      //Apply port-attach-to-component rules to C2
-      let rules = applyAttachRule(cy, cy.$("#c2"), cy.$("#c2_p1"));
-      cy.$("#c2").on("mousedown", function(){
-        rules.forEach(r => {
-          r.destroy();
-        });
-      });
-      cy.$("#c2").on("mouseup", function(){
-        rules = applyAttachRule(cy, cy.$("#c2"),cy.$("#c2_p1"));
-      });
-
-      //Apply port-attach-to-component rules to C2
-      let rules_ = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
+      //Apply port-attach-to-component rules to C1
+      let rules1 = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
       cy.$("#c1").on("mousedown", function(){
-        rules_.forEach(r => {
+        rules1.forEach(r => {
           r.destroy();
         });
       });
       cy.$("#c1").on("mouseup", function(){
-        rules_ = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
+        rules1 = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
+      });
+
+      //Apply port-attach-to-component rules to C2
+      let rules2 = applyAttachRule(cy, cy.$("#c2"), cy.$("#c2_p1"));
+      cy.$("#c2").on("mousedown", function(){
+        rules2.forEach(r => {
+          r.destroy();
+        });
+      });
+      cy.$("#c2").on("mouseup", function(){
+        rules2 = applyAttachRule(cy, cy.$("#c2"),cy.$("#c2_p1"));
+      });
+
+      //Apply port-attach-to-component rules to C3
+      let rules3 = applyAttachRule(cy, cy.$("#c3"), cy.$("#c3_p1"), cy.$("#c3_p2"));
+      cy.$("#c1").on("mousedown", function(){
+        rules3.forEach(r => {
+          r.destroy();
+        });
+      });
+      cy.$("#c1").on("mouseup", function(){
+        rules3 = applyAttachRule(cy, cy.$("#c3"), cy.$("#c3_p1"), cy.$("#c3_p2"));
       });
 
       // edge-bend-editing
