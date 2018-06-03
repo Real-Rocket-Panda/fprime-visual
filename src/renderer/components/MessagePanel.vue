@@ -59,5 +59,6 @@ export default Vue.extend({
 
 .message-panel-active {
   display: block;
+  z-index: 1000;
 }
 </style>
