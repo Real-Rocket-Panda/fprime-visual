@@ -56,6 +56,10 @@ let rendererConfig = {
         exclude: /node_modules/,
         options: {
           appendTsSuffixTo: [/\.vue$/],
+          compilerOptions: {
+            noUnusedLocals: process.env.NODE_ENV === 'production',
+            noUnusedParameters: process.env.NODE_ENV === 'production'
+          }
         }
       },
       {

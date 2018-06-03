@@ -1,23 +1,26 @@
 import Vue from "vue";
 import Router from "vue-router";
+import ViewTabs from "@/components/ViewTabs.vue";
+import ViewContent from "@/components/ViewContent.vue";
 
 Vue.use(Router);
 
 export default new Router({
+
   routes: [
     {
-      component: require("@/components/WelcomeView").default,
-      name: "welcome-view",
       path: "/",
+      component: ViewTabs,
     },
     {
-      component: require("@/components/InspireView").default,
-      name: "inspire",
-      path: "/inspire",
+      path: "/view/:viewType/:viewName",
+      component: ViewTabs,
+      children: [
+        {
+          path: "edit",
+          component: ViewContent,
+        },
+      ],
     },
-    {
-      path: "*",
-      redirect: "/",
-    },
-  ],
+   ],
 });

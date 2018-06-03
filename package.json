@@ -56,9 +56,15 @@
     }
   },
   "dependencies": {
-    "vue": "^2.4.2",
+    "cytoscape-automove": "^1.9.0",
+    "cytoscape-cose-bilkent": "^4.0.0",
+    "cytoscape-edge-bend-editing": "^1.5.4",
+    "jquery": "^3.0.0",
+    "vue": "^2.5.16",
+    "vue-cytoscape": "^0.1.2",
     "vue-electron": "^1.0.6",
-    "vue-router": "^2.5.3",
+    "vue-router": "^3.0.1",
+    "vue-tree-navigation": "^3.0.0",
     "vuetify": "1.0.0"
   },
   "devDependencies": {
