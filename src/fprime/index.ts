@@ -5,7 +5,7 @@ export default {
     boxSelectionEnabled: false,
 
     layout: {
-      name: "breadthfirst"
+      name: "preset",
     },
 
     style: [
@@ -53,10 +53,8 @@ export default {
 
     elements: {
       nodes: [
-   
         { data: { id: "c1" },
           classes: "Component",
-          //renderedPosition: { x: 0, y: 0},
           position: { x: 0, y: 100} },
 
         { data: { id: "c1_p1"},
@@ -73,19 +71,18 @@ export default {
 
         { data: { id: "c2_p1"},
           classes: "Port",
-          position: { x: 340, y: 210}},
+          position: { x: 340, y: 240}},
 
         { data: { id: "c3" },
           classes: "Component",
-          //renderedPosition: { x: 0, y: 0},
-          position: { x: 0, y: 100} },
+          position: { x: 0, y: 400} },
         { data: { id: "c3_p1"},
           classes: "Port",
-          position: { x: 60, y: 70}},
+          position: { x: 60, y: 370}},
 
         { data: { id: "c3_p2"},
           classes: "Port",
-          position: { x: 60, y: 120}},
+          position: { x: 60, y: 430}},
       ],
       edges: [
         { data: { id: "e1", source: "c1_p1", target: "c2_p1" } },

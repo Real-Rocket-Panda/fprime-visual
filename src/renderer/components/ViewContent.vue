@@ -12,32 +12,10 @@ import automove from "cytoscape-automove";
 import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
+import {Cy_Util} from "@/components/cyUtil";
+import {graph} from "@/components/mockGraph";
 
-function generateBox(comp: any, port:any): any{
-  let offset = 12;
-  
-  let x1: number = comp.boundingBox()['x1']-port.width()+offset;
-  let x2: number = comp.boundingBox()['x2']+port.width()-offset;
-  let y1: number = comp.boundingBox()['y1']-port.height()+offset;
-  let y2: number = comp.boundingBox()['y2']+port.height()-offset;
-  return {x1:x1, x2:x2, y1:y1, y2:y2};
-}
-
-function applyAttachRule(cy:any, comp:any, ...ports:any[]):Array<any>{
-   let rules: Array<any> = new Array();
-   ports.forEach(port => {
-      rules.push( 
-        cy.automove({
-        nodesMatching: port,
-        reposition: generateBox(comp, port),
-        when: 'matching'
-      })
-    ); 
-   });
-
-  return rules;
-}
-
+import $ from "jquery";
 
 export default Vue.extend({
   methods: {
@@ -47,75 +25,18 @@ export default Vue.extend({
       edgeBendEditing( cy, jquery ); // register extension
     },
     afterCreated(cy: any) {
-      cy.automove({
-        nodesMatching: cy.$("#c1_p1 ,#c1_p2"),
-        reposition: "drag",
-        dragWith: cy.$("#c1")
-      }); 
-      cy.automove({
-        nodesMatching: cy.$("#c2_p1"),
-        reposition: "drag",
-        dragWith: cy.$("#c2")
-      });  
-      cy.automove({
-        nodesMatching: cy.$("#c3_p1 ,#c3_p2"),
-        reposition: "drag",
-        dragWith: cy.$("#c3")
-      });  
+      let cy_util = new Cy_Util(cy);
 
-      //Apply port-attach-to-component rules to C1
-      let rules1 = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
-      cy.$("#c1").on("mousedown", function(){
-        rules1.forEach(r => {
-          r.destroy();
-        });
-      });
-      cy.$("#c1").on("mouseup", function(){
-        rules1 = applyAttachRule(cy, cy.$("#c1"), cy.$("#c1_p1"), cy.$("#c1_p2"));
-      });
 
-      //Apply port-attach-to-component rules to C2
-      let rules2 = applyAttachRule(cy, cy.$("#c2"), cy.$("#c2_p1"));
-      cy.$("#c2").on("mousedown", function(){
-        rules2.forEach(r => {
-          r.destroy();
-        });
-      });
-      cy.$("#c2").on("mouseup", function(){
-        rules2 = applyAttachRule(cy, cy.$("#c2"),cy.$("#c2_p1"));
-      });
+      for(const comp of Object.keys(graph)){
+        cy_util.portMoveWizComp(cy.$(comp), graph[comp].join(","));
+        cy_util.portStick2Comp(cy.$(comp), ...graph[comp].map((k) => cy.$(k)));
+      }
 
-      //Apply port-attach-to-component rules to C3
-      let rules3 = applyAttachRule(cy, cy.$("#c3"), cy.$("#c3_p1"), cy.$("#c3_p2"));
-      cy.$("#c1").on("mousedown", function(){
-        rules3.forEach(r => {
-          r.destroy();
-        });
-      });
-      cy.$("#c1").on("mouseup", function(){
-        rules3 = applyAttachRule(cy, cy.$("#c3"), cy.$("#c3_p1"), cy.$("#c3_p2"));
-      });
-
-      // edge-bend-editing
-      let options: any = {
-            // this function specifies the positions of bend points
-            bendPositionsFunction: function(ele: any) {
-              return ele.data('bendPointPositions');
-            },
-            // whether to initilize bend points on creation of this extension automatically
-            initBendPointsAutomatically: true,
-            // whether the bend editing operations are undoable (requires cytoscape-undo-redo.js)
-            undoable: false,
-            // the size of bend shape is obtained by multipling width of edge with this parameter
-            bendShapeSizeFactor: 6,
-            // whether to start the plugin in the enabled state
-            enabled: true,
-            // title of add bend point menu item (User may need to adjust width of menu items according to length of this option)
-            //addBendMenuItemTitle: "Add Bend Point",
-            // title of remove bend point menu item (User may need to adjust width of menu items according to length of this option)
-            //removeBendMenuItemTitle: "Remove Bend Point"
-          };
-      let instance: any = cy.edgeBendEditing( options );
+      //(window as any).$ = jquery;
+      (window as any).jQuery = $;
+      (window as any).$ = $;
+      let instance: any = cy.edgeBendEditing();
     },
   },
   computed: {
