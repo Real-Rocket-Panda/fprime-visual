@@ -15,19 +15,20 @@
         </v-btn>
       </v-toolbar>
       
-      <v-navigation-drawer app fixed permanent clipped width="225">
+      <v-navigation-drawer app fixed permanent clipped
+        width="225" id="view-list-nav"
+      >
         <view-list></view-list>
       </v-navigation-drawer>
       
       <!-- app main content -->
-      <v-content :style="'padding-bottom:'+footerHeight+'px'">
-        <router-view></router-view>
+      <v-content id="view-main-content">
+        <router-view :height="25"></router-view>
+        <message-panel :offset="24"></message-panel>
       </v-content>
 
       <!-- app footer -->
-      <v-footer app fixed :height="footerHeight" style="min-height: 20px">
-        <span class="ml-2 caption">&copy; 2017 Rocket Panda</span>
-      </v-footer>
+      <message-footer :height="24"></message-footer>
     </v-app>
   </div>
 </template>
@@ -36,20 +37,59 @@
 import Vue from "vue";
 import ViewList from "./components/ViewList.vue";
 import ViewTabs from "./components/ViewTabs.vue";
+import MessageFooter from "./components/MessageFooter.vue";
+import MessagePanel from "./components/MessagePanel.vue";
 
 export default Vue.extend({
   name: "fprime-visual",
-  components: {ViewList, ViewTabs},
-  data() {
-    return {
-      footerHeight: 24  // Vuetify cannot calculate the footer height and
-                        // content height correctly. Manually set here.
-    };
-  },
+  components: { ViewList, ViewTabs, MessageFooter, MessagePanel },
+  mounted() {
+    let resizing = false;
+    let counter = 0;
+    const drawer = document.getElementById("view-list-nav")!;
+    const border = drawer.lastElementChild!;
+    const content = document.getElementById("view-main-content")!;
+    border.addEventListener("mousedown", function(e: Event) {
+      e.preventDefault();
+      e.stopPropagation();
+      resizing = true;
+      counter = 0;
+    });
+    document.addEventListener("mousemove", function(e: MouseEvent) {
+      if (resizing) {
+        if (counter === 0) {
+          const width = e.x >= 200 ? e.x : 200;
+          drawer.style.width = width + "px";
+          content.style.paddingLeft = width + "px";
+          counter = 12;
+        } else {
+          counter--;
+        }
+      }
+    });
+    document.addEventListener("mouseup", function(e: MouseEvent) {
+      if (resizing) {
+        const width = e.x >= 200 ? e.x : 200;
+        drawer.style.width = width + "px";
+        content.style.paddingLeft = width + "px";
+
+        resizing = false;
+      }
+    });
+  }
 });
 </script>
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons");
 /* Global CSS */
+#view-list-nav {
+  min-width: 200px;
+}
+
+#view-list-nav > .navigation-drawer__border {
+  cursor: ew-resize;
+  width: 2px;
+  background-color: rgba(150,150,150,0.12);
+}
 </style>

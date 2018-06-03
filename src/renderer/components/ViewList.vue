@@ -8,19 +8,34 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import { GetViewList, LoadViewByName } from "@/store";
+import View from "@/store/view";
 import { Route } from "vue-router/types/router";
 
 export default Vue.extend({
   name: "view-list",
   computed: {
-    items: GetViewList
+    items() {
+      return View.GetViewList();
+    },
   },
   watch: {
     '$route'(to: Route) {
       if (to.params.viewName) {
-        LoadViewByName(to.params.viewName);
+        View.LoadViewByName(to.params.viewName);
       }
+    }
+  },
+  mounted() {
+    const pars = document.getElementsByClassName("NavigationLevel__parent");
+    for (let i = 0; i < pars.length; i++) {
+      const par = pars[i];
+      const item = par.lastElementChild!;
+      item.addEventListener("click", function(e: Event) {
+        const toggle = item.previousElementSibling!;
+        if (!toggle.classList.contains("NavigationToggle--closed")) {
+          item.previousElementSibling!.dispatchEvent(new Event("click"));
+        }
+      });
     }
   }
 });
