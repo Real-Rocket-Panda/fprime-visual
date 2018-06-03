@@ -30,7 +30,7 @@ export default Vue.extend({
     for (let i = 0; i < pars.length; i++) {
       const par = pars[i];
       const item = par.lastElementChild!;
-      item.addEventListener("click", function(e: Event) {
+      item.addEventListener("click", function() {
         const toggle = item.previousElementSibling!;
         if (!toggle.classList.contains("NavigationToggle--closed")) {
           item.previousElementSibling!.dispatchEvent(new Event("click"));

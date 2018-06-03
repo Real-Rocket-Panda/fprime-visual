@@ -35,7 +35,8 @@ export default Vue.extend({
       //(window as any).$ = jquery;
       (window as any).jQuery = $;
       (window as any).$ = $;
-      let instance: any = cy.edgeBendEditing();
+      // let instance: any = cy.edgeBendEditing();
+      cy.edgeBendEditing();
     },
   },
   data () {
