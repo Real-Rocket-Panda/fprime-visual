@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   data () {
     return {
-      config: fprimes.viewManager.render("Topology1"),
+      config: fprimes.viewManager.render(this.$route.params.viewName),
     };
   } 
 })
