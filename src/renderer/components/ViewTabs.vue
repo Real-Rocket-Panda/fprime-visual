@@ -27,13 +27,12 @@
 import Vue from "vue";
 import { Event } from "electron";
 import View from "@/store/view";
-import { IViewItem } from "@/store/view";
 
 export default Vue.extend({
   props: ["height"],
   name: "view-tabs",
   methods: {
-    getViewRoute(item: IViewItem): string {
+    getViewRoute(item: any): string {
       return View.GetViewRoute(item);
     },
     /**

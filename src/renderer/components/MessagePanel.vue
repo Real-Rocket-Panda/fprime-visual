@@ -26,16 +26,17 @@
 <script lang="ts">
 import Vue from "vue";
 import Panel from "@/store/panel";
+import { PanelName } from "@/store/panel";
 
 export default Vue.extend({
   props: ["offset"],
   name: "message-panel",
   methods: {
     outputPanel() {
-      this.state.curPanel = "Output";
+      this.state.curPanel = PanelName.Output;
     },
     analysisPanel() {
-      this.state.curPanel = "Analysis";
+      this.state.curPanel = PanelName.Analysis;
     },
   },
   computed: {
