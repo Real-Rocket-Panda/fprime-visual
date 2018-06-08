@@ -17,8 +17,8 @@ export class Cy_Util{
   public portStick2Comp(comp: any, ...ports: any[]): any[] {
     let rules: any[] = this.initPortStick2Comp(comp, ...ports);
 
-    comp.on("mousedown", function(){
-      rules.forEach( (r) => {
+    comp.on("mousedown", () => {
+      rules.forEach((r) => {
         r.destroy();
       });
     });

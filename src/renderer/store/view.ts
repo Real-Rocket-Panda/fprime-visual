@@ -1,36 +1,18 @@
-export interface IViewItem {
-  id: string;
-  name: string;
-  type: string;
-  diagram: string;
-}
+import fprime from "fprime";
+import {IViewList, IViewListItem} from "fprime/ViewManagement/ViewManager";
 
-const views: { [key: string]: IViewItem[] } = {
-  "Function Views": [
-    { id: "1", name: "Topology1", type: "Function Views",
-      diagram: "Topology1 Diagram" },
-  ],
-  "Component Views": [
-    { id: "2", name: "Component1", type: "Component Views",
-      diagram: "Component1 Diagram" },
-    { id: "3", name: "Component2", type: "Component Views",
-      diagram: "Component2 Diagram" },
-  ],
-  "Instance Centric Views": [
-    { id: "4", name: "Instance1", type: "Instance Centric Views",
-      diagram: "Instance1 Diagram" },
-    { id: "5", name: "Instance2", type: "Instance Centric Views",
-      diagram: "Instance2 Diagram" },
-    { id: "6", name: "Instance3", type: "Instance Centric Views",
-      diagram: "Instance3 Diagram" },
-  ],
-};
-
-const opened: IViewItem[] = [];
+const views: IViewList = fprime.viewManager.ViewList;
+const opened: IViewListItem[] = [];
 
 export default {
   state: {
+    /**
+     * The view list generated from the view manager.
+     */
     views,
+    /**
+     * The opened views. This is the data source for ViewTabs.vue component.
+     */
     opened,
   },
   /**
@@ -45,13 +27,13 @@ export default {
    * See https://vue-tree-navigation.misrob.cz/#/introduction.
    * When the user click on the navigation item, we should change the
    * route (path)
-   * of the program. Thus, we set route to "/view/:viewType/:viewName".
+   * of the program. Thus, we set route to "/view/:viewType/:viewName/edit".
    */
   GetViewList() {
     return Object.keys(views).map((key: string) => {
       return {
         name: key,
-        children: views[key].map((i: IViewItem) => {
+        children: views[key].map((i: IViewListItem) => {
           return {
             name: i.name,
             route: this.GetViewRoute(i),
@@ -61,21 +43,34 @@ export default {
     });
   },
 
+  /**
+   * Open a given view in the tab. If the view is not opened, find the
+   * corresponding IViewListItem and push it to the opened list.
+   * @param name The name of the view to load.
+   * @returns true if the opened list is updated; otherwise false.
+   */
   LoadViewByName(name: string): boolean {
     const updated = opened
-                      .filter((i: IViewItem) => i.name === name)
+                      .filter((i: IViewListItem) => i.name === name)
                       .length === 0;
     if (updated) {
       opened.push(
         Object.keys(views)
           .map((key: string) => views[key])
-          .reduce((x: IViewItem[], y: IViewItem[]) => x.concat(y))
-          .filter((i: IViewItem) => i.name === name)
+          .reduce((x: IViewListItem[], y: IViewListItem[]) => x.concat(y))
+          .filter((i: IViewListItem) => i.name === name)
           [0]);
     }
     return updated;
   },
 
+  /**
+   * Close the tab a given view. This will cause the IViewListItem be removed
+   * from the opened list.
+   * @param name The name of the view to close.
+   * @returns The index of the closed view in the opened list. -1 if the view
+   * is not in the opened list, meaning that it is not opened.
+   */
   CloseViewByName(name: string): number {
     let i;
     for (i = 0; i < opened.length; i++) {
@@ -89,15 +84,31 @@ export default {
     return i < opened.length + 1 ? i : -1;
   },
 
-  GetViewByName(name: string): IViewItem {
-    return Object.keys(views)
+  /**
+   * Get the IViewListItem of a view with given name.
+   * @param name The name of the view.
+   * @returns The corresponding view item; null if no view with such name.
+   */
+  GetViewByName(name: string): IViewListItem | null {
+    const namedViews = Object.keys(views)
       .map((key: string) => views[key])
-      .reduce((x: IViewItem[], y: IViewItem[]) => x.concat(y))
-      .filter((i: IViewItem) => i.name === name)
-      [0];
+      .reduce((x: IViewListItem[], y: IViewListItem[]) => x.concat(y))
+      .filter((i: IViewListItem) => i.name === name);
+    if (namedViews.length === 0) {
+      return null;
+    } else {
+      return namedViews[0];
+    }
   },
 
-  GetViewRoute(item: IViewItem): string {
+  /**
+   * Generate the url for a view item. When the user opens a view, we change
+   * the URL to notify the system to load the target view. The URL has the
+   * format: "/view/:viewType/:viewName/edit"
+   * @param item The view item.
+   * @returns The encoded URL.
+   */
+  GetViewRoute(item: IViewListItem): string {
     return encodeURI("/view/" + item.type + "/" + item.name + "/edit");
   },
 };
