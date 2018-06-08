@@ -23,13 +23,26 @@ export default Vue.extend({
     },
     afterCreated(cy: any) {
       let cy_util = new Cy_Util(cy);
-
-
-      for(const comp of Object.keys(graph)){
-        cy_util.portMoveWizComp(cy.$(comp), graph[comp].join(","));
-        cy_util.portStick2Comp(cy.$(comp), ...graph[comp].map((k) => cy.$(k)));
-      }
-
+    cy.batch(function(){
+        let layout: any = cy.layout({ 
+          name: 'cose-bilkent', 
+          nodeRepulsion: 1000,
+          animate: 'end',
+          animationEasing: 'ease-out',
+          animationDuration: 0,
+          stop: () => {
+            for(const comp of Object.keys(graph)){
+              cy_util.portMoveWizComp(cy.$(comp), graph[comp].join(","));
+              cy_util.portStick2Comp(cy.$(comp), ...graph[comp].map((k) => cy.$(k)));
+            }
+            for(const comp of Object.keys(graph)){
+              cy_util.portMoveBackComp(cy.$(comp), ...graph[comp].map((k) => cy.$(k)));
+            }
+          },
+        });
+        layout.options.eles = cy.elements();
+        layout.run();
+    });
       //(window as any).$ = jquery;
       (window as any).jQuery = jquery;
       (window as any).$ = jquery;

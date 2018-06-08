@@ -143,6 +143,8 @@ export default class ViewManager {
           c3: { id: "c3", modelID: "", type: NodeType.Component },
           c3_p1: { id: "c3_p1", modelID: "", type: NodeType.Port },
           c3_p2: { id: "c3_p2", modelID: "", type: NodeType.Port },
+          c4: { id: "c4", modelID: "", type: NodeType.Component },
+          c4_p1: { id: "c4_p1", modelID: "", type: NodeType.Port },
         };
         view.graph.edges = {
           "c1_p1-c2_p1": {
@@ -200,6 +202,20 @@ export default class ViewManager {
             type: EdgeType.Component2Port,
             from: view.graph.nodes.c3,
             to: view.graph.nodes.c3_p2,
+          },
+          "c1_p2-c4_p1": {
+            id: "c1_p2-c4_p1",
+            modelID: "",
+            type: EdgeType.Port2Port,
+            from: view.graph.nodes.c1_p2,
+            to: view.graph.nodes.c4_p1,
+          },
+          "c4-c4_p1": {
+            id: "c4-c4_p1",
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes.c4,
+            to: view.graph.nodes.c4_p1,
           },
         };
         break;
