@@ -1,4 +1,6 @@
 import ViewDescriptor from "./ViewDescriptor";
+import StyleManager from "../StyleManagement/StyleManager";
+import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -22,6 +24,17 @@ export default class ViewManager {
    * descriptor should be generated as needed (call render).
    */
   private viewDescriptors: { [view: string]: ViewDescriptor } = {};
+
+  /**
+   * The style manager provide support for save/load style files for a view
+   * and load the default appearance.
+   */
+  private styleManager: StyleManager;
+
+  /**
+   * The model manager where to get the model data of the current project.
+   */
+  private modelManager: FPPModelManager;
 
   /**
    * The view list of the current project.
@@ -74,8 +87,13 @@ export default class ViewManager {
       viewDescriptor = this.viewDescriptors[viewName];
     } else {
       // Generate the view descriptor for this view and add it to the map.
-      viewDescriptor = this.generateViewDescriptorFor(viewName);
-      this.viewDescriptors[viewName] = viewDescriptor;
+      try {
+        viewDescriptor = this.generateViewDescriptorFor(viewName);
+        this.viewDescriptors[viewName] = viewDescriptor;
+      } catch (e) {
+        // If the generation throws an exception, return an empty object.
+        return {};
+      }
     }
     // Convert the view descriptor to the render JSON (cytoscape format)
     return this.generateRenderJSONFrom(viewDescriptor);
@@ -102,11 +120,25 @@ export default class ViewManager {
   }
 
   /**
-   * Generate the view descriptor for the given view name.
+   * Generate the view descriptor for the given view name. This method should
+   * query the FPP model data from the model manager for the given view. Then,
+   * it should call ViewDescriptor.build method to create a view descriptor
+   * instance from the FPP model data.
    * @param viewName The name of the view which should be in the view list.
    */
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
-    return {};
+    // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
+    // view descriptors here.
+    switch (viewName) {
+      case "Topology1":
+        return new ViewDescriptor();
+      case "Instance1":
+        return new ViewDescriptor();
+      case "Component1":
+        return new ViewDescriptor();
+      default:
+        throw new Error("Cannot generate view for: '" + viewName + "'");
+    }
   }
 
   /**
@@ -126,12 +158,7 @@ export default class ViewManager {
         {
           selector: "edge",
           style: {
-            //"segment-distances": [-70,50],
-            //"segment-weights": [0.5,0.7],
-            //"curve-style": "segments",
             "line-color": "#9dbaea",
-            //"target-arrow-color": "#9dbaea",
-            //"target-arrow-shape": "triangle",
             "width": 2,
           },
         },
@@ -164,30 +191,46 @@ export default class ViewManager {
       ],
       elements: {
         nodes: [
-          { data: { id: "c1" },
+          {
+            data: { id: "c1" },
             classes: "Component",
-            position: { x: 0, y: 100} },
-          { data: { id: "c1_p1"},
+            position: { x: 0, y: 100 },
+          },
+          {
+            data: { id: "c1_p1" },
             classes: "Port",
-            position: { x: 60, y: 70}},
-          { data: { id: "c1_p2"},
+            position: { x: 60, y: 70 },
+          },
+          {
+            data: { id: "c1_p2" },
             classes: "Port",
-            position: { x: 60, y: 120}},
-          { data: { id: "c2"},
+            position: { x: 60, y: 120 },
+          },
+          {
+            data: { id: "c2" },
             classes: "Component",
-            position: { x: 400, y: 240} },
-          { data: { id: "c2_p1"},
+            position: { x: 400, y: 240 },
+          },
+          {
+            data: { id: "c2_p1" },
             classes: "Port",
-            position: { x: 340, y: 240} },
-          { data: { id: "c3" },
+            position: { x: 340, y: 240 },
+          },
+          {
+            data: { id: "c3" },
             classes: "Component",
-            position: { x: 0, y: 400} },
-          { data: { id: "c3_p1"},
+            position: { x: 0, y: 400 },
+          },
+          {
+            data: { id: "c3_p1" },
             classes: "Port",
-            position: { x: 60, y: 370} },
-          { data: { id: "c3_p2"},
+            position: { x: 60, y: 370 },
+          },
+          {
+            data: { id: "c3_p2" },
             classes: "Port",
-            position: { x: 60, y: 430} },
+            position: { x: 60, y: 430 },
+          },
         ],
         edges: [
           { data: { id: "e1", source: "c1_p1", target: "c2_p1" } },
