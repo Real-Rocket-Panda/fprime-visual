@@ -11,10 +11,8 @@ import automove from "cytoscape-automove";
 import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
-import {Cy_Util} from "@/components/cyUtil";
-import {graph} from "@/components/mockGraph";
-
-import $ from "jquery";
+import {Cy_Util} from "./cyUtil";
+import {graph} from "./mockGraph";
 
 export default Vue.extend({
   methods: {
@@ -33,8 +31,8 @@ export default Vue.extend({
       }
 
       //(window as any).$ = jquery;
-      (window as any).jQuery = $;
-      (window as any).$ = $;
+      (window as any).jQuery = jquery;
+      (window as any).$ = jquery;
       // let instance: any = cy.edgeBendEditing();
       cy.edgeBendEditing();
     },

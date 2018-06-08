@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import ViewTabs from "@/components/ViewTabs.vue";
-import ViewContent from "@/components/ViewContent.vue";
+import ViewContent from "@/components/ViewContent/ViewContent.vue";
 
 Vue.use(Router);
 
