@@ -3,9 +3,9 @@
  */
 export interface INodeStyle {
   id: string;
-  x: number;
-  y: number;
   style: { [key: string]: any };
+  x?: number;
+  y?: number;
 }
 
 /**
@@ -20,8 +20,13 @@ export interface IEdgeStyle {
  * 
  */
 export interface IStyleDescriptor {
-  nodes: INodeStyle[];
-  edges: IEdgeStyle[];
+  nodes: { [id: string]: INodeStyle };
+  edges: { [id: string]: IEdgeStyle };
+}
+
+export enum NodeType {
+  Component = "fprime-component",
+  Port = "fprime-port",
 }
 
 /**
@@ -30,6 +35,12 @@ export interface IStyleDescriptor {
 export interface INode {
   id: string;
   modelID: string;
+  type: NodeType;
+}
+
+export enum EdgeType {
+  Port2Port = "port-port",
+  Component2Port = "component-port",
 }
 
 /**
@@ -38,6 +49,7 @@ export interface INode {
 export interface IEdge {
   id: string;
   modelID: string;
+  type: EdgeType;
   from: INode;
   to: INode;
 }
@@ -46,8 +58,8 @@ export interface IEdge {
  * 
  */
 export interface IGraph {
-  nodes: INode[];
-  edges: IEdge[];
+  nodes: { [id: string]: INode };
+  edges: { [id: string]: IEdge };
 }
 
 /**
@@ -55,15 +67,12 @@ export interface IGraph {
  */
 export default class ViewDescriptor {
 
-  private styleDescriptor: IStyleDescriptor | null = null;
-  private graph: IGraph | null = null;
+  public styleDescriptor: IStyleDescriptor;
+  public graph: IGraph;
 
-  public get StyleDescriptor() {
-    return this.styleDescriptor;
-  }
-
-  public get Graph() {
-    return this.graph;
+  constructor() {
+    this.styleDescriptor = { nodes: {}, edges: {} };
+    this.graph = { nodes: {}, edges: {} };
   }
 
   // public static BuildFrom(model)

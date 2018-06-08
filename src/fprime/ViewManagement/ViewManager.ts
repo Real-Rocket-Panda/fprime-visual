@@ -1,4 +1,5 @@
-import ViewDescriptor from "./ViewDescriptor";
+import ViewDescriptor, { NodeType, EdgeType } from "./ViewDescriptor";
+import { INodeStyle, IEdgeStyle, INode, IEdge } from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 
@@ -29,12 +30,12 @@ export default class ViewManager {
    * The style manager provide support for save/load style files for a view
    * and load the default appearance.
    */
-  private styleManager: StyleManager;
+  private styleManager: StyleManager = new StyleManager();
 
   /**
    * The model manager where to get the model data of the current project.
    */
-  private modelManager: FPPModelManager;
+  private modelManager: FPPModelManager = new FPPModelManager();
 
   /**
    * The view list of the current project.
@@ -129,16 +130,90 @@ export default class ViewManager {
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
     // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
     // view descriptors here.
+    const view = new ViewDescriptor();
+
     switch (viewName) {
       case "Topology1":
-        return new ViewDescriptor();
+        view.graph.nodes = {
+          c1: { id: "c1", modelID: "", type: NodeType.Component },
+          c1_p1: { id: "c1_p1", modelID: "", type: NodeType.Port },
+          c1_p2: { id: "c1_p2", modelID: "", type: NodeType.Port },
+          c2: { id: "c2", modelID: "", type: NodeType.Component },
+          c2_p1: { id: "c2_p1", modelID: "", type: NodeType.Port },
+          c3: { id: "c3", modelID: "", type: NodeType.Component },
+          c3_p1: { id: "c3_p1", modelID: "", type: NodeType.Port },
+          c3_p2: { id: "c3_p2", modelID: "", type: NodeType.Port },
+        };
+        view.graph.edges = {
+          "c1_p1-c2_p1": {
+            id: "c1_p1-c2_p1",
+            modelID: "",
+            type: EdgeType.Port2Port,
+            from: { id: "c1_p1", modelID: "", type: NodeType.Port },
+            to: { id: "c2_p1", modelID: "", type: NodeType.Port },
+          },
+          "c1_p2-c3_p1": {
+            id: "c1_p2-c3_p1",
+            modelID: "",
+            type: EdgeType.Port2Port,
+            from: { id: "c1_p2", modelID: "", type: NodeType.Port },
+            to: { id: "c3_p1", modelID: "", type: NodeType.Port },
+          },
+          "c3_p2-c2_p1": {
+            id: "c3_p2-c2_p1",
+            modelID: "",
+            type: EdgeType.Port2Port,
+            from: { id: "c3_p2", modelID: "", type: NodeType.Port },
+            to: { id: "c2_p1", modelID: "", type: NodeType.Port },
+          },
+          "c1-c1_p1": {
+            id: "c1-c1_p1",
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: { id: "c1", modelID: "", type: NodeType.Component },
+            to: { id: "c1_p1", modelID: "", type: NodeType.Port },
+          },
+          "c1-c1_p2": {
+            id: "c1-c1_p2",
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes.c1,
+            to: view.graph.nodes.c1_p2,
+          },
+          "c2-c2_p1": {
+            id: "c2-c2_p1",
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes.c2,
+            to: view.graph.nodes.c2_p1,
+          },
+          "c3-c3_p1": {
+            id: "c3-c3_p1",
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes.c3,
+            to: view.graph.nodes.c3_p1,
+          },
+          "c3-c3_p2": {
+            id: "c3-c3_p2",
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes.c3,
+            to: view.graph.nodes.c3_p2,
+          },
+        };
+        break;
+
       case "Instance1":
-        return new ViewDescriptor();
+        break;
+
       case "Component1":
-        return new ViewDescriptor();
+        break;
+
       default:
         throw new Error("Cannot generate view for: '" + viewName + "'");
     }
+    return view;
   }
 
   /**
@@ -147,97 +222,60 @@ export default class ViewManager {
    * @param viewDescriptor The view descriptor to convert.
    */
   private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): any {
-    // TODO: Mock a cytoscape JSON format
+    const styleDescriptor = viewDescriptor.styleDescriptor;
+    const graph = viewDescriptor.graph;
+    // The style for each individual node (components or ports)
+    const nodeStyles =
+      Object.keys(styleDescriptor.nodes)
+        .map((id: string) => styleDescriptor.nodes[id])
+        .map((n: INodeStyle) => {
+          return {
+            selector: "#" + n.id,
+            style: n.style,
+          };
+        });
+    // The style for each individual edge.
+    const edgeStyles =
+      Object.keys(styleDescriptor.edges)
+        .map((id: string) => styleDescriptor.edges[id])
+        .map((e: IEdgeStyle) => {
+          return {
+            selector: "#" + e.id,
+            style: e.style,
+          };
+        });
+    // Combine the default styles with all the other styles.
+    const styles =
+      this.styleManager.getDefaultStyles()
+        .concat(nodeStyles)
+        .concat(edgeStyles);
+    // All the nodes
+    const nodes =
+      Object.keys(graph.nodes)
+        .map((id: string) => graph.nodes[id])
+        .map((n: INode) => {
+          return {
+            data: { id: n.id },
+            classes: n.type,
+            position: styleDescriptor.nodes[n.id] ? {
+              x: styleDescriptor.nodes[n.id].x,
+              y: styleDescriptor.nodes[n.id].y,
+            } : undefined,
+          };
+        });
+    // All edges
+    const edges =
+      Object.keys(graph.edges)
+        .map((id: string) => graph.edges[id])
+        .map((e: IEdge) => {
+          return {
+            data: { id: e.id, source: e.from.id, target: e.to.id },
+            classes: e.type,
+          };
+        });
     return {
-      autounselectify: true,
-      boxSelectionEnabled: false,
-      layout: {
-        name: "preset",
-      },
-      style: [
-        {
-          selector: "edge",
-          style: {
-            "line-color": "#9dbaea",
-            "width": 2,
-          },
-        },
-        {
-          selector: ".Component",
-          style: {
-            "width": 100,
-            "height": 140,
-            "background-color": "#ffa073",
-            "content": "data(id)",
-            "text-halign": "center",
-            "text-opacity": 0.5,
-            "text-valign": "center",
-            "shape": "rectangle",
-          },
-        },
-        {
-          selector: ".Port",
-          style: {
-            "width": 20,
-            "height": 20,
-            "background-color": "#62b0ff",
-            "content": "data(id)",
-            "text-halign": "center",
-            "text-opacity": 0.5,
-            "text-valign": "top",
-            "shape": "rectangle",
-          },
-        },
-      ],
-      elements: {
-        nodes: [
-          {
-            data: { id: "c1" },
-            classes: "Component",
-            position: { x: 0, y: 100 },
-          },
-          {
-            data: { id: "c1_p1" },
-            classes: "Port",
-            position: { x: 60, y: 70 },
-          },
-          {
-            data: { id: "c1_p2" },
-            classes: "Port",
-            position: { x: 60, y: 120 },
-          },
-          {
-            data: { id: "c2" },
-            classes: "Component",
-            position: { x: 400, y: 240 },
-          },
-          {
-            data: { id: "c2_p1" },
-            classes: "Port",
-            position: { x: 340, y: 240 },
-          },
-          {
-            data: { id: "c3" },
-            classes: "Component",
-            position: { x: 0, y: 400 },
-          },
-          {
-            data: { id: "c3_p1" },
-            classes: "Port",
-            position: { x: 60, y: 370 },
-          },
-          {
-            data: { id: "c3_p2" },
-            classes: "Port",
-            position: { x: 60, y: 430 },
-          },
-        ],
-        edges: [
-          { data: { id: "e1", source: "c1_p1", target: "c2_p1" } },
-          { data: { id: "e2", source: "c1_p2", target: "c3_p1" } },
-          { data: { id: "e3", source: "c3_p2", target: "c2_p1" } },
-        ],
-      },
+      style: styles,
+      elements: { nodes, edges },
     };
   }
 
