@@ -57,7 +57,7 @@
     }
   },
   "dependencies": {
-    "cytoscape-automove": "^1.9.0",
+    "cytoscape-automove": "file:../cytoscape.js-automove",
     "cytoscape-cose-bilkent": "^4.0.0",
     "cytoscape-edge-bend-editing": "^1.5.4",
     "jquery": "^3.0.0",

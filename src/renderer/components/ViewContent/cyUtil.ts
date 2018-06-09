@@ -44,22 +44,31 @@ export class Cy_Util {
       });
     });
 
-    comp.on("mouseup", () => { rules = this.initPortStick2Comp(comp, ...ports) });
-
+    comp.on("mouseup", () => {
+        rules = this.initPortStick2Comp(comp, ...ports);
+      });
     return rules;
   }
 
   private initPortStick2Comp(comp: any, ...ports: any[]): any[] {
     const rules: any[] = new Array();
     ports.forEach((port) => {
+      // Port not separate with the component
       rules.push(
         this.cy.automove({
           nodesMatching: port,
-          reposition: this.generateBox(comp, port),
+          reposition: { type: "inside", pos: this.generateBox(comp, port),
           when: "matching",
-        }));
-    });
+        }}));
 
+      // Port cannot go inside of component
+      rules.push(
+        this.cy.automove({
+          nodesMatching: port,
+          reposition: { type: "outside", pos: comp.boundingBox(),
+          when: "matching",
+      }}));
+    });
     return rules;
   }
 
