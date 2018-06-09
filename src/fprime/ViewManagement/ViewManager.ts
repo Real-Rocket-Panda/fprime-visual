@@ -1,4 +1,4 @@
-import ViewDescriptor, { NodeType, EdgeType } from "./ViewDescriptor";
+import ViewDescriptor from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 
@@ -129,9 +129,7 @@ export default class ViewManager {
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
     // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
     // view descriptors here.
-    const view = new ViewDescriptor();
     let model;
-
     switch (viewName) {
       case "Topology1":
         model = this.modelManager.getMockFunctionView1();
@@ -148,47 +146,7 @@ export default class ViewManager {
       default:
         throw new Error("Cannot generate view for: '" + viewName + "'");
     }
-
-    model.instances.forEach((i) => {
-      view.graph.nodes[i.id] = {
-        id: i.id,
-        modelID: "",
-        type: NodeType.Instance,
-      };
-
-      Object.keys(i.ports).forEach((p) => {
-        const pname = i.id + "_" + (i.ports as any)[p];
-        view.graph.nodes[pname] = {
-          id: pname,
-          modelID: "",
-          type: NodeType.Port,
-        };
-
-        const vedge = i.id + "-" + pname;
-        view.graph.edges[vedge] = {
-          id: vedge,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-          from: view.graph.nodes[i.id],
-          to: view.graph.nodes[pname],
-        };
-      });
-    });
-
-    model.topologies.forEach((t) => {
-      const from = `${t.from.inst.id}_${t.from.port}`;
-      const to = `${t.to.inst.id}_${t.to.port}`;
-      const edge = from + "-" + to;
-      view.graph.edges[edge] = {
-        id: edge,
-        modelID: "",
-        type: EdgeType.Port2Port,
-        from: view.graph.nodes[from],
-        to: view.graph.nodes[to],
-      };
-    });
-
-    return view;
+    return ViewDescriptor.buildFrom(model);
   }
 
   /**
