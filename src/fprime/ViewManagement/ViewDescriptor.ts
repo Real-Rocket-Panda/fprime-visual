@@ -25,7 +25,7 @@ export interface IStyleDescriptor {
 }
 
 export enum NodeType {
-  Component = "fprime-component",
+  Instance = "fprime-instance",
   Port = "fprime-port",
 }
 
@@ -40,7 +40,7 @@ export interface INode {
 
 export enum EdgeType {
   Port2Port = "port-port",
-  Component2Port = "component-port",
+  Instance2Port = "instance-port",
 }
 
 /**
