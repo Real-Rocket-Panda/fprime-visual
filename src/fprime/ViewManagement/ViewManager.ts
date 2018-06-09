@@ -28,6 +28,7 @@ export default class ViewManager {
   private viewDescriptors: { [view: string]: ViewDescriptor } = {};
 
   private configManager: ConfigManager;
+  private config: IConfig;
 
   /**
    * The style manager provide support for save/load style files for a view
@@ -54,6 +55,7 @@ export default class ViewManager {
    */
   constructor() {
     this.configManager = new ConfigManager();
+    this.config = this.configManager.getConfig();
     // TODO: This is wrong. The build method should be invoke based on UI
     // interactions. For now, we just mock the behavior.
     this.build();
@@ -265,9 +267,8 @@ export default class ViewManager {
           };
         });
     // Combine the default styles with all the other styles.
-    console.log(this.configManager.getConfig());
     const styles =
-      this.styleManager.getDefaultStyles()
+      this.styleManager.getDefaultStyles(this.config.DefaultStyleFilePath)
         .concat(nodeStyles)
         .concat(edgeStyles);
     // All the nodes
