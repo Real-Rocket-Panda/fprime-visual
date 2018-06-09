@@ -4,13 +4,13 @@ import fs from "fs";
 import path from "path";
 
 export default class StyleManager {
-  private static = "../../..";
+  private root = "../../..";
   public getDefaultStyles(file: any): Array<{
       selector: string;
       style: { [key: string]: any }
     }> {
     const defaultStyleContent = fs.readFileSync(
-      path.resolve(__dirname, this.static + file),
+      path.resolve(__dirname, this.root + file),
       "utf-8",
     );
     const ast = css.parse(defaultStyleContent);
