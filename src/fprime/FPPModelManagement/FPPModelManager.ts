@@ -5,7 +5,7 @@ export interface IMockInstance {
 
 export interface IMockConnection {
   from: { inst: IMockInstance, port: string };
-  to: { inst: IMockInstance, port: string }
+  to: { inst: IMockInstance, port: string };
 }
 
 export interface IMockModel {
