@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from "vue";
 import coseBilkent from "cytoscape-cose-bilkent";
-import automove from "cytoscape-automove";
+import automove from "rp-automove";
 import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
