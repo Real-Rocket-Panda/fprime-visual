@@ -1,0 +1,13 @@
+{
+    "Analyzers": [
+        {
+            "Name":"analyzer1",
+            "Path":"",
+            "OutputFilePath":"",
+            "Type":""
+        }
+    ],
+    "FPPCompilerPath": "",
+    "FPPCompilerOutputPath": "",
+    "DefaultStyleFilePath": "/static/default.css"
+}

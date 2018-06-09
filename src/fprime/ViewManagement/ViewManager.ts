@@ -1,6 +1,7 @@
 import ViewDescriptor from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
+import ConfigManager from "../ConfigManagement/ConfigManager";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -24,6 +25,9 @@ export default class ViewManager {
    * descriptor should be generated as needed (call render).
    */
   private viewDescriptors: { [view: string]: ViewDescriptor } = {};
+
+  private configManager: ConfigManager;
+  private config: IConfig;
 
   /**
    * The style manager provide support for save/load style files for a view
@@ -49,6 +53,8 @@ export default class ViewManager {
    * Initialize all the fields.
    */
   constructor() {
+    this.configManager = new ConfigManager();
+    this.config = this.configManager.getConfig();
     // TODO: This is wrong. The build method should be invoke based on UI
     // interactions. For now, we just mock the behavior.
     this.build();
@@ -179,7 +185,7 @@ export default class ViewManager {
         });
     // Combine the default styles with all the other styles.
     const styles =
-      this.styleManager.getDefaultStyles()
+      this.styleManager.getDefaultStyles(this.config.DefaultStyleFilePath)
         .concat(nodeStyles)
         .concat(edgeStyles);
     // All the nodes

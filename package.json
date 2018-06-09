@@ -57,6 +57,8 @@
     }
   },
   "dependencies": {
+    "@types/node": "^10.3.2",
+    "css": "^2.2.3",
     "cytoscape-cose-bilkent": "^4.0.0",
     "cytoscape-edge-bend-editing": "^1.5.4",
     "jquery": "^3.0.0",
