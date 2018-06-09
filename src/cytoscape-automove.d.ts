@@ -1,1 +1,1 @@
-declare module 'cytoscape-automove';
+declare module 'rp-automove';
