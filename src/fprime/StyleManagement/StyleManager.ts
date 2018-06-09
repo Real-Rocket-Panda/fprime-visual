@@ -1,4 +1,3 @@
-import { NodeType } from "../ViewManagement/ViewDescriptor";
 import css from "css";
 import fs from "fs";
 import path from "path";

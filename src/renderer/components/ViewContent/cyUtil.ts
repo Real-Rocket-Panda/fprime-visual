@@ -44,32 +44,46 @@ export class Cy_Util {
       });
     });
 
-    comp.on("mouseup", () => { rules = this.initPortStick2Comp(comp, ...ports) });
-
+    comp.on("mouseup", () => {
+      rules = this.initPortStick2Comp(comp, ...ports);
+    });
     return rules;
   }
 
   private initPortStick2Comp(comp: any, ...ports: any[]): any[] {
     const rules: any[] = new Array();
     ports.forEach((port) => {
+      // Port not separate with the component
       rules.push(
         this.cy.automove({
           nodesMatching: port,
-          reposition: this.generateBox(comp, port),
-          when: "matching",
+          reposition: {
+            type: "inside", pos: this.generateBox(comp, port),
+            when: "matching",
+          }
+        }));
+
+      // Port cannot go inside of component
+      rules.push(
+        this.cy.automove({
+          nodesMatching: port,
+          reposition: {
+            type: "outside", pos: comp.boundingBox(),
+            when: "matching",
+          }
         }));
     });
-
     return rules;
   }
 
 
   private generateBox(comp: any, port: any): any {
-    const offset = 12;
-    const x1: number = comp.boundingBox()["x1"] - port.width() + offset;
-    const x2: number = comp.boundingBox()["x2"] + port.width() - offset;
-    const y1: number = comp.boundingBox()["y1"] - port.height() + offset;
-    const y2: number = comp.boundingBox()["y2"] + port.height() - offset;
+    // TODO: dynamic offset
+    const offset = 10;
+    const x1: number = comp.boundingBox()["x1"] - (port.width() / 2) + offset;
+    const x2: number = comp.boundingBox()["x2"] + (port.width() / 2) - offset;
+    const y1: number = comp.boundingBox()["y1"] - (port.height() / 2) + offset;
+    const y2: number = comp.boundingBox()["y2"] + (port.height() / 2) - offset;
     return {
       x1: x1,
       x2: x2,

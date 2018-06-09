@@ -1,5 +1,4 @@
-import ViewDescriptor, { NodeType, EdgeType } from "./ViewDescriptor";
-import { INodeStyle, IEdgeStyle, INode, IEdge } from "./ViewDescriptor";
+import ViewDescriptor from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
@@ -81,9 +80,9 @@ export default class ViewManager {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
-        .map((key: string) => this.viewList[key])
-        .reduce((x: IViewListItem[], y: IViewListItem[]) => x.concat(y))
-        .map((x: IViewListItem) => x.name);
+        .map((key) => this.viewList[key])
+        .reduce((x, y) => x.concat(y))
+        .map((x) => x.name);
     // No such view
     if (views.indexOf(viewName) === -1) {
       return {};
@@ -136,106 +135,24 @@ export default class ViewManager {
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
     // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
     // view descriptors here.
-    const view = new ViewDescriptor();
-
+    let model;
     switch (viewName) {
       case "Topology1":
-        view.graph.nodes = {
-          c1: { id: "c1", modelID: "", type: NodeType.Component },
-          c1_p1: { id: "c1_p1", modelID: "", type: NodeType.Port },
-          c1_p2: { id: "c1_p2", modelID: "", type: NodeType.Port },
-          c2: { id: "c2", modelID: "", type: NodeType.Component },
-          c2_p1: { id: "c2_p1", modelID: "", type: NodeType.Port },
-          c3: { id: "c3", modelID: "", type: NodeType.Component },
-          c3_p1: { id: "c3_p1", modelID: "", type: NodeType.Port },
-          c3_p2: { id: "c3_p2", modelID: "", type: NodeType.Port },
-          c4: { id: "c4", modelID: "", type: NodeType.Component },
-          c4_p1: { id: "c4_p1", modelID: "", type: NodeType.Port },
-        };
-        view.graph.edges = {
-          "c1_p1-c2_p1": {
-            id: "c1_p1-c2_p1",
-            modelID: "",
-            type: EdgeType.Port2Port,
-            from: { id: "c1_p1", modelID: "", type: NodeType.Port },
-            to: { id: "c2_p1", modelID: "", type: NodeType.Port },
-          },
-          "c1_p2-c3_p1": {
-            id: "c1_p2-c3_p1",
-            modelID: "",
-            type: EdgeType.Port2Port,
-            from: { id: "c1_p2", modelID: "", type: NodeType.Port },
-            to: { id: "c3_p1", modelID: "", type: NodeType.Port },
-          },
-          "c3_p2-c2_p1": {
-            id: "c3_p2-c2_p1",
-            modelID: "",
-            type: EdgeType.Port2Port,
-            from: { id: "c3_p2", modelID: "", type: NodeType.Port },
-            to: { id: "c2_p1", modelID: "", type: NodeType.Port },
-          },
-          "c1-c1_p1": {
-            id: "c1-c1_p1",
-            modelID: "",
-            type: EdgeType.Component2Port,
-            from: { id: "c1", modelID: "", type: NodeType.Component },
-            to: { id: "c1_p1", modelID: "", type: NodeType.Port },
-          },
-          "c1-c1_p2": {
-            id: "c1-c1_p2",
-            modelID: "",
-            type: EdgeType.Component2Port,
-            from: view.graph.nodes.c1,
-            to: view.graph.nodes.c1_p2,
-          },
-          "c2-c2_p1": {
-            id: "c2-c2_p1",
-            modelID: "",
-            type: EdgeType.Component2Port,
-            from: view.graph.nodes.c2,
-            to: view.graph.nodes.c2_p1,
-          },
-          "c3-c3_p1": {
-            id: "c3-c3_p1",
-            modelID: "",
-            type: EdgeType.Component2Port,
-            from: view.graph.nodes.c3,
-            to: view.graph.nodes.c3_p1,
-          },
-          "c3-c3_p2": {
-            id: "c3-c3_p2",
-            modelID: "",
-            type: EdgeType.Component2Port,
-            from: view.graph.nodes.c3,
-            to: view.graph.nodes.c3_p2,
-          },
-          "c1_p2-c4_p1": {
-            id: "c1_p2-c4_p1",
-            modelID: "",
-            type: EdgeType.Port2Port,
-            from: view.graph.nodes.c1_p2,
-            to: view.graph.nodes.c4_p1,
-          },
-          "c4-c4_p1": {
-            id: "c4-c4_p1",
-            modelID: "",
-            type: EdgeType.Component2Port,
-            from: view.graph.nodes.c4,
-            to: view.graph.nodes.c4_p1,
-          },
-        };
+        model = this.modelManager.getMockFunctionView1();
         break;
 
       case "Instance1":
+        model = this.modelManager.getMockInstanceView1();
         break;
 
       case "Component1":
+        model = this.modelManager.getMockComponentView1();
         break;
 
       default:
         throw new Error("Cannot generate view for: '" + viewName + "'");
     }
-    return view;
+    return ViewDescriptor.buildFrom(model);
   }
 
   /**
@@ -249,8 +166,8 @@ export default class ViewManager {
     // The style for each individual node (components or ports)
     const nodeStyles =
       Object.keys(styleDescriptor.nodes)
-        .map((id: string) => styleDescriptor.nodes[id])
-        .map((n: INodeStyle) => {
+        .map((id) => styleDescriptor.nodes[id])
+        .map((n) => {
           return {
             selector: "#" + n.id,
             style: n.style,
@@ -259,8 +176,8 @@ export default class ViewManager {
     // The style for each individual edge.
     const edgeStyles =
       Object.keys(styleDescriptor.edges)
-        .map((id: string) => styleDescriptor.edges[id])
-        .map((e: IEdgeStyle) => {
+        .map((id) => styleDescriptor.edges[id])
+        .map((e) => {
           return {
             selector: "#" + e.id,
             style: e.style,
@@ -274,8 +191,8 @@ export default class ViewManager {
     // All the nodes
     const nodes =
       Object.keys(graph.nodes)
-        .map((id: string) => graph.nodes[id])
-        .map((n: INode) => {
+        .map((id) => graph.nodes[id])
+        .map((n) => {
           return {
             data: { id: n.id },
             classes: n.type,
@@ -288,8 +205,8 @@ export default class ViewManager {
     // All edges
     const edges =
       Object.keys(graph.edges)
-        .map((id: string) => graph.edges[id])
-        .map((e: IEdge) => {
+        .map((id) => graph.edges[id])
+        .map((e) => {
           return {
             data: { id: e.id, source: e.from.id, target: e.to.id },
             classes: e.type,
