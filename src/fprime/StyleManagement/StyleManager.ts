@@ -16,7 +16,7 @@ export default class StyleManager {
         },
       },
       {
-        selector: "." + NodeType.Component,
+        selector: "." + NodeType.Instance,
         style: {
           "width": 100,
           "height": 140,

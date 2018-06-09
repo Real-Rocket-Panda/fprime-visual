@@ -1,5 +1,5 @@
 import fprime from "fprime";
-import {IViewList, IViewListItem} from "fprime/ViewManagement/ViewManager";
+import { IViewList, IViewListItem } from "fprime/ViewManagement/ViewManager";
 
 const views: IViewList = fprime.viewManager.ViewList;
 const opened: IViewListItem[] = [];
@@ -30,10 +30,10 @@ export default {
    * of the program. Thus, we set route to "/view/:viewType/:viewName/edit".
    */
   GetViewList() {
-    return Object.keys(views).map((key: string) => {
+    return Object.keys(views).map((key) => {
       return {
         name: key,
-        children: views[key].map((i: IViewListItem) => {
+        children: views[key].map((i) => {
           return {
             name: i.name,
             route: this.GetViewRoute(i),
@@ -50,16 +50,17 @@ export default {
    * @returns true if the opened list is updated; otherwise false.
    */
   LoadViewByName(name: string): boolean {
-    const updated = opened
-                      .filter((i: IViewListItem) => i.name === name)
-                      .length === 0;
+    const updated =
+      opened
+        .filter((i) => i.name === name)
+        .length === 0;
     if (updated) {
       opened.push(
         Object.keys(views)
-          .map((key: string) => views[key])
-          .reduce((x: IViewListItem[], y: IViewListItem[]) => x.concat(y))
-          .filter((i: IViewListItem) => i.name === name)
-          [0]);
+          .map((key) => views[key])
+          .reduce((x, y) => x.concat(y))
+          .filter((i) => i.name === name)
+        [0]);
     }
     return updated;
   },
@@ -90,10 +91,11 @@ export default {
    * @returns The corresponding view item; null if no view with such name.
    */
   GetViewByName(name: string): IViewListItem | null {
-    const namedViews = Object.keys(views)
-      .map((key: string) => views[key])
-      .reduce((x: IViewListItem[], y: IViewListItem[]) => x.concat(y))
-      .filter((i: IViewListItem) => i.name === name);
+    const namedViews =
+      Object.keys(views)
+        .map((key) => views[key])
+        .reduce((x, y) => x.concat(y))
+        .filter((i) => i.name === name);
     if (namedViews.length === 0) {
       return null;
     } else {

@@ -1,6 +1,12 @@
 <template>
   <div style="height:100%;">
-    <cytoscape style="height:100%;" :config="config" :afterCreated="afterCreated" :preConfig="preConfig"></cytoscape>
+    <cytoscape
+      style="height:100%;"
+      :key="name"
+      :config="config"
+      :afterCreated="afterCreated"
+      :preConfig="preConfig"
+    ></cytoscape>
   </div>
 </template>
 
@@ -11,49 +17,69 @@ import automove from "rp-automove";
 import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
-import {Cy_Util} from "./cyUtil";
-import {graph} from "./mockGraph";
+import { Cy_Util } from "./cyUtil";
+import { graph } from "./mockGraph";
 
 export default Vue.extend({
   methods: {
     preConfig(cy: any) {
-      cy.use(coseBilkent); 
-      cy.use(automove);
-      edgeBendEditing( cy, jquery ); // register extension
+      if (!this.initialized) {
+        this.initialized = true;
+        cy.use(coseBilkent);
+        cy.use(automove);
+        edgeBendEditing(cy, jquery); // register extension
+      }
     },
     afterCreated(cy: any) {
       let cy_util = new Cy_Util(cy);
-    cy.batch(function(){
-        let layout: any = cy.layout({ 
-          name: 'cose-bilkent', 
+      cy.batch(function() {
+        let layout: any = cy.layout({
+          name: "cose-bilkent",
           nodeRepulsion: 1000,
-          animate: 'end',
-          animationEasing: 'ease-out',
+          animate: "end",
+          animationEasing: "ease-out",
           animationDuration: 0,
           stop: () => {
-            for(const comp of Object.keys(graph)){
+            for (const comp of Object.keys(graph)) {
               cy_util.portMoveWizComp(cy.$(comp), graph[comp].join(","));
-              cy_util.portStick2Comp(cy.$(comp), ...graph[comp].map((k) => cy.$(k)));
+              cy_util.portStick2Comp(
+                cy.$(comp),
+                ...graph[comp].map(k => cy.$(k))
+              );
             }
-            for(const comp of Object.keys(graph)){
-              cy_util.portMoveBackComp(cy.$(comp), ...graph[comp].map((k) => cy.$(k)));
+            for (const comp of Object.keys(graph)) {
+              cy_util.portMoveBackComp(
+                cy.$(comp),
+                ...graph[comp].map(k => cy.$(k))
+              );
             }
-          },
+          }
         });
         layout.options.eles = cy.elements();
         layout.run();
-    });
+      });
       //(window as any).$ = jquery;
       (window as any).jQuery = jquery;
       (window as any).$ = jquery;
       // let instance: any = cy.edgeBendEditing();
       cy.edgeBendEditing();
-    },
+    }
   },
-  data () {
+  data() {
     return {
-      config: fprimes.viewManager.render(this.$route.params.viewName),
+      initialized: false,
     };
-  } 
-})
+  },
+  computed: {
+    name: function() {
+      return this.$route.params.viewName;
+    },
+    config: function() {
+      return fprimes.viewManager.render(this.name);
+    }
+  },
+  beforeUpdate() {
+    (this as any).$cytoscape.reset();
+  },
+});
 </script>
