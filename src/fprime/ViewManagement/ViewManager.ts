@@ -262,7 +262,7 @@ export default class ViewManager {
         });
     // Combine the default styles with all the other styles.
     const styles =
-      this.styleManager.getDefaultStyles()
+      this.styleManager.getDefaultStyles("../../../static/default.css")
         .concat(nodeStyles)
         .concat(edgeStyles);
     // All the nodes
