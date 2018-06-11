@@ -5,11 +5,8 @@ export class Cy_Util {
     this.cy = cy;
   }
 
-
   public portMoveBackComp(comp: any, ...ports: any[]): void {
     ports.forEach((port) => {
-      console.log("before " + port.id() + " " + port.position("x") + " " + port.position("y"));
-
       // get the edge from component to port
       const id: string = "#" + comp.id() + "-" + port.id();
       const edge: any = this.cy.edges(id);
@@ -21,9 +18,6 @@ export class Cy_Util {
         comp.boundingBox());
       // resposition the port
       port.position(intersection);
-      console.log("after " + port.id() + " " + port.position("x") + " " + port.position("y"));
-
-      // TODO: remove edge
     });
   }
 
@@ -60,7 +54,7 @@ export class Cy_Util {
           reposition: {
             type: "inside", pos: this.generateBox(comp, port),
             when: "matching",
-          }
+          },
         }));
 
       // Port cannot go inside of component
@@ -70,7 +64,7 @@ export class Cy_Util {
           reposition: {
             type: "outside", pos: comp.boundingBox(),
             when: "matching",
-          }
+          },
         }));
     });
     return rules;
@@ -114,13 +108,17 @@ export class Cy_Util {
 
     const wid: number = box["x2"] - box["x1"]; // wid of bounding box
     const high: number = box["y2"] - box["y1"]; // height of bounding box
-    const ratioLine: number = Math.abs((target["y"] - source["y"]) / (target["x"] - source["x"]));
-    const ratioBox: number = Math.abs((box["x2"] - box["x1"]) / (box["y2"] - box["y1"]));
+    const ratioLine: number = Math.abs((target["y"] - source["y"]) /
+                              (target["x"] - source["x"]));
+    const ratioBox: number = Math.abs((box["x2"] - box["x1"]) /
+                            (box["y2"] - box["y1"]));
     let xOff: number = 0;
     let yOff: number = 0;
 
-    const sign_y = (target["y"] - source["y"]) / Math.abs(target["y"] - source["y"]);
-    const sign_x = (target["x"] - source["x"]) / Math.abs(target["x"] - source["x"]);
+    const sign_y = (target["y"] - source["y"]) /
+                    Math.abs(target["y"] - source["y"]);
+    const sign_x = (target["x"] - source["x"]) /
+                    Math.abs(target["x"] - source["x"]);
     if (ratioLine < ratioBox) {  // left or right
       yOff += ratioLine * wid / 2;
       xOff += yOff / ratioLine;
