@@ -5,6 +5,13 @@ export class Cy_Util {
     this.cy = cy;
   }
 
+  /*
+    Purpose:  Adjust the location of port after auto-layout. Move the port
+              back to the source of the edge that connects the port and the
+              component.
+    Parameters: comp - component object that the port belongs to
+                ports - collection of the ports that connect to the component
+  */
   public portMoveBackComp(comp: any, ...ports: any[]): void {
     ports.forEach((port) => {
       // get the edge from component to port
@@ -21,6 +28,11 @@ export class Cy_Util {
     });
   }
 
+  /*
+    Purpose:  Port moves with the component while dragging.
+    Parameters: comp - component object that the port belongs to
+                ports - collection of the ports that connect to the component
+  */
   public portMoveWizComp(comp: any, ...ports: any[]): void {
     this.cy.automove({
       nodesMatching: this.cy.$(...ports),
@@ -29,10 +41,16 @@ export class Cy_Util {
     });
   }
 
+  /*
+    Purpose:  Destroy the rule that port stick to component during dragging.
+              Re-apply the rule when the port is freed.
+    Parameters: comp - component object that the port belongs to
+                ports - collection of the ports that connect to the component
+  */
   public portStick2Comp(comp: any, ...ports: any[]): any[] {
     let rules: any[] = this.initPortStick2Comp(comp, ...ports);
 
-    comp.on("mousedown", function () {
+    comp.on("mousedown", () => {
       rules.forEach((r) => {
         r.destroy();
       });
@@ -43,7 +61,13 @@ export class Cy_Util {
     });
     return rules;
   }
-
+  /*
+    Purpose:  Restrict the movement area of port during dragging.
+              1. Cannot be separate with the component.
+              2. Cannot enter inside of component.
+    Parameters: comp - component object that the port belongs to
+                ports - collection of the ports that connect to the component
+  */
   private initPortStick2Comp(comp: any, ...ports: any[]): any[] {
     const rules: any[] = new Array();
     ports.forEach((port) => {
@@ -74,10 +98,10 @@ export class Cy_Util {
   private generateBox(comp: any, port: any): any {
     // TODO: dynamic offset
     const offset = 10;
-    const x1: number = comp.boundingBox()["x1"] - (port.width() / 2) + offset;
-    const x2: number = comp.boundingBox()["x2"] + (port.width() / 2) - offset;
-    const y1: number = comp.boundingBox()["y1"] - (port.height() / 2) + offset;
-    const y2: number = comp.boundingBox()["y2"] + (port.height() / 2) - offset;
+    const x1: number = comp.boundingBox().x1 - (port.width() / 2) + offset;
+    const x2: number = comp.boundingBox().x2 + (port.width() / 2) - offset;
+    const y1: number = comp.boundingBox().y1 - (port.height() / 2) + offset;
+    const y2: number = comp.boundingBox().y2 + (port.height() / 2) - offset;
     return {
       x1: x1,
       x2: x2,
@@ -109,16 +133,16 @@ export class Cy_Util {
     const wid: number = box["x2"] - box["x1"]; // wid of bounding box
     const high: number = box["y2"] - box["y1"]; // height of bounding box
     const ratioLine: number = Math.abs((target["y"] - source["y"]) /
-                              (target["x"] - source["x"]));
+      (target["x"] - source["x"]));
     const ratioBox: number = Math.abs((box["x2"] - box["x1"]) /
-                            (box["y2"] - box["y1"]));
+      (box["y2"] - box["y1"]));
     let xOff: number = 0;
     let yOff: number = 0;
 
     const sign_y = (target["y"] - source["y"]) /
-                    Math.abs(target["y"] - source["y"]);
+      Math.abs(target["y"] - source["y"]);
     const sign_x = (target["x"] - source["x"]) /
-                    Math.abs(target["x"] - source["x"]);
+      Math.abs(target["x"] - source["x"]);
     if (ratioLine < ratioBox) {  // left or right
       yOff += ratioLine * wid / 2;
       xOff += yOff / ratioLine;
