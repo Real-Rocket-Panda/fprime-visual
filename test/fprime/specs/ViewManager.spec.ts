@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import ViewManager from "fprime/ViewManagement/ViewManager";
+import ViewManager from "../../../src/fprime/ViewManagement/ViewManager";
 
 describe("render", () => {
   const viewManager = new ViewManager();

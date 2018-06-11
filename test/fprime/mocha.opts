@@ -1,0 +1,4 @@
+--require ./test/fprime/ts-node-hook.js
+--require source-map-support/register
+--recursive
+./test/fprime/specs/**/*spec.ts
