@@ -18,7 +18,7 @@ import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
 import { Cy_Init } from "./cyInit";
-import {graph} from "./mockGraph";
+// import {graph} from "./mockGraph";
 
 export default Vue.extend({
   methods: {
@@ -31,8 +31,8 @@ export default Vue.extend({
       }
     },
     afterCreated(cy: any) {
-
-      let cy_init = new Cy_Init(cy, graph);
+      let cy_init = new Cy_Init(cy,
+        fprimes.viewManager.getSimpleGraphFor(this.name));
       cy_init.afterCreate();
 
       // (window as any).$ = jquery;
