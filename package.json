@@ -80,6 +80,7 @@
     "jquery": "^3.0.0",
     "rp-automove": "^1.9.0",
     "vue": "^2.5.16",
+    "vue-color": "^2.4.6",
     "vue-cytoscape": "^0.1.2",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
