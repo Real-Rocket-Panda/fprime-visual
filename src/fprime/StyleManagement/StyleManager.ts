@@ -1,6 +1,6 @@
-import css from "css";
-import fs from "fs";
-import path from "path";
+import * as css from "css";
+import * as fs from "fs";
+import * as path from "path";
 
 export default class StyleManager {
   private root = "../../..";
