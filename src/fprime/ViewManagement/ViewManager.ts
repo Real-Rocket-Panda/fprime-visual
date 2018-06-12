@@ -2,6 +2,7 @@ import ViewDescriptor from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
+import { CytoscapeOptions } from "cytoscape";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -18,21 +19,6 @@ export enum ViewType {
   Component = "Component View",
 }
 
-export interface ICytoscapeJSON {
-  style: Array<{ selector: string, style: { [key: string]: any } }>;
-  elements: {
-    nodes: Array<{
-      data: { id: string },
-      classes: string,
-      position?: { x: number, y: number },
-    }>,
-    edges: Array<{
-        data: { id: string, source: string, target: string },
-        classes: string,
-    }>,
-  };
-}
-
 export default class ViewManager {
 
   /**
@@ -46,7 +32,7 @@ export default class ViewManager {
    * descriptor. The render function should return the existing JSON to the
    * UI render.
    */
-  private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
+  private cytoscapeJSONs: { [view: string]: CytoscapeOptions } = {};
 
   private configManager: ConfigManager;
   private config: IConfig;
@@ -98,8 +84,8 @@ export default class ViewManager {
    * @returns The render JSON object for rendering, the current system uses
    * cytoscape as the front-end rendering library.
    */
-  public render(viewName: string):
-      { needLayout: boolean, descriptor: ICytoscapeJSON } | null  {
+  public render(viewName: string): { needLayout: boolean,
+      descriptor: CytoscapeOptions } | null {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
@@ -108,8 +94,9 @@ export default class ViewManager {
         .map((x) => x.name);
     // No such view
     if (views.indexOf(viewName) === -1) {
-      return {};
+      return null;
     }
+    return null;
     // Find the Cytoscape JSON if already exists.
     // If not, generate the corresponding view descriptor first, and then
     // generate the corresponding Cytoscape JSON from the view descriptor.
@@ -151,8 +138,9 @@ export default class ViewManager {
    * @param viewName 
    * @param descriptor 
    */
-  public updateViewDescriptorFor(viewName: string, descriptor: ICytoscapeJSON) {
-    
+  public updateViewDescriptorFor(viewName: string,
+      descriptor: CytoscapeOptions) {
+
   }
 
   /**
@@ -210,8 +198,8 @@ export default class ViewManager {
    * cytoscape as our front-end renderer.
    * @param viewDescriptor The view descriptor to convert.
    */
-  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor):
-      { needLayout: boolean, descriptor: ICytoscapeJSON } {
+  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): {
+      needLayout: boolean, descriptor: CytoscapeOptions } {
     const styleDescriptor = viewDescriptor.styleDescriptor;
     const graph = viewDescriptor.graph;
     // The style for each individual node (components or ports)
