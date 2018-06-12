@@ -17,7 +17,7 @@ export class Cy_Util {
       // get the edge from component to port
       const id: string = "#" + comp.id() + "-" + port.id();
       const edge: any = this.cy.edges(id);
-      console.log(edge.sourceEndpoint());
+
       // get the posotion of intersection between bounding box and the edge
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
@@ -120,30 +120,30 @@ export class Cy_Util {
     Return: position of intersection {x:number, y:number}
   */
   private getEdgeBoxIntesection(source: any, target: any, box: any): any {
-    if (source["x"] == target["x"]) { // no ratio. Vertical line.
-      return target["y"] > source["y"] ?
-        ({ x: target["x"], y: box["y2"] }) :
-        ({ x: target["x"], y: box["y1"] });
+    if (source.x === target.x) { // no ratio. Vertical line.
+      return target.y > source.y ?
+        ({ x: target.x, y: box.y2 }) :
+        ({ x: target.x, y: box.y1 });
     }
-    if (source["y"] == target["y"]) {// ratio is 0. Horizontal line.
-      return target["x"] > source["x"] ?
-        ({ x: box["x2"], y: target["y"] }) :
-        ({ x: box["x1"], y: target["y"] });
+    if (source.y === target.y) {// ratio is 0. Horizontal line.
+      return target.x > source.x ?
+        ({ x: box.x2, y: target.y }) :
+        ({ x: box.x1, y: target.y });
     }
 
-    const wid: number = box["x2"] - box["x1"]; // wid of bounding box
-    const high: number = box["y2"] - box["y1"]; // height of bounding box
-    const ratioLine: number = Math.abs((target["y"] - source["y"]) /
-      (target["x"] - source["x"]));
-    const ratioBox: number = Math.abs((box["x2"] - box["x1"]) /
-      (box["y2"] - box["y1"]));
+    const wid: number = box.x2 - box.x1; // wid of bounding box
+    const high: number = box.y2 - box.y1; // height of bounding box
+    const ratioLine: number = Math.abs((target.y - source.y) /
+      (target.x - source.x));
+    const ratioBox: number = Math.abs((box.x2 - box.x1) /
+      (box.y2 - box.y1));
     let xOff: number = 0;
     let yOff: number = 0;
 
-    const sign_y = (target["y"] - source["y"]) /
-      Math.abs(target["y"] - source["y"]);
-    const sign_x = (target["x"] - source["x"]) /
-      Math.abs(target["x"] - source["x"]);
+    const sign_y = (target.y - source.y) /
+      Math.abs(target.y - source.y);
+    const sign_x = (target.x - source.x) /
+      Math.abs(target.x - source.x);
     if (ratioLine < ratioBox) {  // left or right
       yOff += ratioLine * wid / 2;
       xOff += yOff / ratioLine;
@@ -152,7 +152,7 @@ export class Cy_Util {
       yOff += xOff * ratioLine;
     }
 
-    return { x: source["x"] + sign_x * xOff, y: source["y"] + sign_y * yOff };
+    return { x: source.x + sign_x * xOff, y: source.y + sign_y * yOff };
   }
 
 }
