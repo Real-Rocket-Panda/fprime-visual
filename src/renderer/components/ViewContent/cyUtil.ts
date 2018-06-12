@@ -46,6 +46,7 @@ export class Cy_Util {
               Re-apply the rule when the port is freed.
     Parameters: comp - component object that the port belongs to
                 ports - collection of the ports that connect to the component
+    Return: rule - the updated rule objects
   */
   public portStick2Comp(comp: any, ...ports: any[]): any[] {
     let rules: any[] = this.initPortStick2Comp(comp, ...ports);
