@@ -157,4 +157,22 @@ export default class ViewDescriptor {
     this.graph = { nodes: {}, edges: {} };
   }
 
+  public getSimpleGraph(): { [key: string]: string[] } {
+    const graph: { [key: string]: string[] } = {};
+    Object
+      .keys(this.graph.edges)
+      .map((key) => this.graph.edges[key])
+      .filter((e) => e.type === EdgeType.Instance2Port)
+      .forEach((e) => {
+        const from = "#" + e.from.id;
+        const to = `#${e.to.id}`;
+        if (!graph[from]) {
+          graph[from] = [to];
+        } else {
+          graph[from].push(to);
+        }
+      });
+    return graph;
+  }
+
 }

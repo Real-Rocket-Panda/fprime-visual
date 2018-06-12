@@ -106,6 +106,18 @@ export default class ViewManager {
   }
 
   /**
+   * 
+   * @param viewName 
+   */
+  public getSimpleGraphFor(viewName: string) {
+    if (this.viewDescriptors[viewName]) {
+      return this.viewDescriptors[viewName].getSimpleGraph();
+    } else {
+      return {};
+    }
+  }
+
+  /**
    * Generate the list of all the views in the current project grouped into
    * view types.
    */
