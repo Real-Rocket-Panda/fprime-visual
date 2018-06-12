@@ -16,6 +16,17 @@ export class Cy_Init {
         this.graph = graph;
     }
 
+    public returnDescriptor(): any {
+        // return {
+        //     style: this.cy.style().json(),
+        //     elements: {
+        //         nodes: this.cy.nodes(),
+        //         edges: this.cy.edges(),
+        //     },
+        // };
+        return this.cy.json();
+    }
+
     public afterCreate(): void {
         this.cy.batch(() => {
             const layout: any = this.cy.layout({
