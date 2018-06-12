@@ -18,6 +18,21 @@ export enum ViewType {
   Component = "Component View",
 }
 
+export interface ICytoscapeJSON {
+  style: Array<{ selector: string, style: { [key: string]: any } }>;
+  elements: {
+    nodes: Array<{
+      data: { id: string },
+      classes: string,
+      position?: { x: number, y: number },
+    }>,
+    edges: Array<{
+        data: { id: string, source: string, target: string },
+        classes: string,
+    }>,
+  };
+}
+
 export default class ViewManager {
 
   /**
@@ -25,6 +40,13 @@ export default class ViewManager {
    * descriptor should be generated as needed (call render).
    */
   private viewDescriptors: { [view: string]: ViewDescriptor } = {};
+
+  /**
+   * All the cytoscape JSONs that have generated from the corresponding view
+   * descriptor. The render function should return the existing JSON to the
+   * UI render.
+   */
+  private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
   private configManager: ConfigManager;
   private config: IConfig;
@@ -76,7 +98,8 @@ export default class ViewManager {
    * @returns The render JSON object for rendering, the current system uses
    * cytoscape as the front-end rendering library.
    */
-  public render(viewName: string): any {
+  public render(viewName: string):
+      { needLayout: boolean, descriptor: ICytoscapeJSON } | null  {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
@@ -87,22 +110,26 @@ export default class ViewManager {
     if (views.indexOf(viewName) === -1) {
       return {};
     }
-    // Return the view descriptor if already rendered.
-    let viewDescriptor: ViewDescriptor;
-    if (this.viewDescriptors[viewName]) {
-      viewDescriptor = this.viewDescriptors[viewName];
-    } else {
-      // Generate the view descriptor for this view and add it to the map.
-      try {
-        viewDescriptor = this.generateViewDescriptorFor(viewName);
-        this.viewDescriptors[viewName] = viewDescriptor;
-      } catch (e) {
-        // If the generation throws an exception, return an empty object.
-        return {};
-      }
-    }
-    // Convert the view descriptor to the render JSON (cytoscape format)
-    return this.generateRenderJSONFrom(viewDescriptor);
+    // Find the Cytoscape JSON if already exists.
+    // If not, generate the corresponding view descriptor first, and then
+    // generate the corresponding Cytoscape JSON from the view descriptor.
+
+    // // Find the view descriptor if already rendered.
+    // let viewDescriptor: ViewDescriptor;
+    // if (this.viewDescriptors[viewName]) {
+    //   viewDescriptor = this.viewDescriptors[viewName];
+    // } else {
+    //   // Generate the view descriptor for this view and add it to the map.
+    //   try {
+    //     viewDescriptor = this.generateViewDescriptorFor(viewName);
+    //     this.viewDescriptors[viewName] = viewDescriptor;
+    //   } catch (e) {
+    //     // If the generation throws an exception, return an empty object.
+    //     return {};
+    //   }
+    // }
+    // // Convert the view descriptor to the render JSON (cytoscape format)
+    // return this.generateRenderJSONFrom(viewDescriptor);
   }
 
   /**
@@ -115,6 +142,17 @@ export default class ViewManager {
     } else {
       return {};
     }
+  }
+
+  /**
+   * The UI has updated the Cytoscape JSON and needs to store the change to the
+   * view descriptor. This function should store the Cytoscape JSON in the 
+   * cytoscapeJSONs map and convert the JSON back to the view descriptor.
+   * @param viewName 
+   * @param descriptor 
+   */
+  public updateViewDescriptorFor(viewName: string, descriptor: ICytoscapeJSON) {
+    
   }
 
   /**
@@ -172,7 +210,8 @@ export default class ViewManager {
    * cytoscape as our front-end renderer.
    * @param viewDescriptor The view descriptor to convert.
    */
-  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): any {
+  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor):
+      { needLayout: boolean, descriptor: ICytoscapeJSON } {
     const styleDescriptor = viewDescriptor.styleDescriptor;
     const graph = viewDescriptor.graph;
     // The style for each individual node (components or ports)
@@ -208,10 +247,13 @@ export default class ViewManager {
           return {
             data: { id: n.id },
             classes: n.type,
-            position: styleDescriptor.nodes[n.id] ? {
-              x: styleDescriptor.nodes[n.id].x,
-              y: styleDescriptor.nodes[n.id].y,
-            } : undefined,
+            // If any of the node does not have the x/y info, we should set
+            // needlayout to true to ask the UI render to layout the diagram.
+
+            // position: styleDescriptor.nodes[n.id] ? {
+            //   x: styleDescriptor.nodes[n.id].x,
+            //   y: styleDescriptor.nodes[n.id].y,
+            // } : undefined,
           };
         });
     // All edges
@@ -225,8 +267,11 @@ export default class ViewManager {
           };
         });
     return {
-      style: styles,
-      elements: { nodes, edges },
+      needLayout: true,
+      descriptor: {
+        style: styles,
+        elements: { nodes, edges },
+      },
     };
   }
 

@@ -18,7 +18,6 @@ import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
 import { Cy_Init } from "./cyInit";
-// import {graph} from "./mockGraph";
 
 export default Vue.extend({
   methods: {
