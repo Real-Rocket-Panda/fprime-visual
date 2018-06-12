@@ -17,14 +17,14 @@ export class Cy_Init {
     }
 
     public returnDescriptor(): any {
-        // return {
-        //     style: this.cy.style().json(),
-        //     elements: {
-        //         nodes: this.cy.nodes(),
-        //         edges: this.cy.edges(),
-        //     },
-        // };
-        return this.cy.json();
+        return {
+            style: this.cy.style().json(),
+            elements: {
+                nodes: this.cy.nodes().json(),
+                edges: this.cy.edges().json(),
+            },
+        };
+
     }
 
     public afterCreate(): void {
