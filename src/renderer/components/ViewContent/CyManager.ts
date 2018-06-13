@@ -21,9 +21,19 @@ class CyManager {
     }
 
     /**
+     * return the collection of elements that are currently selected by user
+     */
+    public getGrabbed(): any {
+        return this.cy.$(":selected");
+    }
+
+    public setColor(eles: any, color: string): void {
+        eles.style({ "background-color": color });
+    }
+
+    /**
      * reutrn the json descriptor that the view manager needs
      */
-
     public returnDescriptor(): any {
         return {
             style: this.cy.style().json(),

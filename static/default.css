@@ -22,3 +22,12 @@ edge {
     text-valign: top;
     shape: rectangle;
 }
+
+.fprime-instance:selected{
+    background-color: #ef5c32;
+    content: data(id);
+    text-halign: center;
+    text-opacity: 0.5;
+    text-valign: center;
+    shape: rectangle;
+}
