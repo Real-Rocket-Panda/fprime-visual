@@ -3,7 +3,7 @@ export default {
     selected: [],
   },
 
-  Select(eles: cy[]) {
+  Select(eles: any[]) {
     
   },
 
