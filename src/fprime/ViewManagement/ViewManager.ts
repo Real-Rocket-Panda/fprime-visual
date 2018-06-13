@@ -1,8 +1,7 @@
-import ViewDescriptor from "./ViewDescriptor";
+import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import { CytoscapeOptions } from "cytoscape";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -32,7 +31,7 @@ export default class ViewManager {
    * descriptor. The render function should return the existing JSON to the
    * UI render.
    */
-  private cytoscapeJSONs: { [view: string]: CytoscapeOptions } = {};
+  private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
   private configManager: ConfigManager;
   private config: IConfig;
@@ -84,8 +83,10 @@ export default class ViewManager {
    * @returns The render JSON object for rendering, the current system uses
    * cytoscape as the front-end rendering library.
    */
-  public render(viewName: string): { needLayout: boolean,
-      descriptor: CytoscapeOptions } | null {
+  public render(viewName: string): {
+    needLayout: boolean,
+    descriptor: ICytoscapeJSON,
+  } | null {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
@@ -96,27 +97,21 @@ export default class ViewManager {
     if (views.indexOf(viewName) === -1) {
       return null;
     }
-    return null;
     // Find the Cytoscape JSON if already exists.
+    if (this.cytoscapeJSONs[viewName]) {
+      return {
+        needLayout: false,
+        descriptor: this.cytoscapeJSONs[viewName],
+      };
+    }
     // If not, generate the corresponding view descriptor first, and then
     // generate the corresponding Cytoscape JSON from the view descriptor.
-
-    // // Find the view descriptor if already rendered.
-    // let viewDescriptor: ViewDescriptor;
-    // if (this.viewDescriptors[viewName]) {
-    //   viewDescriptor = this.viewDescriptors[viewName];
-    // } else {
-    //   // Generate the view descriptor for this view and add it to the map.
-    //   try {
-    //     viewDescriptor = this.generateViewDescriptorFor(viewName);
-    //     this.viewDescriptors[viewName] = viewDescriptor;
-    //   } catch (e) {
-    //     // If the generation throws an exception, return an empty object.
-    //     return {};
-    //   }
-    // }
-    // // Convert the view descriptor to the render JSON (cytoscape format)
-    // return this.generateRenderJSONFrom(viewDescriptor);
+    const viewDescriptor = this.generateViewDescriptorFor(viewName);
+    this.viewDescriptors[viewName] = viewDescriptor;
+    // Convert the view descriptor to the render JSON (cytoscape format)
+    const renderObj = this.generateRenderJSONFrom(viewDescriptor);
+    this.cytoscapeJSONs[viewName] = renderObj.descriptor;
+    return renderObj;
   }
 
   /**
@@ -138,9 +133,16 @@ export default class ViewManager {
    * @param viewName 
    * @param descriptor 
    */
-  public updateViewDescriptorFor(viewName: string,
-      descriptor: CytoscapeOptions) {
+  public updateViewDescriptorFor(
+    viewName: string, descriptor: ICytoscapeJSON) {
 
+    console.log(descriptor);
+    // Update the cytoscape json object
+    this.cytoscapeJSONs[viewName] = descriptor;
+    // Parse the style information in cytoscape json,
+    // write it back to the view descriptor
+    const viewDescriptor = this.viewDescriptors[viewName];
+    viewDescriptor.styleDescriptor = ViewDescriptor.parseStyleFrom(descriptor);
   }
 
   /**
@@ -199,68 +201,15 @@ export default class ViewManager {
    * @param viewDescriptor The view descriptor to convert.
    */
   private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): {
-      needLayout: boolean, descriptor: CytoscapeOptions } {
-    const styleDescriptor = viewDescriptor.styleDescriptor;
-    const graph = viewDescriptor.graph;
-    // The style for each individual node (components or ports)
-    const nodeStyles =
-      Object.keys(styleDescriptor.nodes)
-        .map((id) => styleDescriptor.nodes[id])
-        .map((n) => {
-          return {
-            selector: "#" + n.id,
-            style: n.style,
-          };
-        });
-    // The style for each individual edge.
-    const edgeStyles =
-      Object.keys(styleDescriptor.edges)
-        .map((id) => styleDescriptor.edges[id])
-        .map((e) => {
-          return {
-            selector: "#" + e.id,
-            style: e.style,
-          };
-        });
+    needLayout: boolean,
+    descriptor: ICytoscapeJSON,
+  } {
+    const json = viewDescriptor.generateCytoscapeJSON();
     // Combine the default styles with all the other styles.
-    const styles =
-      this.styleManager.getDefaultStyles(this.config.DefaultStyleFilePath)
-        .concat(nodeStyles)
-        .concat(edgeStyles);
-    // All the nodes
-    const nodes =
-      Object.keys(graph.nodes)
-        .map((id) => graph.nodes[id])
-        .map((n) => {
-          return {
-            data: { id: n.id },
-            classes: n.type,
-            // If any of the node does not have the x/y info, we should set
-            // needlayout to true to ask the UI render to layout the diagram.
-
-            // position: styleDescriptor.nodes[n.id] ? {
-            //   x: styleDescriptor.nodes[n.id].x,
-            //   y: styleDescriptor.nodes[n.id].y,
-            // } : undefined,
-          };
-        });
-    // All edges
-    const edges =
-      Object.keys(graph.edges)
-        .map((id) => graph.edges[id])
-        .map((e) => {
-          return {
-            data: { id: e.id, source: e.from.id, target: e.to.id },
-            classes: e.type,
-          };
-        });
-    return {
-      needLayout: true,
-      descriptor: {
-        style: styles,
-        elements: { nodes, edges },
-      },
-    };
+    const defaultStyle = this.styleManager
+      .getDefaultStyles(this.config.DefaultStyleFilePath);
+    json.descriptor.style = defaultStyle.concat(json.descriptor.style);
+    return json;
   }
 
 }
