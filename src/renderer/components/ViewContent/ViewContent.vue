@@ -52,10 +52,7 @@ export default Vue.extend({
       return this.$route.params.viewName;
     },
     config: function() {
-        let view: any = fprimes.viewManager.render(this.name);
-        if(view==null)
-          return null;
-        return view.descriptor;         
+        return fprimes.viewManager.render(this.name)!.descriptor;         
     }
   },
   beforeUpdate() {
