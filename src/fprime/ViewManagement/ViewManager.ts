@@ -100,7 +100,7 @@ export default class ViewManager {
     // Find the Cytoscape JSON if already exists.
     if (this.cytoscapeJSONs[viewName]) {
       return {
-        needLayout: false,
+        needLayout: true,
         descriptor: this.cytoscapeJSONs[viewName],
       };
     }
@@ -135,8 +135,6 @@ export default class ViewManager {
    */
   public updateViewDescriptorFor(
     viewName: string, descriptor: ICytoscapeJSON) {
-
-    console.log(descriptor);
     // Update the cytoscape json object
     this.cytoscapeJSONs[viewName] = descriptor;
     // Parse the style information in cytoscape json,

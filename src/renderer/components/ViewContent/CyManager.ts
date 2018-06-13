@@ -1,33 +1,47 @@
 
 import { Cy_Util } from "./cyUtil";
-
-export class Cy_Init {
+class CyManager {
     private cy: any;
     private cy_util: Cy_Util;
     private graph: any;
 
-    constructor(cy: any, graph: any) {
+    constructor() {
+        this.cy = null;
+        this.cy_util = new Cy_Util(null);
+        this.graph = null;
+    }
+
+    public setCy(cy: any) {
         this.cy = cy;
         this.cy_util = new Cy_Util(this.cy);
-        this.graph = graph;
     }
 
     public setGraph(graph: any): void {
         this.graph = graph;
     }
 
+    /**
+     * reutrn the json descriptor that the view manager needs
+     */
+
     public returnDescriptor(): any {
         return {
             style: this.cy.style().json(),
             elements: {
-                nodes: this.cy.nodes().json(),
-                edges: this.cy.edges().json(),
+                nodes: (this.cy.nodes() as any[])
+                    .map((n) => n.json()),
+                edges: (this.cy.edges() as any[])
+                    .map((e) => e.json()),
             },
         };
-
     }
 
-    public afterCreate(): void {
+    public defaultLayout(): void {
+        this.stickPort();
+        this.movebackPort();
+    }
+
+    public applyAutoLayout(): void {
         this.cy.batch(() => {
             const layout: any = this.cy.layout({
                 name: "cose-bilkent",
@@ -36,8 +50,7 @@ export class Cy_Init {
                 animationEasing: "ease-out",
                 animationDuration: 0,
                 stop: () => {
-                    this.stickPort();
-                    this.movebackPort();
+                    this.defaultLayout();
                 },
             });
             layout.options.eles = this.cy.elements();
@@ -65,3 +78,7 @@ export class Cy_Init {
         }
     }
 }
+
+export default {
+    CyManager: new CyManager(),
+};
