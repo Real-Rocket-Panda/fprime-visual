@@ -1,9 +1,10 @@
+import { ElementsDefinition  } from "cytoscape";
 export default {
   state: {
     selected: [],
   },
 
-  Select(eles: cy[]) {
+  Select(eles: ElementsDefinition) {
     
   },
 
