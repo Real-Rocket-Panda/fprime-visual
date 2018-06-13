@@ -31,12 +31,11 @@ export default Vue.extend({
     },
     afterCreated(cy: any) {
       CyManager.CyManager.setCy(cy);
-      CyManager.CyManager.setGraph(fprimes.viewManager.getSimpleGraphFor(this.name));
-      console.log(this.needLayout);
-      if(this.needLayout)
-        CyManager.CyManager.applyAutoLayout();
-      else
-        CyManager.CyManager.defaultLayout();
+      CyManager.CyManager.setGraph(
+        fprimes.viewManager.getSimpleGraphFor(this.name)
+      );
+      if (this.needLayout) CyManager.CyManager.applyAutoLayout();
+      else CyManager.CyManager.defaultLayout();
       // (window as any).$ = jquery;
       (window as any).jQuery = jquery;
       (window as any).$ = jquery;
@@ -46,7 +45,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      initialized: false,
+      initialized: false
     };
   },
   computed: {
@@ -54,12 +53,14 @@ export default Vue.extend({
       return this.$route.params.viewName;
     },
     config: function() {
-      return fprimes.viewManager.render(this.name)!.descriptor;         
+      return {
+        ...fprimes.viewManager.render(this.name)!.descriptor,
+        selectionType: "additive",
+      };
     },
     needLayout: function() {
-      return fprimes.viewManager.render(this.name)!.needLayout;    
+      return fprimes.viewManager.render(this.name)!.needLayout;
     }
-
   },
   beforeUpdate() {
     (this as any).$cytoscape.reset();
@@ -71,9 +72,12 @@ export default Vue.extend({
   //   next();
   // }
   watch: {
-    $route: function(){
-      fprimes.viewManager.updateViewDescriptorFor(this.name, CyManager.CyManager.returnDescriptor());
+    $route: function() {
+      fprimes.viewManager.updateViewDescriptorFor(
+        this.name,
+        CyManager.CyManager.returnDescriptor()
+      );
     }
-  },
+  }
 });
 </script>
