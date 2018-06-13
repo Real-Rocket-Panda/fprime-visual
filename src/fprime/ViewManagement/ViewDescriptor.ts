@@ -97,8 +97,7 @@ export interface IGraph {
 
 /**
  * We're using cytoscape as our front-end engine.
- * See https://github.com/DefinitelyTyped/DefinitelyTyped/blob/
- *  master/types/cytoscape/index.d.ts#L154
+ * See https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/cytoscape/index.d.ts#L154
  */
 export interface ICytoscapeJSON {
   style: Array<{ selector: string, style: { [key: string]: any } }>;
@@ -201,8 +200,17 @@ export default class ViewDescriptor {
     });
     // Covert the x/y info in elements to INodeStyle
     descriptor.elements.nodes.forEach((n) => {
-      style.nodes[n.data.id].x = n.position!.x;
-      style.nodes[n.data.id].y = n.position!.y;
+      if (style.nodes[n.data.id]) {
+        style.nodes[n.data.id].x = n.position!.x;
+        style.nodes[n.data.id].y = n.position!.y;
+      } else {
+        style.nodes[n.data.id] = {
+          id: n.data.id,
+          style: {},
+          x: n.position!.x,
+          y: n.position!.y,
+        };
+      }
     });
     return style;
   }

@@ -138,6 +138,7 @@
     "stylus-loader": "^3.0.1",
     "ts-loader": "^3.5.0",
     "ts-node": "^6.1.0",
+    "tsconfig-paths": "^3.4.0",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3",
     "url-loader": "^0.5.9",

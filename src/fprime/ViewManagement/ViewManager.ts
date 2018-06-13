@@ -109,9 +109,7 @@ export default class ViewManager {
     const viewDescriptor = this.generateViewDescriptorFor(viewName);
     this.viewDescriptors[viewName] = viewDescriptor;
     // Convert the view descriptor to the render JSON (cytoscape format)
-    const renderObj = this.generateRenderJSONFrom(viewDescriptor);
-    this.cytoscapeJSONs[viewName] = renderObj.descriptor;
-    return renderObj;
+    return this.generateRenderJSONFrom(viewDescriptor);
   }
 
   /**
@@ -135,8 +133,11 @@ export default class ViewManager {
    */
   public updateViewDescriptorFor(
     viewName: string, descriptor: ICytoscapeJSON) {
-
-    console.log(descriptor);
+    // If the view descriptor does not exist, the view has not rendered.
+    // Ignore the case.
+    if (!this.viewDescriptors[viewName]) {
+      return;
+    }
     // Update the cytoscape json object
     this.cytoscapeJSONs[viewName] = descriptor;
     // Parse the style information in cytoscape json,

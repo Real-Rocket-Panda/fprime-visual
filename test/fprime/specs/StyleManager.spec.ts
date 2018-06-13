@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import StyleManager from "../../../src/fprime/StyleManagement/StyleManager";
+import StyleManager from "fprime/StyleManagement/StyleManager";
 
 describe("StyleManager", () => {
     let styleManager: StyleManager;
