@@ -36,11 +36,6 @@ class CyManager {
         };
     }
 
-    public defaultLayout(): void {
-        this.stickPort();
-        this.movebackPort();
-    }
-
     public applyAutoLayout(): void {
         this.cy.batch(() => {
             const layout: any = this.cy.layout({
@@ -55,6 +50,17 @@ class CyManager {
             });
             layout.options.eles = this.cy.elements();
             layout.run();
+        });
+    }
+
+    public defaultLayout(): void {
+        this.stickPort();
+        this.movebackPort();
+    }
+
+    public selectedChangeColor(): void {
+        this.cy.elements().on("selected", (event: any) => {
+            console.log(123);
         });
     }
 

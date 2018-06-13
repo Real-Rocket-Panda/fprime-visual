@@ -34,8 +34,12 @@ export default Vue.extend({
       CyManager.CyManager.setGraph(
         fprimes.viewManager.getSimpleGraphFor(this.name)
       );
+
       if (this.needLayout) CyManager.CyManager.applyAutoLayout();
       else CyManager.CyManager.defaultLayout();
+
+      CyManager.CyManager.selectedChangeColor();
+      
       // (window as any).$ = jquery;
       (window as any).jQuery = jquery;
       (window as any).$ = jquery;
@@ -55,7 +59,7 @@ export default Vue.extend({
     config: function() {
       return {
         ...fprimes.viewManager.render(this.name)!.descriptor,
-        selectionType: "additive",
+        selectionType: "additive"
       };
     },
     needLayout: function() {
