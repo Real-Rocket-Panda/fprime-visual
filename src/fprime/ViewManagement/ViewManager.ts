@@ -2,6 +2,8 @@ import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
+import IConfig from "../Common/Config";
+import DataImporter from "../DataImport/DataImporter";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -65,6 +67,7 @@ export default class ViewManager {
     // TODO: This is wrong. The build method should be invoke based on UI
     // interactions. For now, we just mock the behavior.
     this.build();
+    this.modelManager.loadModel(this.config);
   }
 
   /**
@@ -185,7 +188,7 @@ export default class ViewManager {
     let model;
     switch (viewName) {
       case "Topology1":
-        model = this.modelManager.getMockFunctionView1();
+        model = this.modelManager.getMockFunctionView2();
         break;
 
       case "Instance1":
