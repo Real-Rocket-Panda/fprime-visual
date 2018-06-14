@@ -98,6 +98,4 @@ class CyManager {
     }
 }
 
-export default {
-    CyManager: new CyManager(),
-};
+export default new CyManager();

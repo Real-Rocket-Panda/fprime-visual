@@ -30,17 +30,18 @@ export default Vue.extend({
       }
     },
     afterCreated(cy: any) {
+
       // cytoscape load view
       let view_json: any = fprimes.viewManager.render(this.name);
       cy.json(view_json.descriptor);
 
-      CyManager.CyManager.setCy(cy);
-      CyManager.CyManager.setGraph(
+      CyManager.setCy(cy);
+      CyManager.setGraph(
         fprimes.viewManager.getSimpleGraphFor(this.name)
       );
 
-      if (view_json.needLayout) CyManager.CyManager.applyAutoLayout();
-      else CyManager.CyManager.defaultLayout();
+      if (view_json.needLayout) CyManager.applyAutoLayout();
+      else CyManager.defaultLayout();
 
       // (window as any).$ = jquery;
       (window as any).jQuery = jquery;
@@ -66,7 +67,7 @@ export default Vue.extend({
     $route: function(_, from: Route) {
       fprimes.viewManager.updateViewDescriptorFor(
         from.params.viewName,
-        CyManager.CyManager.returnDescriptor()
+        CyManager.returnDescriptor()
       );
     }
   }
