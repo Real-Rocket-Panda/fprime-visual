@@ -50,7 +50,7 @@ class CyManager {
         this.cy.batch(() => {
             const layout: any = this.cy.layout({
                 name: "cose-bilkent",
-                nodeRepulsion: 1000,
+                nodeRepulsion: 1000000,
                 animate: "end",
                 animationEasing: "ease-out",
                 animationDuration: 0,
