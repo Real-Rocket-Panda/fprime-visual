@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import IConfig from "../Common/Config";
 
 export default class ConfigManager {
     private config: IConfig;
