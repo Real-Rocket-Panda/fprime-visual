@@ -31,13 +31,13 @@ export default Vue.extend({
       }
     },
     afterCreated(cy: any) {
-      CyManager.CyManager.setCy(cy);
-      CyManager.CyManager.setGraph(
+      CyManager.setCy(cy);
+      CyManager.setGraph(
         fprimes.viewManager.getSimpleGraphFor(this.name)
       );
 
-      if (this.json.needLayout) CyManager.CyManager.applyAutoLayout();
-      else CyManager.CyManager.defaultLayout();
+      if (this.json.needLayout) CyManager.applyAutoLayout();
+      else CyManager.defaultLayout();
 
       // (window as any).$ = jquery;
       (window as any).jQuery = jquery;
@@ -65,10 +65,10 @@ export default Vue.extend({
   watch: {
     $route: function(_, from: Route) {
       console.log("watch route: " + from.params.viewName);
-      console.log(CyManager.CyManager.returnDescriptor());
+      console.log(CyManager.returnDescriptor());
       fprimes.viewManager.updateViewDescriptorFor(
         from.params.viewName,
-        CyManager.CyManager.returnDescriptor()
+        CyManager.returnDescriptor()
       );
     }
   }
