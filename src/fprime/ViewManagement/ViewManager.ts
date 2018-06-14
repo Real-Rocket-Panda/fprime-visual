@@ -3,7 +3,6 @@ import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
 import IConfig from "../Common/Config";
-import DataImporter from "../DataImport/DataImporter";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
