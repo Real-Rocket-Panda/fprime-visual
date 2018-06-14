@@ -13,7 +13,7 @@ export default class CompilerConverter {
         config: IConfig): Promise<any> {
             return compiler.catch((err) => {
                 console.log(err);
-            }).then((stdout): Promise<string> => {
+            }).then((): Promise<string> => {
                 const obj = fs.readFileSync(
                     path.resolve(__dirname, config.FPPCompilerOutputPath),
                     "utf-8",

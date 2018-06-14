@@ -1,5 +1,4 @@
 import IConfig from "../Common/Config";
-import {Promise} from "es6-promise";
 import DataImporter from "../DataImport/DataImporter";
 
 export interface IMockComponent {
@@ -140,7 +139,6 @@ export default class FPPModelManager {
         cons.push(c);
       });
     });
-
     return  {
       instances: this.instances,
       topologies: cons,
