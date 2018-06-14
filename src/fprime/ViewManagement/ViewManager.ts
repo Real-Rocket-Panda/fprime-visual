@@ -188,7 +188,11 @@ export default class ViewManager {
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
     // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
     // view descriptors here.
-    const model = this.modelManager.getMockFunctionView2();
+    const view = Object.keys(this.viewList)
+      .map((key) => this.viewList[key])
+      .reduce((x, y) => x.concat(y))
+      .filter((x) => x.name === viewName)[0];
+    const model = this.modelManager.query(view.name, view.type);
     return ViewDescriptor.buildFrom(model);
   }
 
