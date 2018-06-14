@@ -55,10 +55,7 @@ export default Vue.extend({
       return this.$route.params.viewName;
     },
     config: function() {
-      return {
-        ...fprimes.viewManager.render(this.name)!.descriptor,
-        selectionType: "additive"
-      };
+      return fprimes.viewManager.render(this.name)!.descriptor;
     },
     needLayout: function() {
       return fprimes.viewManager.render(this.name)!.needLayout;
