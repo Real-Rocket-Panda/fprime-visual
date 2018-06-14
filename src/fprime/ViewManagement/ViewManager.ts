@@ -138,12 +138,15 @@ export default class ViewManager {
     if (!this.viewDescriptors[viewName]) {
       return;
     }
-    // Update the cytoscape json object
-    this.cytoscapeJSONs[viewName] = descriptor;
     // Parse the style information in cytoscape json,
     // write it back to the view descriptor
     const viewDescriptor = this.viewDescriptors[viewName];
     viewDescriptor.styleDescriptor = ViewDescriptor.parseStyleFrom(descriptor);
+    // Regenerate a new cytoscape json, at this time all the nodes should
+    // have position, so no need to auto layout. Thus, save the json to the
+    // cytoscapeJSONs map for cachings.
+    this.cytoscapeJSONs[viewName] = this.generateRenderJSONFrom(viewDescriptor)
+      .descriptor;
   }
 
   /**

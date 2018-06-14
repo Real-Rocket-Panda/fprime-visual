@@ -18,6 +18,7 @@ import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
 import CyManager from "./CyManager";
+import { Route } from "vue-router";
 
 export default Vue.extend({
   methods: {
@@ -71,9 +72,9 @@ export default Vue.extend({
   //   next();
   // }
   watch: {
-    $route: function() {
+    $route: function(_, from: Route) {
       fprimes.viewManager.updateViewDescriptorFor(
-        this.name,
+        from.params.viewName,
         CyManager.CyManager.returnDescriptor()
       );
     }
