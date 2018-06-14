@@ -57,7 +57,7 @@ export class Cy_Util {
       });
     });
 
-    comp.on("free", () => {
+    comp.on("unselect", () => {
       rules = this.initPortStick2Comp(comp, ...ports);
     });
     return rules;
