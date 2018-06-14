@@ -28,7 +28,7 @@ edge {
 }
 
 .fprime-instance:selected{
-    background-color: #ef5c32;
+    background-color: #f07452;
     content: data(id);
     text-halign: center;
     text-opacity: 0.5;

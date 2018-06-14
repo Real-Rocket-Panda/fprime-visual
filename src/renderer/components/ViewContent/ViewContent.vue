@@ -38,8 +38,6 @@ export default Vue.extend({
       if (this.needLayout) CyManager.CyManager.applyAutoLayout();
       else CyManager.CyManager.defaultLayout();
 
-      CyManager.CyManager.selectedChangeColor();
-      
       // (window as any).$ = jquery;
       (window as any).jQuery = jquery;
       (window as any).$ = jquery;

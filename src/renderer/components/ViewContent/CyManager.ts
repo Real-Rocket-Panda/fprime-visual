@@ -68,12 +68,6 @@ class CyManager {
         this.movebackPort();
     }
 
-    public selectedChangeColor(): void {
-        this.cy.elements().on("selected", (event: any) => {
-            console.log(123);
-        });
-    }
-
     private stickPort(): void {
         for (const comp of Object.keys(this.graph)) {
             this.cy_util.portMoveWizComp(this.cy.$(comp),
