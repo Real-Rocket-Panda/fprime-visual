@@ -64,6 +64,8 @@ export default Vue.extend({
   },
   watch: {
     $route: function(_, from: Route) {
+      console.log("watch route: " + from.params.viewName);
+      console.log(CyManager.CyManager.returnDescriptor());
       fprimes.viewManager.updateViewDescriptorFor(
         from.params.viewName,
         CyManager.CyManager.returnDescriptor()

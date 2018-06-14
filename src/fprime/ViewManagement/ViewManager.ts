@@ -99,6 +99,9 @@ export default class ViewManager {
     }
     // Find the Cytoscape JSON if already exists.
     if (this.cytoscapeJSONs[viewName]) {
+      // TODO: should not use JSON.parse to do deep clone.
+      console.log("return render: " + viewName);
+      console.log(JSON.parse(JSON.stringify(this.cytoscapeJSONs[viewName])));
       return {
         needLayout: false,
         descriptor: this.cytoscapeJSONs[viewName],
@@ -138,6 +141,8 @@ export default class ViewManager {
     if (!this.viewDescriptors[viewName]) {
       return;
     }
+    // TODO: should not use JSON.parse to do deep clone.
+    descriptor = JSON.parse(JSON.stringify(descriptor));
     // Parse the style information in cytoscape json,
     // write it back to the view descriptor
     const viewDescriptor = this.viewDescriptors[viewName];
