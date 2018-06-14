@@ -51,7 +51,11 @@ export default class ViewManager {
   /**
    * The view list of the current project.
    */
-  private viewList: IViewList = {};
+  private viewList: IViewList = {
+    [ViewType.Function]: [],
+    [ViewType.InstanceCentric]: [],
+    [ViewType.Component]: [],
+  };
 
   public get ViewList(): IViewList {
     return this.viewList;
@@ -161,19 +165,19 @@ export default class ViewManager {
    * Generate the list of all the views in the current project grouped into
    * view types.
    */
-  private generateViewList(viewList: {[k: string]: string[]}) {
-    this.viewList = {
-      [ViewType.Function]: viewList.topologies.map((e: string) => {
-        return {name: e, type: ViewType.Function};
-      }),
-      [ViewType.InstanceCentric]: viewList.instances.map((e: string) => {
-        return {name: e, type: ViewType.InstanceCentric};
-      }),
-      [ViewType.Component]: viewList.components.map((e: string) => {
-        return {name: e, type: ViewType.Component};
-      }),
-    };
-    console.log(this.viewList);
+  private generateViewList(viewList: { [k: string]: string[] }) {
+    this.viewList[ViewType.Function] = viewList.topologies
+      .map((e: string) => {
+        return { name: e, type: ViewType.Function };
+      });
+    this.viewList[ViewType.InstanceCentric] = viewList.instances
+      .map((e: string) => {
+        return { name: e, type: ViewType.InstanceCentric };
+      });
+    this.viewList[ViewType.Component] = viewList.components
+      .map((e: string) => {
+        return { name: e, type: ViewType.Component };
+      });
   }
 
   /**
@@ -186,23 +190,7 @@ export default class ViewManager {
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
     // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
     // view descriptors here.
-    let model;
-    switch (viewName) {
-      case "Topology1":
-        model = this.modelManager.getMockFunctionView2();
-        break;
-
-      case "Instance1":
-        model = this.modelManager.getMockInstanceView1();
-        break;
-
-      case "Component1":
-        model = this.modelManager.getMockComponentView1();
-        break;
-
-      default:
-        throw new Error("Cannot generate view for: '" + viewName + "'");
-    }
+    const model = this.modelManager.getMockFunctionView2();
     return ViewDescriptor.buildFrom(model);
   }
 
