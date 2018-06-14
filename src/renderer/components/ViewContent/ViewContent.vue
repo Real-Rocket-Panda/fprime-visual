@@ -17,7 +17,7 @@ import automove from "rp-automove";
 import fprimes from "fprime";
 import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
-import { Cy_Init } from "./cyInit";
+import CyManager from "./CyManager";
 
 export default Vue.extend({
   methods: {
@@ -30,9 +30,13 @@ export default Vue.extend({
       }
     },
     afterCreated(cy: any) {
-      let cy_init = new Cy_Init(cy,
-        fprimes.viewManager.getSimpleGraphFor(this.name));
-      cy_init.afterCreate();
+      CyManager.CyManager.setCy(cy);
+      CyManager.CyManager.setGraph(
+        fprimes.viewManager.getSimpleGraphFor(this.name)
+      );
+
+      if (this.needLayout) CyManager.CyManager.applyAutoLayout();
+      else CyManager.CyManager.defaultLayout();
 
       // (window as any).$ = jquery;
       (window as any).jQuery = jquery;
@@ -43,7 +47,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      initialized: false,
+      initialized: false
     };
   },
   computed: {
@@ -51,11 +55,31 @@ export default Vue.extend({
       return this.$route.params.viewName;
     },
     config: function() {
-      return fprimes.viewManager.render(this.name);
+      return {
+        ...fprimes.viewManager.render(this.name)!.descriptor,
+        selectionType: "additive"
+      };
+    },
+    needLayout: function() {
+      return fprimes.viewManager.render(this.name)!.needLayout;
     }
   },
   beforeUpdate() {
     (this as any).$cytoscape.reset();
   },
+  // beforeRouteEnter(to: Route, from: Route, next: any){
+  //   if(this != undefined){
+  //     fprimes.viewManager.updateViewDescriptorFor(this.name, (this as any).$cy_init.returnDescriptor());
+  //   }
+  //   next();
+  // }
+  watch: {
+    $route: function() {
+      fprimes.viewManager.updateViewDescriptorFor(
+        this.name,
+        CyManager.CyManager.returnDescriptor()
+      );
+    }
+  }
 });
 </script>
