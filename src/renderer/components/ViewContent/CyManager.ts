@@ -55,7 +55,8 @@ class CyManager {
                 animationEasing: "ease-out",
                 animationDuration: 0,
                 stop: () => {
-                    this.defaultLayout();
+                     this.stickPort();
+                     this.movebackPort();
                 },
             });
             layout.options.eles = this.cy.elements();
@@ -64,8 +65,16 @@ class CyManager {
     }
 
     public defaultLayout(): void {
-        this.stickPort();
-        this.movebackPort();
+        this.cy.batch(() => {
+            const layout: any = this.cy.layout({
+                name: "preset",
+                stop: () => {
+                     this.stickPort();
+                     this.movebackPort();
+                },
+            });
+            layout.run();
+        });
     }
 
     private stickPort(): void {
