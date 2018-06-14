@@ -30,7 +30,6 @@ export default Vue.extend({
       }
     },
     afterCreated(cy: any) {
-
       // cytoscape load view
       let view_json: any = fprimes.viewManager.render(this.name);
       cy.json(view_json.descriptor);

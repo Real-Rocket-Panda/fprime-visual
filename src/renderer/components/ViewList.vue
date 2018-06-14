@@ -13,6 +13,9 @@ import { Route } from "vue-router/types/router";
 
 export default Vue.extend({
   name: "view-list",
+  data() {
+    return { viewlist: View.state.views };
+  },
   computed: {
     items() {
       return View.GetViewList();
