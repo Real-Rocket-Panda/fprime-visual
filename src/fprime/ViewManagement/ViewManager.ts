@@ -1,4 +1,4 @@
-import ViewDescriptor from "./ViewDescriptor";
+import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
@@ -25,6 +25,13 @@ export default class ViewManager {
    * descriptor should be generated as needed (call render).
    */
   private viewDescriptors: { [view: string]: ViewDescriptor } = {};
+
+  /**
+   * All the cytoscape JSONs that have generated from the corresponding view
+   * descriptor. The render function should return the existing JSON to the
+   * UI render.
+   */
+  private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
   private configManager: ConfigManager;
   private config: IConfig;
@@ -76,7 +83,10 @@ export default class ViewManager {
    * @returns The render JSON object for rendering, the current system uses
    * cytoscape as the front-end rendering library.
    */
-  public render(viewName: string): any {
+  public render(viewName: string): {
+    needLayout: boolean,
+    descriptor: ICytoscapeJSON,
+  } | null {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
@@ -85,22 +95,20 @@ export default class ViewManager {
         .map((x) => x.name);
     // No such view
     if (views.indexOf(viewName) === -1) {
-      return {};
+      return null;
     }
-    // Return the view descriptor if already rendered.
-    let viewDescriptor: ViewDescriptor;
-    if (this.viewDescriptors[viewName]) {
-      viewDescriptor = this.viewDescriptors[viewName];
-    } else {
-      // Generate the view descriptor for this view and add it to the map.
-      try {
-        viewDescriptor = this.generateViewDescriptorFor(viewName);
-        this.viewDescriptors[viewName] = viewDescriptor;
-      } catch (e) {
-        // If the generation throws an exception, return an empty object.
-        return {};
-      }
+    // Find the Cytoscape JSON if already exists.
+    if (this.cytoscapeJSONs[viewName]) {
+      // TODO: should not use JSON.parse to do deep clone.
+      return {
+        needLayout: false,
+        descriptor: JSON.parse(JSON.stringify(this.cytoscapeJSONs[viewName])),
+      };
     }
+    // If not, generate the corresponding view descriptor first, and then
+    // generate the corresponding Cytoscape JSON from the view descriptor.
+    const viewDescriptor = this.generateViewDescriptorFor(viewName);
+    this.viewDescriptors[viewName] = viewDescriptor;
     // Convert the view descriptor to the render JSON (cytoscape format)
     return this.generateRenderJSONFrom(viewDescriptor);
   }
@@ -115,6 +123,33 @@ export default class ViewManager {
     } else {
       return {};
     }
+  }
+
+  /**
+   * The UI has updated the Cytoscape JSON and needs to store the change to the
+   * view descriptor. This function should store the Cytoscape JSON in the 
+   * cytoscapeJSONs map and convert the JSON back to the view descriptor.
+   * @param viewName 
+   * @param descriptor 
+   */
+  public updateViewDescriptorFor(
+    viewName: string, descriptor: ICytoscapeJSON) {
+    // If the view descriptor does not exist, the view has not rendered.
+    // Ignore the case.
+    if (!this.viewDescriptors[viewName]) {
+      return;
+    }
+    // TODO: should not use JSON.parse to do deep clone.
+    descriptor = JSON.parse(JSON.stringify(descriptor));
+    // Parse the style information in cytoscape json,
+    // write it back to the view descriptor
+    const viewDescriptor = this.viewDescriptors[viewName];
+    viewDescriptor.styleDescriptor = ViewDescriptor.parseStyleFrom(descriptor);
+    // Regenerate a new cytoscape json, at this time all the nodes should
+    // have position, so no need to auto layout. Thus, save the json to the
+    // cytoscapeJSONs map for cachings.
+    this.cytoscapeJSONs[viewName] = this.generateRenderJSONFrom(viewDescriptor)
+      .descriptor;
   }
 
   /**
@@ -172,62 +207,16 @@ export default class ViewManager {
    * cytoscape as our front-end renderer.
    * @param viewDescriptor The view descriptor to convert.
    */
-  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): any {
-    const styleDescriptor = viewDescriptor.styleDescriptor;
-    const graph = viewDescriptor.graph;
-    // The style for each individual node (components or ports)
-    const nodeStyles =
-      Object.keys(styleDescriptor.nodes)
-        .map((id) => styleDescriptor.nodes[id])
-        .map((n) => {
-          return {
-            selector: "#" + n.id,
-            style: n.style,
-          };
-        });
-    // The style for each individual edge.
-    const edgeStyles =
-      Object.keys(styleDescriptor.edges)
-        .map((id) => styleDescriptor.edges[id])
-        .map((e) => {
-          return {
-            selector: "#" + e.id,
-            style: e.style,
-          };
-        });
+  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): {
+    needLayout: boolean,
+    descriptor: ICytoscapeJSON,
+  } {
+    const json = viewDescriptor.generateCytoscapeJSON();
     // Combine the default styles with all the other styles.
-    const styles =
-      this.styleManager.getDefaultStyles(this.config.DefaultStyleFilePath)
-        .concat(nodeStyles)
-        .concat(edgeStyles);
-    // All the nodes
-    const nodes =
-      Object.keys(graph.nodes)
-        .map((id) => graph.nodes[id])
-        .map((n) => {
-          return {
-            data: { id: n.id },
-            classes: n.type,
-            position: styleDescriptor.nodes[n.id] ? {
-              x: styleDescriptor.nodes[n.id].x,
-              y: styleDescriptor.nodes[n.id].y,
-            } : undefined,
-          };
-        });
-    // All edges
-    const edges =
-      Object.keys(graph.edges)
-        .map((id) => graph.edges[id])
-        .map((e) => {
-          return {
-            data: { id: e.id, source: e.from.id, target: e.to.id },
-            classes: e.type,
-          };
-        });
-    return {
-      style: styles,
-      elements: { nodes, edges },
-    };
+    const defaultStyle = this.styleManager
+      .getDefaultStyles(this.config.DefaultStyleFilePath);
+    json.descriptor.style = defaultStyle.concat(json.descriptor.style);
+    return json;
   }
 
 }

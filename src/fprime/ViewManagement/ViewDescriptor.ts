@@ -96,24 +96,47 @@ export interface IGraph {
 }
 
 /**
+ * We're using cytoscape as our front-end engine.
+ * See https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/cytoscape/index.d.ts#L154
+ */
+export interface ICytoscapeJSON {
+  style: Array<{ selector: string, style: { [key: string]: any } }>;
+  elements: {
+    nodes: Array<{
+      data: { id: string },
+      classes: string,
+      position?: { x: number, y: number },
+    }>,
+    edges: Array<{
+      data: { id: string, source: string, target: string },
+      classes: string,
+    }>,
+  };
+}
+
+/**
  * The definition of the view descriptor.
  */
 export default class ViewDescriptor {
 
   /**
-   * Build the view descriptor from the given model data.
+   * Build the graph of a view descriptor from the given model data.
    * @param model The mocked model data
    */
   public static buildFrom(model: IMockModel): ViewDescriptor {
     const view = new ViewDescriptor();
 
+    // For all the instances in a model
     model.instances.forEach((i) => {
+      // Covert all the instances to a node in the graph
       view.graph.nodes[i.id] = {
         id: i.id,
         modelID: "",
         type: NodeType.Instance,
       };
 
+      // Covert all the ports to a node in the graph
+      // The name of the port has the format: <instance id>_<port id>
       Object.keys(i.ports).forEach((p) => {
         const pname = i.id + "_" + (i.ports as any)[p];
         view.graph.nodes[pname] = {
@@ -122,6 +145,8 @@ export default class ViewDescriptor {
           type: NodeType.Port,
         };
 
+        // Add a virtual edge from instance to the port.
+        // The edge has the format: <instance id>-<instance id>_<port id>
         const vedge = i.id + "-" + pname;
         view.graph.edges[vedge] = {
           id: vedge,
@@ -133,6 +158,9 @@ export default class ViewDescriptor {
       });
     });
 
+    // Convert all the connections to edges in the graph
+    // The edge has the format: <from instance id>_<from port id>-
+    //  <to instance id>_<to instance id>
     model.topologies.forEach((t) => {
       const from = `${t.from.inst.id}_${t.from.port}`;
       const to = `${t.to.inst.id}_${t.to.port}`;
@@ -149,6 +177,44 @@ export default class ViewDescriptor {
     return view;
   }
 
+  /**
+   * Parse the style information from a cytoscape JSON format to an
+   * IStyleDescriptor instance.
+   * @param descriptor 
+   */
+  public static parseStyleFrom(descriptor: ICytoscapeJSON): IStyleDescriptor {
+    const style: IStyleDescriptor = { nodes: {}, edges: {} };
+    // Convert all the style to INodeStyle and IEdgeStyle
+    descriptor.style.forEach((s) => {
+      // Only parse the elements with id.
+      if (s.selector[0] !== "#") {
+        return;
+      }
+      const id = s.selector.substr(1);
+      // Having '-' in the middle should be an edge.
+      if (id.indexOf("-") !== -1) {
+        style.edges[id] = { id, style: s.style };
+      } else { // Otherwise, it's a node
+        style.nodes[id] = { id, style: s.style };
+      }
+    });
+    // Covert the x/y info in elements to INodeStyle
+    descriptor.elements.nodes.forEach((n) => {
+      if (style.nodes[n.data.id]) {
+        style.nodes[n.data.id].x = n.position!.x;
+        style.nodes[n.data.id].y = n.position!.y;
+      } else {
+        style.nodes[n.data.id] = {
+          id: n.data.id,
+          style: {},
+          x: n.position!.x,
+          y: n.position!.y,
+        };
+      }
+    });
+    return style;
+  }
+
   public styleDescriptor: IStyleDescriptor;
   public graph: IGraph;
 
@@ -157,6 +223,83 @@ export default class ViewDescriptor {
     this.graph = { nodes: {}, edges: {} };
   }
 
+  /**
+   * Convert a view descriptor to the render JSON format. Right now, we use
+   * cytoscape as our front-end renderer.
+   */
+  public generateCytoscapeJSON(): {
+    needLayout: boolean,
+    descriptor: ICytoscapeJSON,
+  } {
+    const styleDescriptor = this.styleDescriptor;
+    const graph = this.graph;
+
+    // Add style information to the JSON
+    // The style for each individual node (components or ports)
+    const nodeStyles =
+      Object.keys(styleDescriptor.nodes)
+        .map((id) => styleDescriptor.nodes[id])
+        .map((n) => {
+          return {
+            selector: "#" + n.id,
+            style: n.style,
+          };
+        });
+    // The style for each individual edge.
+    const edgeStyles =
+      Object.keys(styleDescriptor.edges)
+        .map((id) => styleDescriptor.edges[id])
+        .map((e) => {
+          return {
+            selector: "#" + e.id,
+            style: e.style,
+          };
+        });
+    // Combine the two styles
+    const styles = nodeStyles.concat(edgeStyles);
+
+    // Add node and edge information to the JSON
+    let needLayout = false;
+    // All the nodes
+    const nodes =
+      Object.keys(graph.nodes)
+        .map((id) => graph.nodes[id])
+        .map((n) => {
+          const i = { data: { id: n.id }, classes: n.type } as any;
+          const style = styleDescriptor.nodes[n.id];
+          if (style && style.x && style.y) {
+            i.position = { x: style.x!, y: style.y! };
+          } else {
+            // If any of the node does not have the x/y info, we should set
+            // needlayout to true to ask the UI render to layout the diagram.
+            needLayout = true;
+          }
+          return i;
+        });
+
+    // All edges
+    const edges =
+      Object.keys(graph.edges)
+        .map((id) => graph.edges[id])
+        .map((e) => {
+          return {
+            data: { id: e.id, source: e.from.id, target: e.to.id },
+            classes: e.type,
+          };
+        });
+
+    return {
+      needLayout,
+      descriptor: {
+        style: styles,
+        elements: { nodes, edges },
+      },
+    };
+  }
+
+  /**
+   * 
+   */
   public getSimpleGraph(): { [key: string]: string[] } {
     const graph: { [key: string]: string[] } = {};
     Object

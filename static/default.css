@@ -11,6 +11,8 @@ edge {
     text-opacity: 0.5;
     text-valign: center;
     shape: rectangle;
+    border-width: 2;
+    border-color: #c0c0c0
 }
 .fprime-port {
     width: 20;
@@ -20,5 +22,16 @@ edge {
     text-halign: center;
     text-opacity: 0.5;
     text-valign: top;
+    shape: rectangle;
+    border-width: 2;
+    border-color: #c0c0c0
+}
+
+.fprime-instance:selected{
+    background-color: #f07452;
+    content: data(id);
+    text-halign: center;
+    text-opacity: 0.5;
+    text-valign: center;
     shape: rectangle;
 }

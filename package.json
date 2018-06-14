@@ -73,6 +73,7 @@
     }
   },
   "dependencies": {
+    "@types/cytoscape": "^3.1.10",
     "acorn": "^5.6.2",
     "css": "^2.2.3",
     "cytoscape-cose-bilkent": "^4.0.0",
@@ -80,6 +81,7 @@
     "jquery": "^3.0.0",
     "rp-automove": "^1.9.0",
     "vue": "^2.5.16",
+    "vue-color": "^2.4.6",
     "vue-cytoscape": "^0.1.2",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
@@ -136,6 +138,7 @@
     "stylus-loader": "^3.0.1",
     "ts-loader": "^3.5.0",
     "ts-node": "^6.1.0",
+    "tsconfig-paths": "^3.4.0",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3",
     "url-loader": "^0.5.9",

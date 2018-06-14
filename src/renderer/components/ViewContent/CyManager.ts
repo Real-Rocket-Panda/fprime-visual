@@ -1,46 +1,78 @@
 
 import { Cy_Util } from "./cyUtil";
-
-export class Cy_Init {
+class CyManager {
     private cy: any;
     private cy_util: Cy_Util;
     private graph: any;
 
-    constructor(cy: any, graph: any) {
+    constructor() {
+        this.cy = null;
+        this.cy_util = new Cy_Util(null);
+        this.graph = null;
+    }
+
+    public setCy(cy: any) {
         this.cy = cy;
         this.cy_util = new Cy_Util(this.cy);
-        this.graph = graph;
     }
 
     public setGraph(graph: any): void {
         this.graph = graph;
     }
 
+    /**
+     * return the collection of elements that are currently selected by user
+     */
+    public getGrabbed(): any {
+        return this.cy.$(":selected");
+    }
+
+    public setColor(eles: any, color: string): void {
+        eles.style({ "background-color": color });
+    }
+
+    /**
+     * reutrn the json descriptor that the view manager needs
+     */
     public returnDescriptor(): any {
         return {
             style: this.cy.style().json(),
             elements: {
-                nodes: this.cy.nodes().json(),
-                edges: this.cy.edges().json(),
+                nodes: (this.cy.nodes() as any[])
+                    .map((n) => n.json()),
+                edges: (this.cy.edges() as any[])
+                    .map((e) => e.json()),
             },
         };
-
     }
 
-    public afterCreate(): void {
+    public applyAutoLayout(): void {
         this.cy.batch(() => {
             const layout: any = this.cy.layout({
                 name: "cose-bilkent",
-                nodeRepulsion: 1000,
+                nodeRepulsion: 1000000,
                 animate: "end",
                 animationEasing: "ease-out",
                 animationDuration: 0,
                 stop: () => {
-                    this.stickPort();
-                    this.movebackPort();
+                     this.stickPort();
+                     this.movebackPort();
                 },
             });
             layout.options.eles = this.cy.elements();
+            layout.run();
+        });
+    }
+
+    public defaultLayout(): void {
+        this.cy.batch(() => {
+            const layout: any = this.cy.layout({
+                name: "preset",
+                stop: () => {
+                     this.stickPort();
+                     this.movebackPort();
+                },
+            });
             layout.run();
         });
     }
@@ -65,3 +97,5 @@ export class Cy_Init {
         }
     }
 }
+
+export default new CyManager();

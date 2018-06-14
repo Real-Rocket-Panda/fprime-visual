@@ -5,13 +5,13 @@ export class Cy_Util {
     this.cy = cy;
   }
 
-  /*
-    Purpose:  Adjust the location of port after auto-layout. Move the port
-              back to the source of the edge that connects the port and the
-              component.
-    Parameters: comp - component object that the port belongs to
-                ports - collection of the ports that connect to the component
-  */
+  /**
+   * Adjust the location of port afer auto-layout. Move the port back to the
+   * source of the edge that connects the port and the component.
+   * @param comp: component object that the port belongs to
+   * @param ports: collection of the ports that connect to the component
+   */
+
   public portMoveBackComp(comp: any, ...ports: any[]): void {
     ports.forEach((port) => {
       // get the edge from component to port
@@ -51,23 +51,24 @@ export class Cy_Util {
   public portStick2Comp(comp: any, ...ports: any[]): any[] {
     let rules: any[] = this.initPortStick2Comp(comp, ...ports);
 
-    comp.on("mousedown", () => {
+    comp.on("grab", () => {
       rules.forEach((r) => {
         r.destroy();
       });
     });
 
-    comp.on("mouseup", () => {
+    comp.on("free", () => {
       rules = this.initPortStick2Comp(comp, ...ports);
     });
     return rules;
   }
-  /*
-    Purpose:  Restrict the movement area of port during dragging.
-              1. Cannot be separate with the component.
-              2. Cannot enter inside of component.
-    Parameters: comp - component object that the port belongs to
-                ports - collection of the ports that connect to the component
+
+ /**
+  *  Purpose:  Restrict the movement area of port during dragging.
+  *            1. Cannot be separate with the component.
+  *            2. Cannot enter inside of component.
+  *  @param: comp: component object that the port belongs to
+  *  @param  ports: collection of the ports that connect to the component
   */
   private initPortStick2Comp(comp: any, ...ports: any[]): any[] {
     const rules: any[] = new Array();
@@ -154,5 +155,4 @@ export class Cy_Util {
 
     return { x: source.x + sign_x * xOff, y: source.y + sign_y * yOff };
   }
-
 }
