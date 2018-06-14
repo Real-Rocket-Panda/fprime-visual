@@ -100,11 +100,9 @@ export default class ViewManager {
     // Find the Cytoscape JSON if already exists.
     if (this.cytoscapeJSONs[viewName]) {
       // TODO: should not use JSON.parse to do deep clone.
-      console.log("return render: " + viewName);
-      console.log(JSON.parse(JSON.stringify(this.cytoscapeJSONs[viewName])));
       return {
         needLayout: false,
-        descriptor: this.cytoscapeJSONs[viewName],
+        descriptor: JSON.parse(JSON.stringify(this.cytoscapeJSONs[viewName])),
       };
     }
     // If not, generate the corresponding view descriptor first, and then
