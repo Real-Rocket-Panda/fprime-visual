@@ -66,14 +66,15 @@ export default class ViewManager {
     // TODO: This is wrong. The build method should be invoke based on UI
     // interactions. For now, we just mock the behavior.
     this.build();
-    this.modelManager.loadModel(this.config);
   }
 
   /**
    * Build the current FPrime project and get the view list.
    */
   public build() {
-    this.generateViewList();
+    this.modelManager.loadModel(this.config).then((viewList) => {
+      this.generateViewList(viewList);
+    });
   }
 
   /**
@@ -158,20 +159,19 @@ export default class ViewManager {
    * Generate the list of all the views in the current project grouped into
    * view types.
    */
-  private generateViewList() {
-    // TODO: Should generate from model manager, mock the implementation
-    // for now.
+  private generateViewList(viewList: {[k: string]: string[]}) {
     this.viewList = {
-      [ViewType.Function]: [
-        { name: "Topology1", type: ViewType.Function },
-      ],
-      [ViewType.InstanceCentric]: [
-        { name: "Instance1", type: ViewType.InstanceCentric },
-      ],
-      [ViewType.Component]: [
-        { name: "Component1", type: ViewType.Component },
-      ],
+      [ViewType.Function]: viewList.topologies.map((e: string) => {
+        return {name: e, type: ViewType.Function};
+      }),
+      [ViewType.InstanceCentric]: viewList.instances.map((e: string) => {
+        return {name: e, type: ViewType.InstanceCentric};
+      }),
+      [ViewType.Component]: viewList.components.map((e: string) => {
+        return {name: e, type: ViewType.Component};
+      }),
     };
+    console.log(this.viewList);
   }
 
   /**

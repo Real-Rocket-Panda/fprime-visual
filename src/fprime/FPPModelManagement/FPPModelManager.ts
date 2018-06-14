@@ -1,5 +1,7 @@
 import IConfig from "../Common/Config";
 import DataImporter from "../DataImport/DataImporter";
+import { Promise } from "es6-promise";
+import view from "@/store/view";
 
 export interface IMockComponent {
   name: string;
@@ -42,12 +44,14 @@ export default class FPPModelManager {
   }
 
 
-  public loadModel(config: IConfig) {
+  public loadModel(config: IConfig): Promise<{[k: string]: string[]}> {
     const models = this.dataImporter.invokeCompiler(config);
-    models.then((data) => {
+    return models.then((data): Promise<any> => {
       if (data == null || data.namespace == null) {
         console.log("model is null!!");
-        return;
+        return new Promise((resolve, reject) => {
+          reject("model is null");
+        });
       }
 
       if (data.namespace.system && data.namespace.system.length === 1) {
@@ -128,6 +132,22 @@ export default class FPPModelManager {
         console.log(this.topologies);
 
       }
+
+      return new Promise((resolve, reject) => {
+        const viewList: {[k: string]: string[]}
+          = {topologies: [], instances: [], components: []};
+        this.topologies.forEach((e: IMockTopology) => {
+          viewList.topologies.push(e.name);
+        });
+        this.instances.forEach((e: IMockInstance) => {
+          viewList.instances.push(e.id);
+        });
+        this.components.forEach((e: IMockComponent) => {
+          viewList.components.push(e.name);
+        });
+
+        resolve(viewList);
+      });
     });
 
   }
