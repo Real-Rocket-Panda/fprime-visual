@@ -1,15 +1,10 @@
+import {BoundingBox12,Position} from "cytoscape"
+
 export class Cy_Util {
   private cy: any;
-  private rules: any;
   constructor(cy: any) {
     this.cy = cy;
-    this.rules = {};
   }
-
-  public getRule(comp: string): any {
-    return this.rules[comp];
-  }
-
 
   /**
    * Adjust the location of port afer auto-layout. Move the port back to the
@@ -47,47 +42,48 @@ export class Cy_Util {
     });
   }
 
-  /**
-   *  Purpose:  Restrict the movement area of port during dragging.
-   *            1. Cannot be separate with the component.
-   *            2. Cannot enter inside of component.
-   *  @param: comp: component object that the port belongs to
-   *  @param  ports: collection of the ports that connect to the component
-   */
-  public PortStick2Comp(comp: any, ...ports: any[]): void {
-    const rules: any[] = new Array();
-    ports.forEach((port) => {
-      // Port not separate with the component
-      rules.push(
-        this.cy.automove({
-          nodesMatching: port,
-          reposition: {
-            type: "inside", pos: this.generateBox(comp, port),
-            when: "matching",
-          },
-        }));
-
-      // Port cannot go inside of component
-      rules.push(
-        this.cy.automove({
-          nodesMatching: port,
-          reposition: {
-            type: "outside", pos: comp.boundingBox(),
-            when: "matching",
-          },
-        }));
-    });
-    this.rules[comp.id()] = rules;
+  public constrain(val: number, min: number, max: number): any {
+    return val < min ? min : (val > max ? max : val);
   }
 
+  public positionInBox( pos: Position,
+                        bb: BoundingBox12): void {
+      pos.x = this.constrain(pos.x, bb.x1, bb.x2);
+      pos.y = this.constrain(pos.y, bb.y1, bb.y2);
+      console.log(bb);
+      console.log("in");
+      console.log(pos);
+  }
 
-  private generateBox(comp: any, port: any): any {
+  public Oconstrain(val: number, min: number, max: number): any {
+    const mid = (min + max) / 2;
+    if (val > min && val < max) {
+      return val > mid ? max : min;
+    }
+    return val;
+  }
+
+  public positionOutBox( pos: Position,
+                         bb: BoundingBox12): void {
+    const x = this.Oconstrain(pos.x, bb.x1, bb.x2);
+    const y = this.Oconstrain(pos.y, bb.y1, bb.y2);
+
+    if (x !== pos.x && y !== pos.y) {
+      if (Math.abs(pos.x - x) < Math.abs(pos.y - y)) {
+        pos.x = x;
+      } else {
+        pos.y = y;
+      }
+    }
+  }
+
+  public generateBox(cb: BoundingBox12, pw: number, ph: number): any {
     // TODO: dynamic offset
-    const offset = 10;
-    const x1: number = comp.boundingBox().x1 - (port.width() / 2) + offset;
-    const x2: number = comp.boundingBox().x2 + (port.width() / 2) - offset;
-    const y1: number = comp.boundingBox().y1 - (port.height() / 2) + offset;
-    const y2: number = comp.boundingBox().y2 + (port.height() / 2) - offset;
+    const offset = 12;
+    const x1: number = cb.x1 - (pw / 2) + offset;
+    const x2: number = cb.x2 + (pw / 2) - offset;
+    const y1: number = cb.y1 - (ph / 2) + offset;
+    const y2: number = cb.y2 + (ph / 2) - offset;
     return {
       x1: x1,
       x2: x2,
