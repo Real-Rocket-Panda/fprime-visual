@@ -29,9 +29,37 @@ class CyManager {
         return this.cy.$(":selected");
     }
 
+    /**
+     * set a collection of elements to be a certain color
+     * @param eles collection of elements (implicitly of the same type)
+     * @param color value of color to change
+     */
     public setColor(eles: any, color: string): void {
         eles.style({ "background-color": color });
     }
+
+    /**
+     * assign the width and height to a collection of elements
+     * @param eles collection of elements (implicitly of the same type)
+     * @param width the value of width to be set
+     * @param height the value of height to be set
+     */
+    public setSize(eles: any, width: number, height: number): void {
+        this.cy.batch(() => {
+            eles.array.forEach((node: any) => {
+                node.style({
+                    width: width,
+                    height: height,
+                });
+                if (node.is(".fprime-instance")) {
+                    this.cy_util.portMoveBackComp(node,
+                        ...this.graph["#" + node.id()]
+                            .map((port: any) => (this.cy.$(port))));
+                }
+            });
+        });
+    }
+
 
     /**
      * Enable the plugin nodeResize.
@@ -52,7 +80,7 @@ class CyManager {
             */
             this.cy_util.portMoveBackComp(node,
                 ...this.graph["#" + node.id()]
-                .map((port: any) => (this.cy.$(port))));
+                    .map((port: any) => (this.cy.$(port))));
         });
     }
 
