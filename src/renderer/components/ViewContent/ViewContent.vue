@@ -43,13 +43,15 @@ export default Vue.extend({
       CyManager.setGraph(
         fprimes.viewManager.getSimpleGraphFor(this.name)
       );
-
       // apply layout
       if (view_json.needLayout) CyManager.applyAutoLayout();
       else CyManager.defaultLayout();
 
       // use resize
       CyManager.resize();
+
+      // use click rule
+      CyManager.clickThenSelect();
     }
   },
   data() {

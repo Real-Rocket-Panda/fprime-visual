@@ -1,5 +1,6 @@
 
 import { Cy_Util } from "./cyUtil";
+import { NodeType } from "fprime/ViewManagement/ViewDescriptor";
 class CyManager {
     private cy: any;
     private cy_util: Cy_Util;
@@ -16,8 +17,15 @@ class CyManager {
         this.cy_util = new Cy_Util(this.cy);
     }
 
+    public getGraph(): any {
+        return this.graph;
+    }
     public setGraph(graph: any): void {
         this.graph = graph;
+        // TODO: Move this logic to view descriptor
+        for (const comp of Object.keys(this.graph)) {
+            this.cy.$(comp).data("ports", this.graph[comp]);
+        }
     }
 
     /**
@@ -128,15 +136,38 @@ class CyManager {
         });
     }
 
+    /**
+     * set up the rule for all the nodes that if clicked, then selected
+     */
+    public clickThenSelect(): void {
+        this.cy.nodes().on("mousedown", (e: any) => {
+            e.target.select();
+        });
+    }
+
+
     private stickPort(): void {
         for (const comp of Object.keys(this.graph)) {
             this.cy_util.portMoveWizComp(this.cy.$(comp),
                 this.graph[comp].join(","));
-            this.cy_util.portStick2Comp(
+            this.cy_util.PortStick2Comp(
                 this.cy.$(comp),
                 ...this.graph[comp].map((k: any) => this.cy.$(k)),
             );
         }
+
+        this.cy.nodes(".fprime-instance").on("select", (evt: any) => {
+            const comp = evt.target.id();
+            this.cy_util.getRule(comp).forEach((r: any) => {
+                r.destroy();
+            });
+            evt.target.data("ports").map((k: any) => this.cy.$(k).select());
+        });
+        this.cy.nodes(".fprime-instance").on("unselect", (evt: any) => {
+            const comp = evt.target.id();
+            this.cy_util.PortStick2Comp(evt.target,
+                ...evt.target.data("ports").map((k: any) => this.cy.$(k)));
+        });
     }
 
     private movebackPort(): void {
