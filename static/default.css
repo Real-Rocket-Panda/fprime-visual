@@ -2,6 +2,10 @@ edge {
     line-color: #9dbaea;
     width: 2;
 }
+extra_edge {
+    visibility: "display";
+    width: 2;
+}
 .fprime-instance {
     width: 100;
     height: 140;
