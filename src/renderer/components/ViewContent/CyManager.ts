@@ -1,6 +1,6 @@
 
 import { Cy_Util } from "./cyUtil";
-import { NodeType } from "fprime/ViewManagement/ViewDescriptor";
+import { EventObject } from "cytoscape";
 class CyManager {
     private cy: any;
     private cy_util: Cy_Util;
@@ -25,6 +25,9 @@ class CyManager {
         // TODO: Move this logic to view descriptor
         for (const comp of Object.keys(this.graph)) {
             this.cy.$(comp).data("ports", this.graph[comp]);
+            this.graph[comp].forEach((port: any) => {
+                this.cy.$(port).data("component", comp);
+            });
         }
     }
 
@@ -140,9 +143,9 @@ class CyManager {
      * set up the rule for all the nodes that if clicked, then selected
      */
     public clickThenSelect(): void {
-        this.cy.nodes().on("mousedown", (e: any) => {
-            e.target.select();
-        });
+        // this.cy.nodes().on("mousedown", (e: any) => {
+        //     e.target.select();
+        // });
     }
 
 
@@ -150,23 +153,21 @@ class CyManager {
         for (const comp of Object.keys(this.graph)) {
             this.cy_util.portMoveWizComp(this.cy.$(comp),
                 this.graph[comp].join(","));
-            this.cy_util.PortStick2Comp(
-                this.cy.$(comp),
-                ...this.graph[comp].map((k: any) => this.cy.$(k)),
-            );
         }
 
-        this.cy.nodes(".fprime-instance").on("select", (evt: any) => {
-            const comp = evt.target.id();
-            this.cy_util.getRule(comp).forEach((r: any) => {
-                r.destroy();
-            });
-            evt.target.data("ports").map((k: any) => this.cy.$(k).select());
-        });
-        this.cy.nodes(".fprime-instance").on("unselect", (evt: any) => {
-            const comp = evt.target.id();
-            this.cy_util.PortStick2Comp(evt.target,
-                ...evt.target.data("ports").map((k: any) => this.cy.$(k)));
+        this.cy.nodes(".fprime-port").on("drag", (evt: EventObject) => {
+            const portIns = evt.target;
+            const compIns = this.cy.$(evt.target.data("component"));
+            this.cy_util.positionInBox(
+                portIns.position(),
+                this.cy_util.generateBox(
+                    compIns.boundingBox(),
+                    portIns.width(),
+                    portIns.height()));
+
+            this.cy_util.positionOutBox(
+                portIns.position(),
+                compIns.boundingBox());
         });
     }
 

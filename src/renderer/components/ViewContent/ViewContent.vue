@@ -37,7 +37,6 @@ export default Vue.extend({
       // cytoscape load view
       let view_json: any = fprimes.viewManager.render(this.name);
       cy.json(view_json.descriptor);
-
       // update cy obj and connection graph
       CyManager.setCy(cy);
       CyManager.setGraph(
