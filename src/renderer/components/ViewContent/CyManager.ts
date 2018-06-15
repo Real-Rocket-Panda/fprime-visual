@@ -1,6 +1,8 @@
 
 import { Cy_Util } from "./cyUtil";
 class CyManager {
+    public initialized: boolean = false;
+
     private cy: any;
     private cy_util: Cy_Util;
     private graph: any;
@@ -59,7 +61,6 @@ class CyManager {
                      this.movebackPort();
                 },
             });
-            layout.options.eles = this.cy.elements();
             layout.run();
         });
     }
