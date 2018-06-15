@@ -32,6 +32,29 @@ class CyManager {
     }
 
     /**
+     * Enable the plugin nodeResize.
+     * Drag-to-resize only applies to the components.
+     * further options refer to:
+     * https://github.com/iVis-at-Bilkent/cytoscape.js-node-resize
+     */
+    public resize(): void {
+        this.cy.nodeResize({
+            isNoControlsMode: (node: any) => {
+                return !node.is(".fprime-instance");
+            },
+        });
+        this.cy.on("noderesize.resizeend", (e: any, type: any, node: any) => {
+            /* type param includes:
+            topleft, topcenter, topright, centerright,
+            bottomright, bottomcenter, bottomleft, centerleft
+            */
+            this.cy_util.portMoveBackComp(node,
+                ...this.graph["#" + node.id()]
+                .map((port: any) => (this.cy.$(port))));
+        });
+    }
+
+    /**
      * reutrn the json descriptor that the view manager needs
      */
     public returnDescriptor(): any {
@@ -55,8 +78,8 @@ class CyManager {
                 animationEasing: "ease-out",
                 animationDuration: 0,
                 stop: () => {
-                     this.stickPort();
-                     this.movebackPort();
+                    this.stickPort();
+                    this.movebackPort();
                 },
             });
             layout.options.eles = this.cy.elements();
@@ -69,8 +92,8 @@ class CyManager {
             const layout: any = this.cy.layout({
                 name: "preset",
                 stop: () => {
-                     this.stickPort();
-                     this.movebackPort();
+                    this.stickPort();
+                    this.movebackPort();
                 },
             });
             layout.run();
