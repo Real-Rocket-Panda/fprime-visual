@@ -2,8 +2,6 @@
   <div style="height:100%;">
     <cytoscape
       style="height:100%;"
-      :config="config"
-      :afterCreated="updateCytoscape"
       :preConfig="initCytoscape"
     ></cytoscape>
   </div>
@@ -32,7 +30,9 @@ export default Vue.extend({
     updateCytoscape(cy: any) {
       CyManager.setCy(cy);
       CyManager.setGraph(fprimes.viewManager.getSimpleGraphFor(this.name));
-
+      // Update the config
+      cy.json(this.config);
+      // Update layout
       if (this.render!.needLayout) {
         CyManager.applyAutoLayout();
       } else {
@@ -55,7 +55,16 @@ export default Vue.extend({
       config: render!.descriptor,
     };
   },
+  mounted() {
+    (this as any).$cytoscape.instance.then((cy: any) => {
+      // Set the config to cytoscape
+      this.updateCytoscape(cy);
+    });
+  },
   beforeDestroy() {
+    // Save the current cytoscape json
+    fprimes.viewManager.updateViewDescriptorFor(this.name,
+      CyManager.returnDescriptor());
     (this as any).$cytoscape.instance.then((cy: any) => {
       cy.destroy();
     });
@@ -78,7 +87,6 @@ export default Vue.extend({
         this.render = fprimes.viewManager.render(this.name);
         this.config = this.render!.descriptor;
         // Set the config to cytoscape
-        cy.json(this.config);
         this.updateCytoscape(cy);
       });
     }

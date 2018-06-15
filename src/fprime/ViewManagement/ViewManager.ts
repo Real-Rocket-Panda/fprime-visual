@@ -31,7 +31,7 @@ export default class ViewManager {
    * descriptor. The render function should return the existing JSON to the
    * UI render.
    */
-  private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
+  public cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
   private configManager: ConfigManager;
   private config: IConfig;
