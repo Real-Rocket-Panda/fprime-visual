@@ -1,9 +1,15 @@
 export class Cy_Util {
   private cy: any;
-
+  private rules: any;
   constructor(cy: any) {
     this.cy = cy;
+    this.rules = {};
   }
+
+  public getRule(comp: string): any {
+    return this.rules[comp];
+  }
+
 
   /**
    * Adjust the location of port afer auto-layout. Move the port back to the
@@ -41,27 +47,6 @@ export class Cy_Util {
     });
   }
 
-  /*
-    Purpose:  Destroy the rule that port stick to component during dragging.
-              Re-apply the rule when the port is freed.
-    Parameters: comp - component object that the port belongs to
-                ports - collection of the ports that connect to the component
-    Return: rule - the updated rule objects
-  */
-  public portStick2Comp(comp: any, ...ports: any[]): any[] {
-    let rules: any[] = this.initPortStick2Comp(comp, ...ports);
-
-    comp.on("grab", () => {
-      rules.forEach((r) => {
-        r.destroy();
-      });
-    });
-    comp.on("unselect", () => {
-      rules = this.initPortStick2Comp(comp, ...ports);
-    });
-    return rules;
-  }
-
   /**
    *  Purpose:  Restrict the movement area of port during dragging.
    *            1. Cannot be separate with the component.
@@ -69,7 +54,7 @@ export class Cy_Util {
    *  @param: comp: component object that the port belongs to
    *  @param  ports: collection of the ports that connect to the component
    */
-  private initPortStick2Comp(comp: any, ...ports: any[]): any[] {
+  public PortStick2Comp(comp: any, ...ports: any[]): void {
     const rules: any[] = new Array();
     ports.forEach((port) => {
       // Port not separate with the component
@@ -92,7 +77,7 @@ export class Cy_Util {
           },
         }));
     });
-    return rules;
+    this.rules[comp.id()] = rules;
   }
 
 
