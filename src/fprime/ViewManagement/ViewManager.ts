@@ -187,6 +187,7 @@ export default class ViewManager {
       .reduce((x, y) => x.concat(y))
       .filter((x) => x.name === viewName)[0];
     const model = this.modelManager.query(view.name, view.type);
+    console.log(model);
     return ViewDescriptor.buildFrom(model);
   }
 
