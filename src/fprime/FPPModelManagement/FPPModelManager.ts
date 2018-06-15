@@ -33,7 +33,7 @@ export interface IMockTopology {
 
 export interface IMockModel {
   instances: IMockInstance[];
-  topologies: IMockConnection[];
+  connections: IMockConnection[];
   components: IMockComponent[];
 }
 
@@ -136,6 +136,7 @@ export default class FPPModelManager {
 
         });
         console.log(this.topologies);
+        console.log(this.components);
 
       }
 
@@ -175,36 +176,19 @@ export default class FPPModelManager {
 
         return {
           instances: ins,
-          topologies: cons,
+          connections: cons,
           components: [],
         };
       }
       case ViewType.Component: {
         const ins: IMockInstance[] = [];
         const cons: IMockConnection[] = [];
-        this.instances.forEach((i) => {
-          const type = i.properties.type.split("\.");
-          const component = type[1];
-          if (component === viewName) {
-            console.log(viewName);
-            ins.push(i);
-          }
-        });
-
-        this.topologies.forEach((t) => {
-          t.connections.forEach((c) => {
-            if (ins.indexOf(c.from.inst) !== -1 &&
-                ins.indexOf(c.to.inst) !== -1 &&
-                cons.indexOf(c) === -1) {
-                cons.push(c);
-            }
-          });
-        });
-
+        const comps = this.components.filter((i) => i.name === viewName);
+        console.log(comps);
         return {
           instances: ins,
-          topologies: cons,
-          components: [],
+          connections: cons,
+          components: comps,
         };
       }
       case ViewType.InstanceCentric: {
@@ -227,7 +211,7 @@ export default class FPPModelManager {
         ins.push(root);
         return {
           instances: ins,
-          topologies: cons,
+          connections: cons,
           components: [],
         };
       }
@@ -246,7 +230,7 @@ export default class FPPModelManager {
     });
     return  {
       instances: this.instances,
-      topologies: cons,
+      connections: cons,
       components: this.components,
     };
   }
