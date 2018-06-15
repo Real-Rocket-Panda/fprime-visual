@@ -23,7 +23,7 @@ export class Cy_Util {
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
         edge.targetEndpoint(),
-        comp.boundingBox());
+        comp.boundingBox( {includeOverlays: false}));
       // resposition the port
       port.position(intersection);
     });
@@ -50,9 +50,6 @@ export class Cy_Util {
                         bb: BoundingBox12): void {
       pos.x = this.constrain(pos.x, bb.x1, bb.x2);
       pos.y = this.constrain(pos.y, bb.y1, bb.y2);
-      console.log(bb);
-      console.log("in");
-      console.log(pos);
   }
 
   public Oconstrain(val: number, min: number, max: number): any {
@@ -112,12 +109,12 @@ export class Cy_Util {
         ({ x: box.x1, y: target.y });
     }
 
-    const wid: number = box.x2 - box.x1; // wid of bounding box
-    const high: number = box.y2 - box.y1; // height of bounding box
+    const wid = box.w; // wid of bounding box
+    const high = box.h; // height of bounding box
     const ratioLine: number = Math.abs((target.y - source.y) /
       (target.x - source.x));
-    const ratioBox: number = Math.abs((box.x2 - box.x1) /
-      (box.y2 - box.y1));
+    const ratioBox: number = Math.abs((box.y2 - box.y1) /
+      (box.x2 - box.x1));
     let xOff: number = 0;
     let yOff: number = 0;
 
@@ -127,10 +124,10 @@ export class Cy_Util {
       Math.abs(target.x - source.x);
     if (ratioLine < ratioBox) {  // left or right
       yOff += ratioLine * wid / 2;
-      xOff += yOff / ratioLine;
+      xOff += wid / 2;
     } else {  // up or down
       xOff += (high / 2) / ratioLine;
-      yOff += xOff * ratioLine;
+      yOff += high / 2 ;
     }
 
     return { x: source.x + sign_x * xOff, y: source.y + sign_y * yOff };

@@ -44,9 +44,6 @@ export default Vue.extend({
 
       // use resize
       CyManager.resize();
-
-      // use click rule
-      CyManager.clickThenSelect();
     }
   },
   data() {

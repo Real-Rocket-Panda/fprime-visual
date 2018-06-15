@@ -84,15 +84,15 @@ class CyManager {
                 return !node.is(".fprime-instance");
             },
         });
-        this.cy.on("noderesize.resizeend", (e: any, type: any, node: any) => {
-            /* type param includes:
-            topleft, topcenter, topright, centerright,
-            bottomright, bottomcenter, bottomleft, centerleft
-            */
-            this.cy_util.portMoveBackComp(node,
-                ...this.graph["#" + node.id()]
-                    .map((port: any) => (this.cy.$(port))));
-        });
+        this.cy.on("noderesize.resizeend",
+            (evt: EventObject, type: any, node: any) => {
+                /* type param includes:
+                topleft, topcenter, topright, centerright,
+                bottomright, bottomcenter, bottomleft, centerleft
+                */
+                this.cy_util.portMoveBackComp(node, ...node.data("ports").map(
+                    (p: string) => this.cy.$(p)));
+            });
     }
 
     /**
@@ -140,16 +140,6 @@ class CyManager {
         });
     }
 
-    /**
-     * set up the rule for all the nodes that if clicked, then selected
-     */
-    public clickThenSelect(): void {
-        // this.cy.nodes().on("mousedown", (e: any) => {
-        //     e.target.select();
-        // });
-    }
-
-
     private stickPort(): void {
         for (const comp of Object.keys(this.graph)) {
             this.cy_util.portMoveWizComp(this.cy.$(comp),
@@ -162,21 +152,22 @@ class CyManager {
             this.cy_util.positionInBox(
                 portIns.position(),
                 this.cy_util.generateBox(
-                    compIns.boundingBox(),
+                    compIns.boundingBox({includeOverlays: false}),
                     portIns.width(),
                     portIns.height()));
 
             this.cy_util.positionOutBox(
                 portIns.position(),
-                compIns.boundingBox());
+                compIns.boundingBox({includeOverlays: false}));
         });
     }
 
     private movebackPort(): void {
         for (const comp of Object.keys(this.graph)) {
+            const compIns = this.cy.$(comp);
             this.cy_util.portMoveBackComp(
-                this.cy.$(comp),
-                ...this.graph[comp].map((k: any) => this.cy.$(k)),
+                compIns,
+                ...compIns.data("ports").map((k: any) => this.cy.$(k)),
             );
         }
     }
