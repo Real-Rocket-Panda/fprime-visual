@@ -2,6 +2,9 @@ import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
+import * as path from "path";
+
+declare var __static: string;
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -33,7 +36,7 @@ export default class ViewManager {
    */
   private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
-  private configManager: ConfigManager;
+  private configManager: ConfigManager = new ConfigManager();
   private config: IConfig;
 
   /**
@@ -50,7 +53,11 @@ export default class ViewManager {
   /**
    * The view list of the current project.
    */
-  private viewList: IViewList = {};
+  private viewList: IViewList = {
+    [ViewType.Function]: [],
+    [ViewType.InstanceCentric]: [],
+    [ViewType.Component]: [],
+  };
 
   public get ViewList(): IViewList {
     return this.viewList;
@@ -60,7 +67,7 @@ export default class ViewManager {
    * Initialize all the fields.
    */
   constructor() {
-    this.configManager = new ConfigManager();
+    // Set to an empty config
     this.config = this.configManager.getConfig();
     // TODO: This is wrong. The build method should be invoke based on UI
     // interactions. For now, we just mock the behavior.
@@ -71,7 +78,13 @@ export default class ViewManager {
    * Build the current FPrime project and get the view list.
    */
   public build() {
-    this.generateViewList();
+    // Load the project config.
+    // TODO: for now, we are using a fake config file in the static folder.
+    this.configManager.loadConfig(path.resolve(__static, "config.json"));
+    this.config = this.configManager.getConfig();
+    this.modelManager.loadModel(this.config).then((viewList) => {
+      this.generateViewList(viewList);
+    });
   }
 
   /**
@@ -102,7 +115,7 @@ export default class ViewManager {
       // TODO: should not use JSON.parse to do deep clone.
       return {
         needLayout: false,
-        descriptor: JSON.parse(JSON.stringify(this.cytoscapeJSONs[viewName])),
+        descriptor: this.cytoscapeJSONs[viewName],
       };
     }
     // If not, generate the corresponding view descriptor first, and then
@@ -139,37 +152,30 @@ export default class ViewManager {
     if (!this.viewDescriptors[viewName]) {
       return;
     }
-    // TODO: should not use JSON.parse to do deep clone.
-    descriptor = JSON.parse(JSON.stringify(descriptor));
+    this.cytoscapeJSONs[viewName] = descriptor;
     // Parse the style information in cytoscape json,
     // write it back to the view descriptor
     const viewDescriptor = this.viewDescriptors[viewName];
     viewDescriptor.styleDescriptor = ViewDescriptor.parseStyleFrom(descriptor);
-    // Regenerate a new cytoscape json, at this time all the nodes should
-    // have position, so no need to auto layout. Thus, save the json to the
-    // cytoscapeJSONs map for cachings.
-    this.cytoscapeJSONs[viewName] = this.generateRenderJSONFrom(viewDescriptor)
-      .descriptor;
   }
 
   /**
    * Generate the list of all the views in the current project grouped into
    * view types.
    */
-  private generateViewList() {
-    // TODO: Should generate from model manager, mock the implementation
-    // for now.
-    this.viewList = {
-      [ViewType.Function]: [
-        { name: "Topology1", type: ViewType.Function },
-      ],
-      [ViewType.InstanceCentric]: [
-        { name: "Instance1", type: ViewType.InstanceCentric },
-      ],
-      [ViewType.Component]: [
-        { name: "Component1", type: ViewType.Component },
-      ],
-    };
+  private generateViewList(viewList: { [k: string]: string[] }) {
+    this.viewList[ViewType.Function] = viewList.topologies
+      .map((e: string) => {
+        return { name: e, type: ViewType.Function };
+      });
+    this.viewList[ViewType.InstanceCentric] = viewList.instances
+      .map((e: string) => {
+        return { name: e, type: ViewType.InstanceCentric };
+      });
+    this.viewList[ViewType.Component] = viewList.components
+      .map((e: string) => {
+        return { name: e, type: ViewType.Component };
+      });
   }
 
   /**
@@ -182,23 +188,12 @@ export default class ViewManager {
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
     // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
     // view descriptors here.
-    let model;
-    switch (viewName) {
-      case "Topology1":
-        model = this.modelManager.getMockFunctionView1();
-        break;
-
-      case "Instance1":
-        model = this.modelManager.getMockInstanceView1();
-        break;
-
-      case "Component1":
-        model = this.modelManager.getMockComponentView1();
-        break;
-
-      default:
-        throw new Error("Cannot generate view for: '" + viewName + "'");
-    }
+    const view = Object.keys(this.viewList)
+      .map((key) => this.viewList[key])
+      .reduce((x, y) => x.concat(y))
+      .filter((x) => x.name === viewName)[0];
+    const model = this.modelManager.query(view.name, view.type);
+    console.log(model);
     return ViewDescriptor.buildFrom(model);
   }
 
@@ -213,6 +208,8 @@ export default class ViewManager {
   } {
     const json = viewDescriptor.generateCytoscapeJSON();
     // Combine the default styles with all the other styles.
+    // TODO: should not load the default style from file system every time when
+    // generating the render json.
     const defaultStyle = this.styleManager
       .getDefaultStyles(this.config.DefaultStyleFilePath);
     json.descriptor.style = defaultStyle.concat(json.descriptor.style);

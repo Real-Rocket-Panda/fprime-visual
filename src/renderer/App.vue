@@ -65,7 +65,7 @@ export default Vue.extend({
           const width = e.x >= 200 ? e.x : 200;
           drawer.style.width = width + "px";
           content.style.paddingLeft = width + "px";
-          counter = 12;
+          counter = 5;
         } else {
           counter--;
         }
