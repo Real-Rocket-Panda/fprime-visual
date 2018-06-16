@@ -1,6 +1,24 @@
+import IConfig from "../Common/Config";
+import DataImporter from "../DataImport/DataImporter";
+import { Promise } from "es6-promise";
+
+export enum ViewType {
+  Function = "Function View",
+  InstanceCentric = "InstanceCentric View",
+  Component = "Component View",
+}
+
+export interface IMockComponent {
+  name: string;
+  namespace: string;
+  ports: string[];
+}
+
 export interface IMockInstance {
   id: string;
+  model_id: number;
   ports: { [p: string]: string };
+  properties: { [p: string]: string };
 }
 
 export interface IMockConnection {
@@ -8,158 +26,212 @@ export interface IMockConnection {
   to: { inst: IMockInstance, port: string };
 }
 
+export interface IMockTopology {
+  name: string;
+  connections: IMockConnection[];
+}
+
 export interface IMockModel {
   instances: IMockInstance[];
-  topologies: IMockConnection[];
+  connections: IMockConnection[];
+  components: IMockComponent[];
 }
 
 export default class FPPModelManager {
-
-  public getMockFunctionView1(): IMockModel {
-    const c1 = { id: "c1", ports: { p1: "p1", p2: "p2"} };
-    const c2 = { id: "c2", ports: { p1: "p1" } };
-    const c3 = { id: "c3", ports: { p1: "p1", p2: "p2" } };
-    const c4 = { id: "c4", ports: { p1: "p1" } };
-
-    return {
-      instances: [c1, c2, c3, c4],
-      topologies: [
-        {
-          from: { inst: c1, port: c1.ports.p1 },
-          to: { inst: c2, port: c2.ports.p1 },
-        },
-        {
-          from: { inst: c1, port: c1.ports.p2 },
-          to: { inst: c3, port: c3.ports.p1 },
-        },
-        {
-          from: { inst: c3, port: c3.ports.p2 },
-          to: { inst: c2, port: c2.ports.p1 },
-        },
-        {
-          from: { inst: c1, port: c1.ports.p2 },
-          to: { inst: c4, port: c4.ports.p1 },
-        },
-      ],
-    };
+  private dataImporter: DataImporter = new DataImporter();
+  private instances: IMockInstance[];
+  private topologies: IMockTopology[];
+  private components: IMockComponent[];
+  private keywords: string[] = ["base_id", "name"];
+  constructor() {
+    this.instances = [];
+    this.topologies = [];
+    this.components = [];
   }
 
-  public getMockInstanceView1(): IMockModel {
-    const c1 = { id: "c1", ports: { p1: "p1", p2: "p2"} };
-    const c2 = { id: "c2", ports: { p1: "p1", p2: "p2", p3: "p3"  } };
-    const c3 = { id: "c3", ports: { p1: "p1", p2: "p2", p3: "p3"  } };
-    const c4 = { id: "c4", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    const c5 = { id: "c5", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    const c6 = { id: "c6", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    const c7 = { id: "c7", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    const c8 = { id: "c8", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    const c9 = { id: "c9", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    const c10 = { id: "c10", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    // const c11 = { id: "c11", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
-    // const c12 = { id: "c12", ports: { p1: "p1", p2: "p2", p3: "p3"   } };
 
-    return {
-      instances: [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10],
-      topologies: [
-        {
-          from: { inst: c1, port: c1.ports.p1 },
-          to: { inst: c2, port: c2.ports.p3 },
-        },
-        {
-          from: { inst: c1, port: c1.ports.p2 },
-          to: { inst: c5, port: c5.ports.p3 },
-        },
-        {
-          from: { inst: c1, port: c1.ports.p1 },
-          to: { inst: c2, port: c3.ports.p2 },
-        },
-        {
-          from: { inst: c1, port: c1.ports.p2 },
-          to: { inst: c3, port: c3.ports.p2 },
-        },
-        {
-          from: { inst: c3, port: c3.ports.p2 },
-          to: { inst: c5, port: c5.ports.p2 },
-        },
-        {
-          from: { inst: c1, port: c1.ports.p2 },
-          to: { inst: c4, port: c4.ports.p1 },
-        },
-        {
-          from: { inst: c2, port: c2.ports.p1 },
-          to: { inst: c3, port: c3.ports.p3 },
-        },
-        {
-          from: { inst: c3, port: c3.ports.p1 },
-          to: { inst: c4, port: c4.ports.p3 },
-        },
-        {
-          from: { inst: c4, port: c4.ports.p1 },
-          to: { inst: c5, port: c5.ports.p3 },
-        },
-        {
-          from: { inst: c4, port: c4.ports.p2 },
-          to: { inst: c7, port: c7.ports.p2 },
-        },
-        {
-          from: { inst: c4, port: c4.ports.p3 },
-          to: { inst: c6, port: c6.ports.p3 },
-        },
-        {
-          from: { inst: c5, port: c5.ports.p1 },
-          to: { inst: c6, port: c6.ports.p3 },
-        },
-        {
-          from: { inst: c5, port: c5.ports.p2 },
-          to: { inst: c9, port: c9.ports.p2 },
-        },
-        {
-          from: { inst: c5, port: c5.ports.p3 },
-          to: { inst: c8, port: c8.ports.p3 },
-        },
-        {
-          from: { inst: c6, port: c6.ports.p1 },
-          to: { inst: c7, port: c7.ports.p3 },
-        },
-        {
-          from: { inst: c7, port: c3.ports.p1 },
-          to: { inst: c8, port: c8.ports.p3 },
-        },
-        {
-          from: { inst: c7, port: c7.ports.p2 },
-          to: { inst: c10, port: c10.ports.p2 },
-        },
-        {
-          from: { inst: c7, port: c7.ports.p3 },
-          to: { inst: c2, port: c2.ports.p3 },
-        },
-        {
-          from: { inst: c8, port: c8.ports.p1 },
-          to: { inst: c9, port: c9.ports.p3 },
-        },
-        {
-          from: { inst: c8, port: c8.ports.p3 },
-          to: { inst: c1, port: c1.ports.p1 },
-        },
-        {
-          from: { inst: c9, port: c9.ports.p1 },
-          to: { inst: c10, port: c10.ports.p3 },
-        },
-        {
-          from: { inst: c10, port: c10.ports.p3 },
-          to: { inst: c4, port: c4.ports.p3 },
-        },
-      ],
-    };
+  public loadModel(config: IConfig): Promise<{[k: string]: string[]}> {
+    const models = this.dataImporter.invokeCompiler(config);
+    return models.then((data): Promise<any> => {
+      if (data == null || data.namespace == null) {
+        // console.log("model is null!!");
+        return new Promise((resolve, reject) => {
+          reject("model is null");
+        });
+      }
+
+      if (data.namespace.system && data.namespace.system.length === 1) {
+
+        data.namespace.component.forEach((ele: any) => {
+          const ps: string[] = [];
+          ele.port.forEach((p: any) => {
+            ps.push(p.$.name);
+          });
+
+          this.components.push({
+            name: ele.$.name,
+            namespace: ele.$.namespace,
+            ports: ps,
+          });
+        });
+
+        // console.dir(this.components);
+        data.namespace.system[0].instance.forEach((ele: any) => {
+          const props: { [p: string]: string } = {};
+          for (const key in ele.$) {
+            if (!ele.$.hasOwnProperty(key)) {
+              continue;
+            }
+            if (this.keywords.indexOf(key) === -1) {
+                props[key] = ele.$[key];
+            }
+          }
+          const ps: {[p: string]: string} = {};
+          if (ele.$.type) {
+            const type = ele.$.type.split("\.");
+            if (type.length === 2) {
+              const namespace = type[0];
+              const name = type[1];
+              this.components.forEach((c: IMockComponent) => {
+                if (c.name === name && c.namespace === namespace) {
+                  let cnt = 1;
+                  c.ports.forEach((p: string) => {
+                      ps["p" + cnt] = p;
+                      cnt++;
+                    });
+                }
+              });
+
+            }
+          }
+          this.instances.push({
+              id: ele.$.name,
+              model_id: ele.$.base_id,
+              ports: ps,
+              properties: props,
+          });
+        });
+
+        // console.log(this.instances);
+
+        data.namespace.system[0].topology.forEach((ele: any) => {
+          const cons: IMockConnection[] = [];
+          ele.connection.forEach((con: any) => {
+            const source = this.instances.filter(
+              (i) => i.id === con.source[0].$.instance)[0];
+            const target = this.instances.filter(
+              (i) => i.id === con.target[0].$.instance)[0];
+
+            cons.push({
+                from: {inst: source, port: con.source[0].$.port},
+                to: {inst: target, port: con.target[0].$.port},
+            });
+            // console.log(cons);
+          });
+
+          this.topologies.push({
+            name: ele.$.name,
+            connections: cons,
+          });
+
+        });
+        // console.log(this.topologies);
+        // console.log(this.components);
+
+      }
+
+      return new Promise((resolve, reject) => {
+        const viewList: {[k: string]: string[]}
+          = {topologies: [], instances: [], components: []};
+        this.topologies.forEach((e: IMockTopology) => {
+          viewList.topologies.push(e.name);
+        });
+        this.instances.forEach((e: IMockInstance) => {
+          viewList.instances.push(e.id);
+        });
+        this.components.forEach((e: IMockComponent) => {
+          viewList.components.push(e.name);
+        });
+
+        resolve(viewList);
+      });
+    });
+
   }
 
-  public getMockComponentView1(): IMockModel {
-    const c1 = { id: "c1", ports: { p1: "p1", p2: "p2"} };
+  public query(viewName: string, viewType: string): any {
+    switch (viewType) {
+      case ViewType.Function: {
+        const cons: IMockConnection[] = this.topologies.filter(
+              (i) => i.name === viewName)[0].connections;
+        const ins: IMockInstance[] = [];
+        cons.forEach((c) => {
+            if (ins.indexOf(c.from.inst) === -1) {
+              ins.push(c.from.inst);
+            }
+            if (ins.indexOf(c.to.inst) === -1) {
+              ins.push(c.to.inst);
+            }
+        });
 
-    return {
-      instances: [c1],
-      topologies: [],
-    };
+        return {
+          instances: ins,
+          connections: cons,
+          components: [],
+        };
+      }
+      case ViewType.Component: {
+        const ins: IMockInstance[] = [];
+        const cons: IMockConnection[] = [];
+        const comps = this.components.filter((i) => i.name === viewName);
+        // console.log(comps);
+        return {
+          instances: ins,
+          connections: cons,
+          components: comps,
+        };
+      }
+      case ViewType.InstanceCentric: {
+        const ins: IMockInstance[] = [];
+        const cons: IMockConnection[] = [];
+        const root = this.instances.filter((i) => i.id === viewName)[0];
+
+        this.topologies.forEach((t) => {
+          t.connections.forEach((c) => {
+            if (c.from.inst === root) {
+              ins.push(c.to.inst);
+              cons.push(c);
+            }
+            if (c.to.inst === root) {
+              ins.push(c.from.inst);
+              cons.push(c);
+            }
+          });
+        });
+        ins.push(root);
+        return {
+          instances: ins,
+          connections: cons,
+          components: [],
+        };
+      }
+      default: {
+        return null;
+      }
+    }
   }
 
+  public getMockFunctionView2(): IMockModel {
+    const cons: IMockConnection[] = [];
+    this.topologies.forEach((e) => {
+      e.connections.forEach((c) => {
+        cons.push(c);
+      });
+    });
+    return  {
+      instances: this.instances,
+      connections: cons,
+      components: this.components,
+    };
+  }
 }
