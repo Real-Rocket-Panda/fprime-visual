@@ -16,8 +16,6 @@ import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
 import CyManager from "./CyManager";
 import { Route } from "vue-router";
-import nodeResize from "cytoscape-node-resize";
-import konva from "konva";
 
 export default Vue.extend({
   methods: {
@@ -27,7 +25,6 @@ export default Vue.extend({
         cy.use(coseBilkent);
         cy.use(automove);
         edgeBendEditing(cy, jquery); // register extension
-        nodeResize( cy, jquery, konva ); // register extension
       }
     },
     updateCytoscape(cy: any) {
@@ -42,8 +39,11 @@ export default Vue.extend({
         CyManager.defaultLayout();
       }
 
-      // use resize
-      CyManager.resize();
+      // (window as any).$ = jquery;
+      // (window as any).jQuery = jquery;
+      // (window as any).$ = jquery;
+
+      // cy.edgeBendEditing();
     }
   },
   data() {
