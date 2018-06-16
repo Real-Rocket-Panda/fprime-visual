@@ -2,9 +2,7 @@
   <div style="height:100%;">
     <cytoscape
       style="height:100%;"
-      :key="name"
-      :afterCreated="afterCreated"
-      :preConfig="preConfig"
+      :preConfig="initCytoscape"
     ></cytoscape>
   </div>
 </template>
@@ -21,55 +19,77 @@ import { Route } from "vue-router";
 
 export default Vue.extend({
   methods: {
-    preConfig(cy: any) {
-      if (!this.initialized) {
-        this.initialized = true;
+    initCytoscape(cy: any) {
+      if (!CyManager.initialized) {
+        CyManager.initialized = true;
         cy.use(coseBilkent);
         cy.use(automove);
         edgeBendEditing(cy, jquery); // register extension
       }
     },
-    afterCreated(cy: any) {
-
-      // cytoscape load view
-      let view_json: any = fprimes.viewManager.render(this.name);
-      cy.json(view_json.descriptor);
-
+    updateCytoscape(cy: any) {
       CyManager.setCy(cy);
-      CyManager.setGraph(
-        fprimes.viewManager.getSimpleGraphFor(this.name)
-      );
-
-      if (view_json.needLayout) CyManager.applyAutoLayout();
-      else CyManager.defaultLayout();
+      CyManager.setGraph(fprimes.viewManager.getSimpleGraphFor(this.name));
+      // Update the config
+      cy.json(this.config);
+      // Update layout
+      if (this.render!.needLayout) {
+        CyManager.applyAutoLayout();
+      } else {
+        CyManager.defaultLayout();
+      }
 
       // (window as any).$ = jquery;
-      (window as any).jQuery = jquery;
-      (window as any).$ = jquery;
+      // (window as any).jQuery = jquery;
+      // (window as any).$ = jquery;
 
-      cy.edgeBendEditing();
+      // cy.edgeBendEditing();
     }
   },
   data() {
+    const name = this.$route.params.viewName;
+    const render = fprimes.viewManager.render(name);
     return {
-      initialized: false
+      name,
+      render,
+      config: render!.descriptor,
     };
   },
-  computed: {
-    name: function() {
-      return this.$route.params.viewName;
-    },
+  mounted() {
+    (this as any).$cytoscape.instance.then((cy: any) => {
+      // Set the config to cytoscape
+      this.updateCytoscape(cy);
+    });
   },
-  beforeUpdate() {
-    (this as any).$cytoscape.reset();
+  beforeDestroy() {
+    // Save the current cytoscape json
+    fprimes.viewManager.updateViewDescriptorFor(this.name,
+      CyManager.returnDescriptor());
+    (this as any).$cytoscape.instance.then((cy: any) => {
+      cy.destroy();
+    });
   },
   watch: {
-    $route: function(_, from: Route) {
+    $route: function(to: Route, from: Route) {
+      // Save the current cytoscape json
       fprimes.viewManager.updateViewDescriptorFor(
         from.params.viewName,
         CyManager.returnDescriptor()
       );
+
+      // update the cytoscape instance with the new config
+      (this as any).$cytoscape.instance.then((cy: any) => {
+        // Remove all the exisiting elements
+        cy.remove(cy.elements());
+
+        // Read the config for the in coming view
+        this.name = to.params.viewName;
+        this.render = fprimes.viewManager.render(this.name);
+        this.config = this.render!.descriptor;
+        // Set the config to cytoscape
+        this.updateCytoscape(cy);
+      });
     }
-  }
+  },
 });
 </script>
