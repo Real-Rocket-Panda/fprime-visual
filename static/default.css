@@ -18,7 +18,7 @@ edge {
 .fprime-component {
     width: 100;
     height: 140;
-    background-color: #73ffe8;
+    background-color: rgb(216, 204, 186);
     content: data(id);
     text-halign: center;
     text-opacity: 0.5;
