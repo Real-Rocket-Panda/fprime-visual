@@ -26,12 +26,16 @@ export default Vue.extend({
   },
   methods: {
     changeColor() {
-      // If the picker is not shown, just show the color picker
-      // Otherwise, set the color
-      if (this.show) {
-        CyManager.setColor(CyManager.getGrabbed(), this.colors.hex);
+      // If some elements are selected, then clicking on the button will set
+      // the color of elemetns to the current color of picker.
+      const eles = CyManager.getGrabbed();
+      if (this.show == false && eles.length > 0) {
+        CyManager.setColor(eles, this.colors.hex);
+      } else {
+        // Otherwise, open the picker
+        this.show = !this.show;
       }
-      this.show = !this.show;
+      
     },
   }
 });
