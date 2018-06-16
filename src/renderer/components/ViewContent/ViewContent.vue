@@ -31,10 +31,11 @@ export default Vue.extend({
       }
     },
     updateCytoscape(cy: any) {
-      CyManager.setCy(cy);
-      CyManager.setGraph(fprimes.viewManager.getSimpleGraphFor(this.name));
       // Update the config
       cy.json(this.config);
+
+      CyManager.setCy(cy);
+      CyManager.setGraph(fprimes.viewManager.getSimpleGraphFor(this.name));
       // Update layout
       if (this.render!.needLayout) {
         CyManager.applyAutoLayout();
