@@ -4,6 +4,7 @@ import * as path from "path";
 import IConfig from "../Common/Config";
 import {Promise} from "es6-promise";
 
+declare var __static: string;
 
 export default class CompilerConverter {
     public convert(
@@ -15,7 +16,7 @@ export default class CompilerConverter {
                 console.log(err);
             }).then((): Promise<string> => {
                 const obj = fs.readFileSync(
-                    path.resolve(__dirname, config.FPPCompilerOutputPath),
+                    path.resolve(__static, config.FPPCompilerOutputPath),
                     "utf-8",
                 );
 

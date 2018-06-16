@@ -4,6 +4,7 @@ import CompilerConverter from "./CompilerConverter";
 import {Promise} from "es6-promise";
 import * as path from "path";
 
+declare var __static: string;
 
 export default class DataImporter {
     private compilerConverter: CompilerConverter = new CompilerConverter();
@@ -13,7 +14,7 @@ export default class DataImporter {
             stdout: string, stderr: string;
         }> ((resolve, reject) => {
             child.exec(
-                path.resolve(__dirname, config.FPPCompilerPath ) + " " +
+                path.resolve(__static, config.FPPCompilerPath ) + " " +
                 config.FPPCompilerParameters)
                 .then(resolve).catch(reject);
         });
