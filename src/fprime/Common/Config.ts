@@ -1,5 +1,6 @@
-interface IConfig {
+export default interface IConfig {
     FPPCompilerPath: string;
+    FPPCompilerParameters: string;
     FPPCompilerOutputPath: string;
     DefaultStyleFilePath: string;
     Analyzers: Array<

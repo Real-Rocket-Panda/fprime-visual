@@ -41,6 +41,7 @@ export interface IStyleDescriptor {
 export enum NodeType {
   Instance = "fprime-instance",
   Port = "fprime-port",
+  component = "fprime-component",
 }
 
 /**
@@ -65,6 +66,7 @@ export interface INode {
 export enum EdgeType {
   Port2Port = "port-port",
   Instance2Port = "instance-port",
+  Component2Port = "instance-component",
 }
 
 /**
@@ -158,10 +160,41 @@ export default class ViewDescriptor {
       });
     });
 
+    model.components.forEach((i) => {
+      // Covert all the instances to a node in the graph
+      view.graph.nodes[i.name] = {
+        id: i.name,
+        modelID: "",
+        type: NodeType.component,
+      };
+
+      // Covert all the ports to a node in the graph
+      // The name of the port has the format: <instance id>_<port id>
+      Object.keys(i.ports).forEach((p) => {
+        const pname = i.name + "_" + (i.ports as any)[p];
+        view.graph.nodes[pname] = {
+          id: pname,
+          modelID: "",
+          type: NodeType.Port,
+        };
+
+        // Add a virtual edge from instance to the port.
+        // The edge has the format: <instance id>-<instance id>_<port id>
+        const vedge = i.name + "-" + pname;
+        view.graph.edges[vedge] = {
+          id: vedge,
+          modelID: "",
+          type: EdgeType.Instance2Port,
+          from: view.graph.nodes[i.name],
+          to: view.graph.nodes[pname],
+        };
+      });
+    });
+
     // Convert all the connections to edges in the graph
     // The edge has the format: <from instance id>_<from port id>-
     //  <to instance id>_<to instance id>
-    model.topologies.forEach((t) => {
+    model.connections.forEach((t) => {
       const from = `${t.from.inst.id}_${t.from.port}`;
       const to = `${t.to.inst.id}_${t.to.port}`;
       const edge = from + "-" + to;
