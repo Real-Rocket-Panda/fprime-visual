@@ -45,6 +45,12 @@ export default class ViewManager {
    * and load the default appearance.
    */
   private styleManager: StyleManager = new StyleManager();
+  private defaultStyle?: Array<{
+    selector: string;
+    style: {
+      [key: string]: any;
+    };
+  }>;
 
   /**
    * The model manager where to get the model data of the current project.
@@ -83,6 +89,9 @@ export default class ViewManager {
     // TODO: for now, we are using a fake config file in the static folder.
     this.configManager.loadConfig(path.resolve(__static, "config.json"));
     this.config = this.configManager.getConfig();
+    // Load the default style from the config
+    this.defaultStyle = this.styleManager
+        .getDefaultStyles(this.config.DefaultStyleFilePath);
     this.modelManager.loadModel(this.config).then((viewList) => {
       this.generateViewList(viewList);
     });
@@ -208,11 +217,9 @@ export default class ViewManager {
   } {
     const json = viewDescriptor.generateCytoscapeJSON();
     // Combine the default styles with all the other styles.
-    // TODO: should not load the default style from file system every time when
-    // generating the render json.
-    const defaultStyle = this.styleManager
-      .getDefaultStyles(this.config.DefaultStyleFilePath);
-    json.descriptor.style = defaultStyle.concat(json.descriptor.style);
+    if (this.defaultStyle) {
+      json.descriptor.style = this.defaultStyle.concat(json.descriptor.style);
+    }
     return json;
   }
 
