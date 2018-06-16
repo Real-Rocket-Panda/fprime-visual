@@ -2,9 +2,7 @@ import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import * as path from "path";
-
-declare var __static: string;
+import IConfig from "../Common/Config";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -36,7 +34,7 @@ export default class ViewManager {
    */
   private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
-  private configManager: ConfigManager = new ConfigManager();
+  private configManager: ConfigManager;
   private config: IConfig;
 
   /**
@@ -67,7 +65,7 @@ export default class ViewManager {
    * Initialize all the fields.
    */
   constructor() {
-    // Set to an empty config
+    this.configManager = new ConfigManager();
     this.config = this.configManager.getConfig();
     // TODO: This is wrong. The build method should be invoke based on UI
     // interactions. For now, we just mock the behavior.
@@ -78,10 +76,6 @@ export default class ViewManager {
    * Build the current FPrime project and get the view list.
    */
   public build() {
-    // Load the project config.
-    // TODO: for now, we are using a fake config file in the static folder.
-    this.configManager.loadConfig(path.resolve(__static, "config.json"));
-    this.config = this.configManager.getConfig();
     this.modelManager.loadModel(this.config).then((viewList) => {
       this.generateViewList(viewList);
     });
@@ -208,8 +202,6 @@ export default class ViewManager {
   } {
     const json = viewDescriptor.generateCytoscapeJSON();
     // Combine the default styles with all the other styles.
-    // TODO: should not load the default style from file system every time when
-    // generating the render json.
     const defaultStyle = this.styleManager
       .getDefaultStyles(this.config.DefaultStyleFilePath);
     json.descriptor.style = defaultStyle.concat(json.descriptor.style);
