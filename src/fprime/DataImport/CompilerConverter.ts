@@ -24,7 +24,7 @@ export default class CompilerConverter {
                         if (err) {
                             reject(err);
                         } else {
-                            console.dir(result);
+                            // console.dir(result);
                             resolve(result);
                         }
                     });

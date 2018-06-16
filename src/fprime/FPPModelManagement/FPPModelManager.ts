@@ -54,7 +54,7 @@ export default class FPPModelManager {
     const models = this.dataImporter.invokeCompiler(config);
     return models.then((data): Promise<any> => {
       if (data == null || data.namespace == null) {
-        console.log("model is null!!");
+        // console.log("model is null!!");
         return new Promise((resolve, reject) => {
           reject("model is null");
         });
@@ -112,7 +112,7 @@ export default class FPPModelManager {
           });
         });
 
-        console.log(this.instances);
+        // console.log(this.instances);
 
         data.namespace.system[0].topology.forEach((ele: any) => {
           const cons: IMockConnection[] = [];
@@ -135,8 +135,8 @@ export default class FPPModelManager {
           });
 
         });
-        console.log(this.topologies);
-        console.log(this.components);
+        // console.log(this.topologies);
+        // console.log(this.components);
 
       }
 
@@ -184,7 +184,7 @@ export default class FPPModelManager {
         const ins: IMockInstance[] = [];
         const cons: IMockConnection[] = [];
         const comps = this.components.filter((i) => i.name === viewName);
-        console.log(comps);
+        // console.log(comps);
         return {
           instances: ins,
           connections: cons,
