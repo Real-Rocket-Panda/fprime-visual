@@ -1,14 +1,13 @@
 {
     "Analyzers": [
         {
-            "Name":"analyzer1",
+            "Name":"",
             "Path":"",
             "OutputFilePath":"",
             "Type":""
         }
     ],
-    "FPPCompilerPath": "../../../static/fppcompiler",
-    "FPPCompilerParameters": "",
-    "FPPCompilerOutputPath": "../../../static/model.xml",
-    "DefaultStyleFilePath": "/static/default.css"
+    "FPPCompilerPath": "",
+    "FPPCompilerOutputPath": "",
+    "DefaultStyleFilePath": ""
 }
