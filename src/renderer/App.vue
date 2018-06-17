@@ -2,7 +2,9 @@
   <div id="app">
     <v-app>
       <!-- app top toolbar -->
-      <v-toolbar app fixed clipped-left flat height="40px">
+      <v-toolbar app fixed clipped-left flat height="40px"
+        :style="{zIndex: 1000}"
+      >
         <v-toolbar-title class="mr-3">FPrime Visual</v-toolbar-title>
         <v-btn icon>
           <v-icon>play_circle_filled</v-icon>
@@ -13,6 +15,7 @@
         <v-btn icon>
           <v-icon>insert_chart</v-icon>
         </v-btn>
+        <color-picker></color-picker>
       </v-toolbar>
       
       <v-navigation-drawer app fixed permanent clipped
@@ -39,10 +42,11 @@ import ViewList from "./components/ViewList.vue";
 import ViewTabs from "./components/ViewTabs.vue";
 import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
+import ColorPicker from "./components/ColorPicker.vue";
 
 export default Vue.extend({
   name: "fprime-visual",
-  components: { ViewList, ViewTabs, MessageFooter, MessagePanel },
+  components: { ViewList, ViewTabs, MessageFooter, MessagePanel, ColorPicker },
   mounted() {
     let resizing = false;
     let counter = 0;
@@ -61,7 +65,7 @@ export default Vue.extend({
           const width = e.x >= 200 ? e.x : 200;
           drawer.style.width = width + "px";
           content.style.paddingLeft = width + "px";
-          counter = 12;
+          counter = 5;
         } else {
           counter--;
         }

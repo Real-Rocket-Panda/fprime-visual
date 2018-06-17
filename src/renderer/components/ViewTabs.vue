@@ -27,13 +27,12 @@
 import Vue from "vue";
 import { Event } from "electron";
 import View from "@/store/view";
-import { IViewItem } from "@/store/view";
 
 export default Vue.extend({
   props: ["height"],
   name: "view-tabs",
   methods: {
-    getViewRoute(item: IViewItem): string {
+    getViewRoute(item: any): string {
       return View.GetViewRoute(item);
     },
     /**
@@ -42,8 +41,11 @@ export default Vue.extend({
      *  2. User closes the tab other than the current. Just close it.
      */
     closeTab(event: Event) {
-      let viewName = (event.target as Element)
-        .firstElementChild!.getAttribute("data-id")!;
+      let clsbtn = (event.target as Element).firstElementChild;
+      if (!clsbtn) {
+        return;
+      }
+      let viewName = clsbtn!.getAttribute("data-id")!;
       let idx = View.CloseViewByName(viewName);
       if (this.items.length === 0) {
         this.$router.replace("/view");

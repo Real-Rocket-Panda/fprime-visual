@@ -13,6 +13,9 @@ import { Route } from "vue-router/types/router";
 
 export default Vue.extend({
   name: "view-list",
+  data() {
+    return { viewlist: View.state.views };
+  },
   computed: {
     items() {
       return View.GetViewList();
@@ -26,6 +29,9 @@ export default Vue.extend({
     }
   },
   mounted() {
+    // The following statements add click event listender to the root
+    // navigation item of the view types (e.g., "Function View").
+    // Clicking on those item should cause the list to toggle.
     const pars = document.getElementsByClassName("NavigationLevel__parent");
     for (let i = 0; i < pars.length; i++) {
       const par = pars[i];

@@ -1,0 +1,14 @@
+{
+    "Analyzers": [
+        {
+            "Name":"",
+            "Path":"",
+            "OutputFilePath":"",
+            "Type":""
+        }
+    ],
+    "FPPCompilerPath": "fppcompiler",
+    "FPPCompilerParameters": "",
+    "FPPCompilerOutputPath": "model.xml",
+    "DefaultStyleFilePath": ""
+}
