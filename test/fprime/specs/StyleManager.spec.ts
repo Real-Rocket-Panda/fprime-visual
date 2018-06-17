@@ -9,9 +9,8 @@ describe("StyleManager", () => {
 
     describe("check the format of the style file", ( ) => {
         it("should load the defualt style file", () => {
-            const file = "/static/default.css";
-            const style = styleManager.getDefaultStyles(file);
-            expect(style.length).to.equal(3);
+            const style = styleManager.getDefaultStyles();
+            expect(style.length).to.equal(5);
         });
     });
 });
