@@ -45,6 +45,6 @@ edge {
     content: data(id);
     text-halign: center;
     text-opacity: 0.5;
-    text-valign: center;
+    text-valign: top;
     shape: rectangle;
 }
