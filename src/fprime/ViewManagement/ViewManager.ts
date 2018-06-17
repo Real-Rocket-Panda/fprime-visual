@@ -92,7 +92,7 @@ export default class ViewManager {
     // Load the default style from the config
     this.defaultStyle = this.styleManager
         .getDefaultStyles(this.config.DefaultStyleFilePath);
-    this.modelManager.loadModel(this.config).then((viewList) => {
+    return this.modelManager.loadModel(this.config).then((viewList) => {
       this.generateViewList(viewList);
     });
   }

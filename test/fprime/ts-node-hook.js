@@ -3,3 +3,5 @@ require("ts-node").register({
     module: "commonjs",
   },
 });
+
+global.__static = "./test/static";

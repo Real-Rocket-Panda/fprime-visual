@@ -85,7 +85,7 @@ class CyManager {
             },
         });
         this.cy.on("noderesize.resizeend",
-            (evt: EventObject, type: any, node: any) => {
+            (_evt: EventObject, _type: any, node: any) => {
                 /* type param includes:
                 topleft, topcenter, topright, centerright,
                 bottomright, bottomcenter, bottomleft, centerleft

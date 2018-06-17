@@ -55,7 +55,7 @@ export default class FPPModelManager {
     return models.then((data): Promise<any> => {
       if (data == null || data.namespace == null) {
         // console.log("model is null!!");
-        return new Promise((resolve, reject) => {
+        return new Promise((_resolve, reject) => {
           reject("model is null");
         });
       }
@@ -140,7 +140,7 @@ export default class FPPModelManager {
 
       }
 
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         const viewList: {[k: string]: string[]}
           = {topologies: [], instances: [], components: []};
         this.topologies.forEach((e: IMockTopology) => {
