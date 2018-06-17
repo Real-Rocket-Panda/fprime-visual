@@ -1,6 +1,7 @@
+import {BoundingBox12,Position} from "cytoscape"
+
 export class Cy_Util {
   private cy: any;
-
   constructor(cy: any) {
     this.cy = cy;
   }
@@ -22,7 +23,7 @@ export class Cy_Util {
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
         edge.targetEndpoint(),
-        comp.boundingBox());
+        comp.boundingBox( {includeOverlays: false}));
       // resposition the port
       port.position(intersection);
     });
@@ -41,69 +42,45 @@ export class Cy_Util {
     });
   }
 
-  /*
-    Purpose:  Destroy the rule that port stick to component during dragging.
-              Re-apply the rule when the port is freed.
-    Parameters: comp - component object that the port belongs to
-                ports - collection of the ports that connect to the component
-    Return: rule - the updated rule objects
-  */
-  public portStick2Comp(comp: any, ...ports: any[]): any[] {
-    let rules: any[] = this.initPortStick2Comp(comp, ...ports);
-
-    comp.on("grab", () => {
-      rules.forEach((r) => {
-        r.destroy();
-      });
-    });
-
-    comp.on("unselect", () => {
-      rules = this.initPortStick2Comp(comp, ...ports);
-    });
-    return rules;
+  public constrain(val: number, min: number, max: number): any {
+    return val < min ? min : (val > max ? max : val);
   }
 
- /**
-  *  Purpose:  Restrict the movement area of port during dragging.
-  *            1. Cannot be separate with the component.
-  *            2. Cannot enter inside of component.
-  *  @param: comp: component object that the port belongs to
-  *  @param  ports: collection of the ports that connect to the component
-  */
-  private initPortStick2Comp(comp: any, ...ports: any[]): any[] {
-    const rules: any[] = new Array();
-    ports.forEach((port) => {
-      // Port not separate with the component
-      rules.push(
-        this.cy.automove({
-          nodesMatching: port,
-          reposition: {
-            type: "inside", pos: this.generateBox(comp, port),
-            when: "matching",
-          },
-        }));
-
-      // Port cannot go inside of component
-      rules.push(
-        this.cy.automove({
-          nodesMatching: port,
-          reposition: {
-            type: "outside", pos: comp.boundingBox(),
-            when: "matching",
-          },
-        }));
-    });
-    return rules;
+  public positionInBox( pos: Position,
+                        bb: BoundingBox12): void {
+      pos.x = this.constrain(pos.x, bb.x1, bb.x2);
+      pos.y = this.constrain(pos.y, bb.y1, bb.y2);
   }
 
+  public Oconstrain(val: number, min: number, max: number): any {
+    const mid = (min + max) / 2;
+    if (val > min && val < max) {
+      return val > mid ? max : min;
+    }
+    return val;
+  }
 
-  private generateBox(comp: any, port: any): any {
+  public positionOutBox( pos: Position,
+                         bb: BoundingBox12): void {
+    const x = this.Oconstrain(pos.x, bb.x1, bb.x2);
+    const y = this.Oconstrain(pos.y, bb.y1, bb.y2);
+
+    if (x !== pos.x && y !== pos.y) {
+      if (Math.abs(pos.x - x) < Math.abs(pos.y - y)) {
+        pos.x = x;
+      } else {
+        pos.y = y;
+      }
+    }
+  }
+
+  public generateBox(cb: BoundingBox12, pw: number, ph: number): any {
     // TODO: dynamic offset
-    const offset = 10;
-    const x1: number = comp.boundingBox().x1 - (port.width() / 2) + offset;
-    const x2: number = comp.boundingBox().x2 + (port.width() / 2) - offset;
-    const y1: number = comp.boundingBox().y1 - (port.height() / 2) + offset;
-    const y2: number = comp.boundingBox().y2 + (port.height() / 2) - offset;
+    const offset = 12;
+    const x1: number = cb.x1 - (pw / 2) + offset;
+    const x2: number = cb.x2 + (pw / 2) - offset;
+    const y1: number = cb.y1 - (ph / 2) + offset;
+    const y2: number = cb.y2 + (ph / 2) - offset;
     return {
       x1: x1,
       x2: x2,
@@ -132,12 +109,12 @@ export class Cy_Util {
         ({ x: box.x1, y: target.y });
     }
 
-    const wid: number = box.x2 - box.x1; // wid of bounding box
-    const high: number = box.y2 - box.y1; // height of bounding box
+    const wid = box.w; // wid of bounding box
+    const high = box.h; // height of bounding box
     const ratioLine: number = Math.abs((target.y - source.y) /
       (target.x - source.x));
-    const ratioBox: number = Math.abs((box.x2 - box.x1) /
-      (box.y2 - box.y1));
+    const ratioBox: number = Math.abs((box.y2 - box.y1) /
+      (box.x2 - box.x1));
     let xOff: number = 0;
     let yOff: number = 0;
 
@@ -147,10 +124,10 @@ export class Cy_Util {
       Math.abs(target.x - source.x);
     if (ratioLine < ratioBox) {  // left or right
       yOff += ratioLine * wid / 2;
-      xOff += yOff / ratioLine;
+      xOff += wid / 2;
     } else {  // up or down
       xOff += (high / 2) / ratioLine;
-      yOff += xOff * ratioLine;
+      yOff += high / 2 ;
     }
 
     return { x: source.x + sign_x * xOff, y: source.y + sign_y * yOff };
