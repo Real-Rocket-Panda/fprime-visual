@@ -1,4 +1,4 @@
-import {BoundingBox12,Position} from "cytoscape"
+import { BoundingBox12, Position } from "cytoscape"
 
 export class Cy_Util {
   private cy: any;
@@ -23,7 +23,7 @@ export class Cy_Util {
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
         edge.targetEndpoint(),
-        comp.boundingBox( {includeOverlays: false}));
+        comp.boundingBox({ includeOverlays: false }));
       // resposition the port
       port.position(intersection);
     });
@@ -46,10 +46,9 @@ export class Cy_Util {
     return val < min ? min : (val > max ? max : val);
   }
 
-  public positionInBox( pos: Position,
-                        bb: BoundingBox12): void {
-      pos.x = this.constrain(pos.x, bb.x1, bb.x2);
-      pos.y = this.constrain(pos.y, bb.y1, bb.y2);
+  public positionInBox(pos: Position, bb: BoundingBox12): void {
+    pos.x = this.constrain(pos.x, bb.x1, bb.x2);
+    pos.y = this.constrain(pos.y, bb.y1, bb.y2);
   }
 
   public Oconstrain(val: number, min: number, max: number): any {
@@ -60,8 +59,7 @@ export class Cy_Util {
     return val;
   }
 
-  public positionOutBox( pos: Position,
-                         bb: BoundingBox12): void {
+  public positionOutBox(pos: Position, bb: BoundingBox12): void {
     const x = this.Oconstrain(pos.x, bb.x1, bb.x2);
     const y = this.Oconstrain(pos.y, bb.y1, bb.y2);
 
@@ -89,14 +87,13 @@ export class Cy_Util {
     };
   }
 
-  /*
-    Purpose: Calculate the position of intersection between a box
-              and the line whose source is the center of the box
-    Parameters: source - position of source of the line {x:number, y:number}
-                target - position of target of the line {x:number, y:number}
-                box - bounding box {x1:number, x2:number, y1:number, y2:number}
-    Return: position of intersection {x:number, y:number}
-  */
+  /**
+   * Calculate the position of intersection between a box and the line whose source is the center of the box
+   * @param source  position of source of the line {x:number, y:number}
+   * @param target position of target of the line {x:number, y:number}
+   * @param box bounding box {x1:number, x2:number, y1:number, y2:number}
+   * @returns position of intersection {x:number, y:number}
+   */
   private getEdgeBoxIntesection(source: any, target: any, box: any): any {
     if (source.x === target.x) { // no ratio. Vertical line.
       return target.y > source.y ?
@@ -109,6 +106,12 @@ export class Cy_Util {
         ({ x: box.x1, y: target.y });
     }
 
+    // type = 1: the target point is outside of the box.
+    // type = -1: the target point is inside of the box.
+    const type = (this.constrain(source.x, box.x1, box.x2) &&
+      this.constrain(source.y, box.y1, box.y2)) ?
+      -1 : 1;
+
     const wid = box.w; // wid of bounding box
     const high = box.h; // height of bounding box
     const ratioLine: number = Math.abs((target.y - source.y) /
@@ -118,16 +121,17 @@ export class Cy_Util {
     let xOff: number = 0;
     let yOff: number = 0;
 
-    const sign_y = (target.y - source.y) /
+    const sign_y = type * (target.y - source.y) /
       Math.abs(target.y - source.y);
-    const sign_x = (target.x - source.x) /
+    const sign_x = type * (target.x - source.x) /
       Math.abs(target.x - source.x);
+
     if (ratioLine < ratioBox) {  // left or right
       yOff += ratioLine * wid / 2;
       xOff += wid / 2;
     } else {  // up or down
       xOff += (high / 2) / ratioLine;
-      yOff += high / 2 ;
+      yOff += high / 2;
     }
 
     return { x: source.x + sign_x * xOff, y: source.y + sign_y * yOff };
