@@ -108,8 +108,8 @@ export class Cy_Util {
 
     // type = 1: the target point is outside of the box.
     // type = -1: the target point is inside of the box.
-    const type = (this.constrain(source.x, box.x1, box.x2) &&
-      this.constrain(source.y, box.y1, box.y2)) ?
+    const type = (this.constrain(source.x, box.x1, box.x2) !== source.x &&
+      this.constrain(source.y, box.y1, box.y2) !== source.y) ?
       -1 : 1;
 
     const wid = box.w; // wid of bounding box
