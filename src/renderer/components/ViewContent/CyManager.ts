@@ -81,7 +81,7 @@ class CyManager {
     public resize(): void {
         this.cy.nodeResize({
             isNoControlsMode: (node: any) => {
-                return !node.is(".fprime-instance");
+                return !node.is(".fprime-instance,.fprime-component");
             },
         });
         this.cy.on("noderesize.resizeend",
