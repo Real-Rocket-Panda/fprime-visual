@@ -8,7 +8,7 @@ export default interface IConfig {
             Name: string,
             Path: string,
             OutputFilePath: string,
-            Yype: string,
+            Type: string,
         }
     >;
 }
