@@ -16,7 +16,7 @@ import jquery from "jquery";
 import edgeBendEditing from "cytoscape-edge-bend-editing";
 import CyManager from "./CyManager";
 import { Route } from "vue-router";
-import nodeResize from "cytoscape-node-resize";
+import nodeResize from "rp-cytoscape-node-resize";
 import konva from "konva";
 
 export default Vue.extend({

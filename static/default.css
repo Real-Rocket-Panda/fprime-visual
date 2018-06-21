@@ -39,12 +39,3 @@ edge {
     border-width: 2;
     border-color: rgb(158, 173, 145)
 }
-
-/* .fprime-instance:selected{
-    background-color: rgb(223, 211, 171);
-    content: data(id);
-    text-halign: center;
-    text-opacity: 0.5;
-    text-valign: top;
-    shape: rectangle;
-} */
