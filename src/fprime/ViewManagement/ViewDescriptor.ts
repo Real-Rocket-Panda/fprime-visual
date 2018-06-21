@@ -1,4 +1,4 @@
-import { IMockModel } from "../FPPModelManagement/FPPModelManager";
+import { IFPPModel } from "../FPPModelManagement/FPPModelManager";
 
 /**
  * The interface of the node style.
@@ -125,7 +125,7 @@ export default class ViewDescriptor {
    * Build the graph of a view descriptor from the given model data.
    * @param model The mocked model data
    */
-  public static buildFrom(model: IMockModel): ViewDescriptor {
+  public static buildFrom(model: IFPPModel): ViewDescriptor {
     const view = new ViewDescriptor();
 
     // For all the instances in a model
