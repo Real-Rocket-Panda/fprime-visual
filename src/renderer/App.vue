@@ -56,6 +56,7 @@ import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
 import { remote } from "electron";
 import fprime from "fprime";
+import panel, { PanelName } from "@/store/panel";
 
 export default Vue.extend({
   name: "fprime-visual",
@@ -107,12 +108,18 @@ export default Vue.extend({
         this.building = true;
         fprime.viewManager.build(dirs[0]).finally(() => {
           this.building = false;
+          if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
+            panel.showOutput();
+          }
         });
       }
     },
     rebuild() {
       fprime.viewManager.rebuild().finally(() => {
         this.building = false;
+        if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
+          panel.showOutput();
+        }
       });
     },
     refresh() {

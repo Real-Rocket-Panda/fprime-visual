@@ -61,6 +61,15 @@ export default class ViewManager {
   }
 
   /**
+   * 
+   */
+  private compilerOutput = { content: "" };
+
+  public get CompilerOutput() {
+    return this.compilerOutput;
+  }
+
+  /**
    * Build the current FPrime project and get the view list.
    * @param dir The folder path of a project.
    */
@@ -75,8 +84,12 @@ export default class ViewManager {
     // Load the FPP model
     return this.modelManager
       .loadModel(this.configManager.Config)
-      .then((viewList) => {
-        this.generateViewList(viewList);
+      .then((data) => {
+        this.compilerOutput.content = data.output + "\n\n";
+        this.generateViewList(data.viewlist);
+      })
+      .catch((err) => {
+        this.compilerOutput.content = err + "\n\n";
       });
   }
 

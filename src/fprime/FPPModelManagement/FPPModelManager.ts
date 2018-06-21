@@ -2,64 +2,86 @@ import IConfig from "../Common/Config";
 import DataImporter from "../DataImport/DataImporter";
 import { Promise } from "es6-promise";
 
+/**
+ * 
+ */
 export enum ViewType {
   Function = "Function View",
   InstanceCentric = "InstanceCentric View",
   Component = "Component View",
 }
 
-export interface IMockComponent {
+/**
+ * 
+ */
+export interface IFPPComponent {
   name: string;
   namespace: string;
   ports: string[];
 }
 
-export interface IMockInstance {
+/**
+ * 
+ */
+export interface IFPPInstance {
   id: string;
   model_id: number;
   ports: { [p: string]: string };
   properties: { [p: string]: string };
 }
 
-export interface IMockConnection {
-  from: { inst: IMockInstance, port: string };
-  to: { inst: IMockInstance, port: string };
+/**
+ * 
+ */
+export interface IFPPConnection {
+  from: { inst: IFPPInstance, port: string };
+  to: { inst: IFPPInstance, port: string };
 }
 
+/**
+ * 
+ */
 export interface IMockTopology {
   name: string;
-  connections: IMockConnection[];
+  connections: IFPPConnection[];
 }
 
-export interface IMockModel {
-  instances: IMockInstance[];
-  connections: IMockConnection[];
-  components: IMockComponent[];
+/**
+ * 
+ */
+export interface IFPPModel {
+  instances: IFPPInstance[];
+  connections: IFPPConnection[];
+  components: IFPPComponent[];
 }
 
+/**
+ * 
+ */
 export default class FPPModelManager {
   private dataImporter: DataImporter = new DataImporter();
-  private instances: IMockInstance[];
-  private topologies: IMockTopology[];
-  private components: IMockComponent[];
+  private instances: IFPPInstance[] = [];
+  private topologies: IMockTopology[] = [];
+  private components: IFPPComponent[] = [];
   private keywords: string[] = ["base_id", "name"];
-  constructor() {
-    this.instances = [];
-    this.topologies = [];
-    this.components = [];
-  }
 
+  /**
+   * 
+   */
+  public loadModel(config: IConfig): Promise<{
+    output: string;
+    viewlist: { [k: string]: string[] };
+  }> {
+    // Invoke the compiler
+    const compilerResult = this.dataImporter.invokeCompiler(config);
 
-  public loadModel(config: IConfig): Promise<{[k: string]: string[]}> {
-    const models = this.dataImporter.invokeCompiler(config);
-    return models.then((data): Promise<any> => {
+    return compilerResult.then((re) => {
+      // Load the model from xml object and return the view list
+      const data = re.representation;
       if (data == null || data.namespace == null) {
-        // console.log("model is null!!");
-        return new Promise((_resolve, reject) => {
-          reject("model is null");
-        });
+        throw new Error("fail to parse model data, model is null!");
       }
-
+      // Load the model data to FPP model manager
       if (data.namespace.system && data.namespace.system.length === 1) {
 
         data.namespace.component.forEach((ele: any) => {
@@ -83,39 +105,37 @@ export default class FPPModelManager {
               continue;
             }
             if (this.keywords.indexOf(key) === -1) {
-                props[key] = ele.$[key];
+              props[key] = ele.$[key];
             }
           }
-          const ps: {[p: string]: string} = {};
+          const ps: { [p: string]: string } = {};
           if (ele.$.type) {
             const type = ele.$.type.split("\.");
             if (type.length === 2) {
               const namespace = type[0];
               const name = type[1];
-              this.components.forEach((c: IMockComponent) => {
+              this.components.forEach((c: IFPPComponent) => {
                 if (c.name === name && c.namespace === namespace) {
                   let cnt = 1;
                   c.ports.forEach((p: string) => {
-                      ps["p" + cnt] = p;
-                      cnt++;
-                    });
+                    ps["p" + cnt] = p;
+                    cnt++;
+                  });
                 }
               });
 
             }
           }
           this.instances.push({
-              id: ele.$.name,
-              model_id: ele.$.base_id,
-              ports: ps,
-              properties: props,
+            id: ele.$.name,
+            model_id: ele.$.base_id,
+            ports: ps,
+            properties: props,
           });
         });
 
-        // console.log(this.instances);
-
         data.namespace.system[0].topology.forEach((ele: any) => {
-          const cons: IMockConnection[] = [];
+          const cons: IFPPConnection[] = [];
           ele.connection.forEach((con: any) => {
             const source = this.instances.filter(
               (i) => i.id === con.source[0].$.instance)[0];
@@ -123,10 +143,9 @@ export default class FPPModelManager {
               (i) => i.id === con.target[0].$.instance)[0];
 
             cons.push({
-                from: {inst: source, port: con.source[0].$.port},
-                to: {inst: target, port: con.target[0].$.port},
+              from: { inst: source, port: con.source[0].$.port },
+              to: { inst: target, port: con.target[0].$.port },
             });
-            // console.log(cons);
           });
 
           this.topologies.push({
@@ -135,43 +154,43 @@ export default class FPPModelManager {
           });
 
         });
-        // console.log(this.topologies);
-        // console.log(this.components);
-
       }
 
-      return new Promise((resolve, _reject) => {
-        const viewList: {[k: string]: string[]}
-          = {topologies: [], instances: [], components: []};
-        this.topologies.forEach((e: IMockTopology) => {
-          viewList.topologies.push(e.name);
-        });
-        this.instances.forEach((e: IMockInstance) => {
-          viewList.instances.push(e.id);
-        });
-        this.components.forEach((e: IMockComponent) => {
-          viewList.components.push(e.name);
-        });
-
-        resolve(viewList);
+      // Return the view list of the model
+      const viewlist: { [k: string]: string[] } = {
+        topologies: [],
+        instances: [],
+        components: [],
+      };
+      this.topologies.forEach((e: IMockTopology) => {
+        viewlist.topologies.push(e.name);
       });
-    });
+      this.instances.forEach((e: IFPPInstance) => {
+        viewlist.instances.push(e.id);
+      });
+      this.components.forEach((e: IFPPComponent) => {
+        viewlist.components.push(e.name);
+      });
 
+      // Add output information
+      const output = re.output + "View list generated...\n";
+      return { output, viewlist };
+    });
   }
 
   public query(viewName: string, viewType: string): any {
     switch (viewType) {
       case ViewType.Function: {
-        const cons: IMockConnection[] = this.topologies.filter(
-              (i) => i.name === viewName)[0].connections;
-        const ins: IMockInstance[] = [];
+        const cons: IFPPConnection[] = this.topologies.filter(
+          (i) => i.name === viewName)[0].connections;
+        const ins: IFPPInstance[] = [];
         cons.forEach((c) => {
-            if (ins.indexOf(c.from.inst) === -1) {
-              ins.push(c.from.inst);
-            }
-            if (ins.indexOf(c.to.inst) === -1) {
-              ins.push(c.to.inst);
-            }
+          if (ins.indexOf(c.from.inst) === -1) {
+            ins.push(c.from.inst);
+          }
+          if (ins.indexOf(c.to.inst) === -1) {
+            ins.push(c.to.inst);
+          }
         });
 
         return {
@@ -181,8 +200,8 @@ export default class FPPModelManager {
         };
       }
       case ViewType.Component: {
-        const ins: IMockInstance[] = [];
-        const cons: IMockConnection[] = [];
+        const ins: IFPPInstance[] = [];
+        const cons: IFPPConnection[] = [];
         const comps = this.components.filter((i) => i.name === viewName);
         // console.log(comps);
         return {
@@ -192,8 +211,8 @@ export default class FPPModelManager {
         };
       }
       case ViewType.InstanceCentric: {
-        const ins: IMockInstance[] = [];
-        const cons: IMockConnection[] = [];
+        const ins: IFPPInstance[] = [];
+        const cons: IFPPConnection[] = [];
         const root = this.instances.filter((i) => i.id === viewName)[0];
 
         this.topologies.forEach((t) => {
@@ -219,19 +238,5 @@ export default class FPPModelManager {
         return null;
       }
     }
-  }
-
-  public getMockFunctionView2(): IMockModel {
-    const cons: IMockConnection[] = [];
-    this.topologies.forEach((e) => {
-      e.connections.forEach((c) => {
-        cons.push(c);
-      });
-    });
-    return  {
-      instances: this.instances,
-      connections: cons,
-      components: this.components,
-    };
   }
 }
