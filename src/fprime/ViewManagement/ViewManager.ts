@@ -1,11 +1,7 @@
 import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
-import StyleManager from "../StyleManagement/StyleManager";
+import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import IConfig from "../Common/Config";
-import * as path from "path";
-
-declare var __static: string;
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -38,19 +34,13 @@ export default class ViewManager {
   private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
   private configManager: ConfigManager = new ConfigManager();
-  private config: IConfig;
 
   /**
    * The style manager provide support for save/load style files for a view
    * and load the default appearance.
    */
   private styleManager: StyleManager = new StyleManager();
-  private defaultStyle?: Array<{
-    selector: string;
-    style: {
-      [key: string]: any;
-    };
-  }>;
+  private defaultStyle?: IStyle[];
 
   /**
    * The model manager where to get the model data of the current project.
@@ -71,30 +61,39 @@ export default class ViewManager {
   }
 
   /**
-   * Initialize all the fields.
+   * Build the current FPrime project and get the view list.
+   * @param dir The folder path of a project.
    */
-  constructor() {
-    // Set to an empty config
-    this.config = this.configManager.getConfig();
-    // TODO: This is wrong. The build method should be invoke based on UI
-    // interactions. For now, we just mock the behavior.
-    this.build();
+  public build(dir: string) {
+    // Set the project path
+    this.configManager.ProjectPath = dir;
+    // Load the project config.
+    this.configManager.loadConfig();
+    // Load the default style from the config
+    this.defaultStyle = this.styleManager.getDefaultStyles(
+      this.configManager.Config.DefaultStyleFilePath);
+    // Load the FPP model
+    return this.modelManager
+      .loadModel(this.configManager.Config)
+      .then((viewList) => {
+        this.generateViewList(viewList);
+      });
   }
 
   /**
-   * Build the current FPrime project and get the view list.
+   * Rebuild the project with the current path.
    */
-  public build() {
-    // Load the project config.
-    // TODO: for now, we are using a fake config file in the static folder.
-    this.configManager.loadConfig(path.resolve(__static, "config.json"));
-    this.config = this.configManager.getConfig();
+  public rebuild() {
+    return this.build(this.configManager.ProjectPath);
+  }
+
+  /**
+   * 
+   */
+  public refresh() {
     // Load the default style from the config
-    this.defaultStyle = this.styleManager
-        .getDefaultStyles(this.config.DefaultStyleFilePath);
-    return this.modelManager.loadModel(this.config).then((viewList) => {
-      this.generateViewList(viewList);
-    });
+    this.defaultStyle = this.styleManager.getDefaultStyles(
+      this.configManager.Config.DefaultStyleFilePath);
   }
 
   /**
