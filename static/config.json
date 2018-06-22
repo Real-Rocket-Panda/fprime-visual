@@ -10,5 +10,6 @@
   "FPPCompilerPath": "fppcompiler",
   "FPPCompilerParameters": "",
   "FPPCompilerOutputPath": "fpp_output",
-  "DefaultStyleFilePath": ""
+  "DefaultStyleFilePath": "",
+  "ViewStyleFileFolder": ""
 }

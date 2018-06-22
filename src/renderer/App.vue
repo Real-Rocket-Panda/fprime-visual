@@ -23,6 +23,9 @@
         <v-btn icon @click="refresh">
           <v-icon>refresh</v-icon>
         </v-btn>
+        <v-btn icon @click="saveView">
+          <v-icon>save</v-icon>
+        </v-btn>
         <v-btn icon>
           <v-icon>insert_chart</v-icon>
         </v-btn>
@@ -57,6 +60,7 @@ import ColorPicker from "./components/ColorPicker.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
+import CyManager from "@/components/ViewContent/CyManager";
 
 export default Vue.extend({
   name: "fprime-visual",
@@ -124,7 +128,14 @@ export default Vue.extend({
     },
     refresh() {
       fprime.viewManager.refresh();
-    }
+    },
+    saveView() {
+      // TODO: seems not good :(
+      fprime.viewManager.saveViewDescriptorFor(
+        this.$route.params.viewName,
+        CyManager.returnDescriptor(),
+      )
+    },
   }
 });
 </script>

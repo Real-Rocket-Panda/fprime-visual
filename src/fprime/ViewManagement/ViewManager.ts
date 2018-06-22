@@ -61,7 +61,7 @@ export default class ViewManager {
   }
 
   /**
-   * 
+   * The output message to show on the output panel.
    */
   private compilerOutput = { content: "" };
 
@@ -101,7 +101,9 @@ export default class ViewManager {
   }
 
   /**
-   * 
+   * Refresh the style information of all the views. This is useful when the
+   * user changes the style file and want to reload the view without build the
+   * entire project again.
    */
   public refresh() {
     // Load the default style from the config
@@ -149,8 +151,8 @@ export default class ViewManager {
   }
 
   /**
-   * 
-   * @param viewName 
+   * Get a simple graph of the view. See, ViewDescriptor.getSimpleGraph()
+   * @param viewName The name of the view.
    */
   public getSimpleGraphFor(viewName: string) {
     if (this.viewDescriptors[viewName]) {
@@ -162,23 +164,39 @@ export default class ViewManager {
 
   /**
    * The UI has updated the Cytoscape JSON and needs to store the change to the
-   * view descriptor. This function should store the Cytoscape JSON in the 
+   * view descriptor. This function should store the Cytoscape JSON in the
    * cytoscapeJSONs map and convert the JSON back to the view descriptor.
-   * @param viewName 
-   * @param descriptor 
+   * @param viewName The name of the view to update
+   * @param descriptor The cytoscape json object to update
    */
-  public updateViewDescriptorFor(
-    viewName: string, descriptor: ICytoscapeJSON) {
+  public updateViewDescriptorFor(viewName: string, json: ICytoscapeJSON) {
     // If the view descriptor does not exist, the view has not rendered.
     // Ignore the case.
     if (!this.viewDescriptors[viewName]) {
       return;
     }
-    this.cytoscapeJSONs[viewName] = descriptor;
+    this.cytoscapeJSONs[viewName] = json;
     // Parse the style information in cytoscape json,
     // write it back to the view descriptor
     const viewDescriptor = this.viewDescriptors[viewName];
-    viewDescriptor.styleDescriptor = ViewDescriptor.parseStyleFrom(descriptor);
+    viewDescriptor.Descriptor = ViewDescriptor.parseStyleFrom(json);
+  }
+
+  /**
+   * Save the given view to a style file. The function should receive the
+   * recent cytoscape json obejct, update the in-memory view descriptor,
+   * and then write the view descriptor to the file.
+   * @param viewName The name of the view to save.
+   * @param descriptor The current cytoscape json object.
+   */
+  public saveViewDescriptorFor(viewName: string, descriptor: ICytoscapeJSON) {
+    if (!this.viewDescriptors[viewName]) {
+      return;
+    }
+    // Update the view descriptor first
+    this.updateViewDescriptorFor(viewName, descriptor);
+    const styles = this.viewDescriptors[viewName].CSSStyles;
+    this.styleManager.saveStyleFor(viewName, styles, this.configManager);
   }
 
   /**
@@ -208,14 +226,17 @@ export default class ViewManager {
    * @param viewName The name of the view which should be in the view list.
    */
   private generateViewDescriptorFor(viewName: string): ViewDescriptor {
-    // TODO: Currently, we do not have the FPPModelManager. Thus, we mock three
-    // view descriptors here.
     const view = Object.keys(this.viewList)
       .map((key) => this.viewList[key])
       .reduce((x, y) => x.concat(y))
       .filter((x) => x.name === viewName)[0];
     const model = this.modelManager.query(view.name, view.type);
-    return ViewDescriptor.buildFrom(model);
+    // Generate the graph part of the view descriptor
+    const descriptor = ViewDescriptor.buildFrom(model);
+    // Load the styledescriptor part of the view descriptor from file
+    const styles = this.styleManager.loadStyleFor(viewName, this.configManager);
+    descriptor.CSSStyles = styles;
+    return descriptor;
   }
 
   /**
