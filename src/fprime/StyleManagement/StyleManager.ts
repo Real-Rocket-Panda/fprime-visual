@@ -32,15 +32,7 @@ export default class StyleManager {
     }
     const projectStyle = projectCSS ? this.getStyleFromCSS(projectCSS) : [];
     // Merge the projectStyle to the systemStyle
-    projectStyle.forEach((ps: any) => {
-      const selectors = systemStyle.filter((ss: any) =>
-        ss.selector === ps.selector);
-      if (selectors.length > 0) {
-        selectors[0].style = (Object as any).assign(selectors[0].style,
-          ps.style);
-      }
-    });
-    return systemStyle;
+    return this.mergeStyle(systemStyle, projectStyle);
   }
 
   /**
@@ -83,6 +75,31 @@ export default class StyleManager {
     }
     const ast = css.parse(fs.readFileSync(filepath, "utf-8"));
     return this.getStyleFromCSS(ast);
+  }
+
+  /**
+   * Merge two styles into one. Merge won't change the value in x (the first
+   * parameter).
+   * @param x An array of IStyle to merge to.
+   * @param y An array of IStyle to merge from.
+   */
+  public mergeStyle(x: IStyle[], y: IStyle[]): IStyle[] {
+    // Clone x
+    x = x.map((s) => {
+      return {
+        selector: s.selector,
+        style: (Object as any).assign({}, s.style),
+      };
+    });
+    y.forEach((ys) => {
+      const s = x.find((xs) => xs.selector === ys.selector);
+      if (s) {
+        s.style = (Object as any).assign(s.style, ys.style);
+      } else {
+        x.push(ys);
+      }
+    });
+    return x;
   }
 
   /**

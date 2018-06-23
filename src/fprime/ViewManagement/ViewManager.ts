@@ -249,9 +249,10 @@ export default class ViewManager {
     descriptor: ICytoscapeJSON,
   } {
     const json = viewDescriptor.generateCytoscapeJSON();
-    // Combine the default styles with all the other styles.
+    // Merge the default styles with all the other styles.
     if (this.defaultStyle) {
-      json.descriptor.style = this.defaultStyle.concat(json.descriptor.style);
+      json.descriptor.style = this.styleManager.mergeStyle(
+        this.defaultStyle, json.descriptor.style);
     }
     return json;
   }
