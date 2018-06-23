@@ -1,6 +1,6 @@
 import cytoscape, { EventObject } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
-import nodeResize from "cytoscape-node-resize";
+import nodeResize from "rp-cytoscape-node-resize";
 import konva from "konva";
 import jquery from "jquery";
 import automove from "rp-automove";
