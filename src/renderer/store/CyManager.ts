@@ -14,18 +14,34 @@ nodeResize(cytoscape, jquery, konva);
 class CyManager {
 
   /**
-   * 
+   * The cytoscape instance.
    */
   private cy?: cytoscape.Core;
 
+  /**
+   * The class for utils of cytoscape, including move ports back and
+   * stick ports
+   */
   private cyutil?: CyUtil;
 
+  /**
+   * The name of the current view.
+   */
   private viewName: string = "";
 
+  /**
+   * The container html element <div id="cytoscape"></div>
+   */
   private container?: HTMLElement;
 
+  /**
+   * The automove rules. Clean up the rules to release memory
+   */
   private automoveRule?: any[];
 
+  /**
+   * A function of all the operation of rendering a new view.
+   */
   private batch: any;
 
   public get Cy() {
@@ -62,6 +78,13 @@ class CyManager {
     }
   }
 
+  /**
+   * Start updating the cytoscape instance. This function will not really
+   * execute the updation. See endUpdate
+   * @param viewName The name of the view
+   * @param needLayout Whether the view needs layout
+   * @param config The config for cytoscape.
+   */
   public startUpdate(viewName: string, needLayout: boolean, config: any) {
     this.viewName = viewName;
     // Hide the viewport for usability concern
@@ -103,6 +126,9 @@ class CyManager {
     };
   }
 
+  /**
+   * endUpdate will call the batch function where to execute the updating.
+   */
   public endUpdate() {
     if (this.batch) {
       this.cy!.batch(this.batch);
