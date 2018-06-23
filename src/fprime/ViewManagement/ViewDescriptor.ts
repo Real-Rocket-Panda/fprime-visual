@@ -249,7 +249,7 @@ export default class ViewDescriptor {
     // Copy the style from descriptor to cytoscape style filed
     const styles = Object.keys(descriptor)
       .map((key) => {
-        const s = (Object as any).assign({}, descriptor[key].style);
+        const s = Object.assign({}, descriptor[key].style);
         delete s.x;
         delete s.y;
         return { selector: descriptor[key].selector, style: s };

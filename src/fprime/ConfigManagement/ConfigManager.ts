@@ -43,7 +43,7 @@ export default class ConfigManager {
       this.systemConfigPath, "utf-8"));
     this.resolvePath(__static, this.systemConfig);
     // Make a copy of the system config
-    this.config = (Object as any).assign({}, this.systemConfig);
+    this.config = Object.assign({}, this.systemConfig);
   }
 
   /**
@@ -52,7 +52,7 @@ export default class ConfigManager {
    */
   public loadConfig() {
     // Set to system default first
-    this.config = (Object as any).assign({}, this.systemConfig);
+    this.config = Object.assign({}, this.systemConfig);
     // By default it search config with name config.json
     const dir = path.resolve(this.projectPath, "config.json");
     if (fs.existsSync(dir)) {
@@ -62,7 +62,7 @@ export default class ConfigManager {
       // Merge the config
       pjConfig.Analyzers = this.systemConfig.Analyzers
         .concat(pjConfig.Analyzers ? pjConfig.Analyzers : []);
-      this.config = (Object as any).assign(this.config, pjConfig);
+      this.config = Object.assign(this.config, pjConfig);
     }
   }
 

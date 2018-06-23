@@ -60,7 +60,7 @@ import ColorPicker from "./components/ColorPicker.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
-import CyManager from "@/components/ViewContent/CyManager";
+import CyManager from "@/store/CyManager";
 
 export default Vue.extend({
   name: "fprime-visual",
@@ -133,7 +133,7 @@ export default Vue.extend({
       // TODO: seems not good :(
       fprime.viewManager.saveViewDescriptorFor(
         this.$route.params.viewName,
-        CyManager.returnDescriptor(),
+        CyManager.getDescriptor(),
       )
     },
   }

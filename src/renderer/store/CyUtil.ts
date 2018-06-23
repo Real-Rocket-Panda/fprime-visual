@@ -1,8 +1,10 @@
-import { BoundingBox12, Position } from "cytoscape"
+import { BoundingBox12, Position } from "cytoscape";
 
-export class Cy_Util {
-  private cy: any;
-  constructor(cy: any) {
+export class CyUtil {
+
+  private cy: cytoscape.Core;
+
+  constructor(cy: cytoscape.Core) {
     this.cy = cy;
   }
 
@@ -13,8 +15,9 @@ export class Cy_Util {
    * @param ports: collection of the ports that connect to the component
    */
 
-  public portMoveBackComp(comp: any, ...ports: any[]): void {
-    ports.forEach((port) => {
+  public portMoveBackComp(comp: cytoscape.NodeCollection,
+                          ports: cytoscape.NodeCollection): void {
+    ports.forEach((port: cytoscape.NodeSingular) => {
       // get the edge from component to port
       const id: string = "#" + comp.id() + "-" + port.id();
       const edge: any = this.cy.edges(id);
@@ -23,20 +26,21 @@ export class Cy_Util {
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
         edge.targetEndpoint(),
-        comp.boundingBox({ includeOverlays: false }));
+        comp.boundingBox({ includeOverlays: false } as any));
       // resposition the port
       port.position(intersection);
     });
   }
 
-  /*
-    Purpose:  Port moves with the component while dragging.
-    Parameters: comp - component object that the port belongs to
-                ports - collection of the ports that connect to the component
-  */
-  public portMoveWizComp(comp: any, ...ports: any[]): void {
-    this.cy.automove({
-      nodesMatching: this.cy.$(...ports),
+  /**
+   * Purpose:  Port moves with the component while dragging.
+   * @param comp component object that the port belongs to
+   * @param ports collection of the ports that connect to the component
+   */
+  public portMoveWizComp(comp: cytoscape.NodeCollection,
+                         ports: cytoscape.NodeCollection): any {
+    return (this.cy as any).automove({
+      nodesMatching: ports,
       reposition: "drag",
       dragWith: comp,
     });
@@ -80,15 +84,16 @@ export class Cy_Util {
     const y1: number = cb.y1 - (ph / 2) + offset;
     const y2: number = cb.y2 + (ph / 2) - offset;
     return {
-      x1: x1,
-      x2: x2,
-      y1: y1,
-      y2: y2
+      x1,
+      x2,
+      y1,
+      y2,
     };
   }
 
   /**
-   * Calculate the position of intersection between a box and the line whose source is the center of the box
+   * Calculate the position of intersection between a box and the
+   * line whose source is the center of the box
    * @param source  position of source of the line {x:number, y:number}
    * @param target position of target of the line {x:number, y:number}
    * @param box bounding box {x1:number, x2:number, y1:number, y2:number}
@@ -121,9 +126,9 @@ export class Cy_Util {
     let xOff: number = 0;
     let yOff: number = 0;
 
-    const sign_y = type * (target.y - source.y) /
+    const signy = type * (target.y - source.y) /
       Math.abs(target.y - source.y);
-    const sign_x = type * (target.x - source.x) /
+    const signx = type * (target.x - source.x) /
       Math.abs(target.x - source.x);
 
     if (ratioLine < ratioBox) {  // left or right
@@ -134,6 +139,6 @@ export class Cy_Util {
       yOff += high / 2;
     }
 
-    return { x: source.x + sign_x * xOff, y: source.y + sign_y * yOff };
+    return { x: source.x + signx * xOff, y: source.y + signy * yOff };
   }
 }
