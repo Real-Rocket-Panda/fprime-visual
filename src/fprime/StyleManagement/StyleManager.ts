@@ -88,13 +88,13 @@ export default class StyleManager {
     x = x.map((s) => {
       return {
         selector: s.selector,
-        style: (Object as any).assign({}, s.style),
+        style: Object.assign({}, s.style),
       };
     });
     y.forEach((ys) => {
       const s = x.find((xs) => xs.selector === ys.selector);
       if (s) {
-        s.style = (Object as any).assign(s.style, ys.style);
+        s.style = Object.assign(s.style, ys.style);
       } else {
         x.push(ys);
       }
