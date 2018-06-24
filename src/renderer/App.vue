@@ -3,16 +3,24 @@
     <v-app>
       <!-- app top toolbar -->
       <v-toolbar app fixed clipped-left flat height="40px"
-        :style="{zIndex: 1000}"
+        :style="{zIndex: 1000}" id="fprime-header-toolbar"
       >
         <v-toolbar-title class="mr-3">FPrime Visual</v-toolbar-title>
-        <v-btn icon @click="openProject">
-          <v-icon>folder_open</v-icon>
-        </v-btn>
-        <v-dialog v-model="building" persistent max-width="40">
-          <v-btn icon @click="rebuild" slot="activator">
-            <v-icon>play_circle_filled</v-icon>
+        <!-- open button -->
+        <!-- <v-tooltip bottom> -->
+          <v-btn icon @click="openProject">
+            <v-icon>folder_open</v-icon>
           </v-btn>
+          <!-- <span>open</span> -->
+        <!-- </v-tooltip> -->
+        <!-- build button -->
+        <v-dialog v-model="building" persistent max-width="40">
+          <!-- <v-tooltip slot="activator" bottom> -->
+            <v-btn icon @click="rebuild" slot="activator">
+              <v-icon>play_circle_filled</v-icon>
+            </v-btn>
+            <!-- <span>build</span> -->
+          <!-- </v-tooltip> -->
           <v-card width="40" height="40" :style="{padding: '4px 4px'}">
             <v-progress-circular
               indeterminate
@@ -20,16 +28,30 @@
             </v-progress-circular>
           </v-card>
         </v-dialog>
-        <v-btn icon @click="refresh">
-          <v-icon>refresh</v-icon>
-        </v-btn>
-        <v-btn icon @click="saveView">
-          <v-icon>save</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>insert_chart</v-icon>
-        </v-btn>
-        <color-picker></color-picker>
+        <!-- refresh button -->
+        <!-- <v-tooltip bottom> -->
+          <v-btn icon @click="refresh">
+            <v-icon>refresh</v-icon>
+          </v-btn>
+          <!-- <span>refresh</span> -->
+        <!-- </v-tooltip> -->
+        <!-- save button -->
+        <!-- <v-tooltip bottom> -->
+          <v-btn icon @click="saveView">
+            <v-icon>save</v-icon>
+          </v-btn>
+          <!-- <span>save</span> -->
+        <!-- </v-tooltip> -->
+        <!-- analysis button -->
+        <!-- <v-tooltip bottom> -->
+          <v-btn icon>
+            <v-icon>insert_chart</v-icon>
+          </v-btn>
+          <!-- <span>analysis</span> -->
+        <!-- </v-tooltip> -->
+        <!-- <v-tooltip bottom> -->
+          <color-picker></color-picker>
+        <!-- </v-tooltip> -->
       </v-toolbar>
       
       <v-navigation-drawer app fixed permanent clipped
@@ -151,5 +173,9 @@ export default Vue.extend({
   cursor: ew-resize;
   width: 2px;
   background-color: rgba(150, 150, 150, 0.12);
+}
+
+#fprime-header-toolbar .tooltip {
+  height: 48px;
 }
 </style>

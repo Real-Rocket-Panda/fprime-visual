@@ -97,6 +97,8 @@ export default class ViewManager {
    * Rebuild the project with the current path.
    */
   public rebuild() {
+    // Clean up
+    this.cleanup();
     return this.build(this.configManager.ProjectPath);
   }
 
@@ -106,6 +108,7 @@ export default class ViewManager {
    * entire project again.
    */
   public refresh() {
+    this.cleanup();
     // Load the default style from the config
     this.defaultStyle = this.styleManager.getDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);
@@ -197,6 +200,18 @@ export default class ViewManager {
     this.updateViewDescriptorFor(viewName, descriptor);
     const styles = this.viewDescriptors[viewName].CSSStyles;
     this.styleManager.saveStyleFor(viewName, styles, this.configManager);
+  }
+
+  /**
+   * Clean up the memeory
+   */
+  private cleanup() {
+    Object.keys(this.viewDescriptors).forEach((key) => {
+      delete this.viewDescriptors[key];
+    });
+    Object.keys(this.cytoscapeJSONs).forEach((key) => {
+      delete this.cytoscapeJSONs[key];
+    });
   }
 
   /**

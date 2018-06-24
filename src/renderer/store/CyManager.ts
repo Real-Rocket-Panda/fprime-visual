@@ -169,7 +169,12 @@ class CyManager {
    * @param color value of color to change
    */
   public setColor(eles: any, color: string): void {
-    eles.style({ "background-color": color });
+    eles.forEach((el: any) => {
+      (this.cy!.style() as any)
+        .selector("#" + el.id())
+        .style({ "background-color": color });
+    });
+    (this.cy!.style() as any).update();
   }
 
   /**
@@ -187,15 +192,19 @@ class CyManager {
     (this.cy! as any).on(
       "noderesize.resizeend",
       (_evt: EventObject, _type: any, node: any) => {
-        /* type param includes:
-        topleft, topcenter, topright, centerright,
-        bottomright, bottomcenter, bottomleft, centerleft
-        */
-       const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
-       this.cyutil!.portMoveBackComp(
-         node,
-         this.cy!.$(simpleGraph["#" + node.id()].join(",")),
-       );
+        // Set the size style for this node
+        (this.cy!.style() as any)
+          .selector("#" + node.id())
+          .style({ height: node.style("height") })
+          .style({ width: node.style("width") });
+        // type param includes:
+        // topleft, topcenter, topright, centerright,
+        // bottomright, bottomcenter, bottomleft, centerleft
+        const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
+        this.cyutil!.portMoveBackComp(
+          node,
+          this.cy!.$(simpleGraph["#" + node.id()].join(",")),
+        );
       });
   }
 
