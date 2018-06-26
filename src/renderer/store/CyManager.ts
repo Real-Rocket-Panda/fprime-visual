@@ -183,6 +183,28 @@ class CyManager {
   }
 
   /**
+   * assign the width and height to a collection of elements
+   * @param eles collection of elements (implicitly of the same type)
+   * @param width the value of width to be set
+   * @param height the value of height to be set
+   */
+  // public setSize(eles: NodeCollection, width: number, height: number): void {
+  //   this.cy.batch(() => {
+  //       eles.toArray().forEach((node: any) => {
+  //           node.style({
+  //               width,
+  //               height,
+  //           });
+  //           if (node.is(".fprime-instance")) {
+  //               this.cy_util.portMoveBackComp(node,
+  //                   ...this.graph["#" + node.id()]
+  //                       .map((port: any) => (this.cy.$(port))));
+  //           }
+  //       });
+  //   });
+  // }
+
+  /**
    * Enable the plugin nodeResize.
    * Drag-to-resize only applies to the components.
    * further options refer to:
@@ -206,20 +228,21 @@ class CyManager {
         // topleft, topcenter, topright, centerright,
         // bottomright, bottomcenter, bottomleft, centerleft
         const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
-        this.cyutil!.portMoveBackComp(
-          node,
-          this.cy!.$(simpleGraph["#" + node.id()].join(",")),
-        );
+        const ports = this.cy!.$(simpleGraph["#" + node.id()].join(","));
+        this.cyutil!.portMoveBackComp(node, ports);
+        // Adjust port image after change port relative loc.
+        this.cyutil!.adjustCompsAllPortImg(node, ports);
       });
   }
 
   private movebackPort(): void {
     const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
     Object.keys(simpleGraph).forEach((c) => {
-      this.cyutil!.portMoveBackComp(
-        this.cy!.$(c),
-        this.cy!.$(simpleGraph[c].join(",")),
-      );
+      const comp = this.cy!.$(c);
+      const ports = this.cy!.$(simpleGraph[c].join(","));
+      this.cyutil!.portMoveBackComp(comp, ports);
+      // Adjust port image after change port relative loc.
+      this.cyutil!.adjustCompsAllPortImg(comp, ports);
     });
   }
 
@@ -253,6 +276,8 @@ class CyManager {
             ({ includeOverlays: false } as any),
           ) as cytoscape.BoundingBox12);
 
+        // Adjust port image
+        this.cyutil!.adjustPortImg(compIns, portIns);
       });
     });
   }

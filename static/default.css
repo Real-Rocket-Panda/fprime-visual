@@ -31,6 +31,9 @@ edge {
     width: 30;
     height: 30;
     background-color: rgb(205, 217, 205);
+    background-image: data(img) ;
+    background-width: 70%;
+    background-height: 70%;
     content: data(id);
     text-halign: center;
     text-opacity: 0.5;
