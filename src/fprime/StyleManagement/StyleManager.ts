@@ -123,11 +123,10 @@ export default class StyleManager {
     let filepath: string;
     let stylePath = config.Config.ViewStyleFileFolder;
     if (stylePath) {
-      if (!fs.existsSync(config.Config.ViewStyleFileFolder)) {
-        fs.mkdirSync(config.Config.ViewStyleFileFolder);
+      if (!fs.existsSync(stylePath)) {
+        fs.mkdirSync(stylePath);
       }
-      filepath = path.resolve(config.Config.ViewStyleFileFolder,
-        `${viewName}_style.css`);
+      filepath = path.resolve(stylePath, `${viewName}_style.css`);
     } else {
       stylePath = path.resolve(config.ProjectPath, "styles");
       // If "ViewStyleFileFolder" field is not specified in the configuration

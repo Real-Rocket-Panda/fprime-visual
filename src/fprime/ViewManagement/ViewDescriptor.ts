@@ -33,7 +33,7 @@ export interface INode {
 export enum EdgeType {
   Port2Port = "port-port",
   Instance2Port = "instance-port",
-  Component2Port = "instance-component",
+  Component2Port = "component-port",
 }
 
 /**
@@ -150,7 +150,7 @@ export default class ViewDescriptor {
         view.graph.edges[vedge] = {
           id: vedge,
           modelID: "",
-          type: EdgeType.Instance2Port,
+          type: EdgeType.Component2Port,
           from: view.graph.nodes[i.name],
           to: view.graph.nodes[pname],
         };

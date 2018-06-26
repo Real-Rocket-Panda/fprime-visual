@@ -1,7 +1,6 @@
 import IConfig from "../Common/Config";
 import DataImporter from "../DataImport/DataImporter";
 import { Promise } from "es6-promise";
-import { isNull } from "util";
 
 /**
  * 

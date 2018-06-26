@@ -21,7 +21,8 @@
     "noUnusedParameters": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "test/fprime/**/*"
   ],
   "exclude": [
     "node_modules"
