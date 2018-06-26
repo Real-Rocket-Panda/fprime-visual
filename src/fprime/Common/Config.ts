@@ -11,4 +11,11 @@ export default interface IConfig {
             Type: string,
         }
     >;
+    AutoLayout: Array<
+        {
+            Name: string,
+            Default: boolean,
+            Paremeters: {[key: string]: string},
+        }
+    >;
 }

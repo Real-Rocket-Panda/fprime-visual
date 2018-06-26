@@ -7,11 +7,13 @@ class CyManager {
     private cy: any;
     private cy_util: Cy_Util;
     private graph: any;
+    private layoutConfig: {[key: string]: any};
 
     constructor() {
         this.cy = null;
         this.cy_util = new Cy_Util(null);
         this.graph = null;
+        this.layoutConfig = {};
     }
 
     public setCy(cy: any) {
@@ -22,6 +24,11 @@ class CyManager {
     public getGraph(): any {
         return this.graph;
     }
+
+    public setLayoutConfig(config: {[key: string]: any}) {
+        this.layoutConfig = config;
+    }
+
     public setGraph(graph: any): void {
         this.graph = graph;
         // TODO: Move this logic to view descriptor
@@ -111,18 +118,20 @@ class CyManager {
     }
 
     public applyAutoLayout(): void {
+        const config: {[key: string]: any} = {};
+        for (const key in this.layoutConfig.Parameters) {
+            if (!this.layoutConfig.Parameters.hasOwnProperty(key)) {
+                continue;
+            }
+            config[key] = this.layoutConfig.Parameters[key];
+        }
+        config.name = this.layoutConfig.Name;
+        config.stop = () => {
+                     this.stickPort();
+                     this.movebackPort();
+                };
         this.cy.batch(() => {
-            const layout: any = this.cy.layout({
-                name: "cose-bilkent",
-                nodeRepulsion: 1000000,
-                animate: "end",
-                animationEasing: "ease-out",
-                animationDuration: 0,
-                stop: () => {
-                    this.stickPort();
-                    this.movebackPort();
-                },
-            });
+            const layout: any = this.cy.layout(config);
             layout.run();
         });
     }

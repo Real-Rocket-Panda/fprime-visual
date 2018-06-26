@@ -2,6 +2,7 @@ import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
+import LayoutGenerator from "./LayoutGenerator";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -48,6 +49,12 @@ export default class ViewManager {
   private modelManager: FPPModelManager = new FPPModelManager();
 
   /**
+   * The layout gennerator where to manage the layout algorithm with
+   * related paremeters.
+   */
+  private layoutGennerator: LayoutGenerator = new LayoutGenerator();
+
+  /**
    * The view list of the current project.
    */
   private viewList: IViewList = {
@@ -78,6 +85,7 @@ export default class ViewManager {
     this.configManager.ProjectPath = dir;
     // Load the project config.
     this.configManager.loadConfig();
+    // Initialize the layoutGenerator
     // Load the default style from the config
     this.defaultStyle = this.styleManager.getDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);
@@ -182,6 +190,25 @@ export default class ViewManager {
   }
 
   /**
+   * return the default config for the auto-layout algorithm
+   */
+  public getDefaultAutoLayoutConfig(): {[key: string]: any} {
+    console.log(this.layoutGennerator.getDefaultAutoLayoutConfig(
+      this.configManager.Config));
+    return this.layoutGennerator.getDefaultAutoLayoutConfig(
+      this.configManager.Config);
+  }
+
+  /**
+   * return the config for the auto-layout algorithm
+   */
+  public getAutoLayoutConfigByName(name: string): {[key: string]: any} {
+    return this.layoutGennerator.getAutoLayoutConfigByName(
+      this.configManager.Config, name,
+    );
+  }
+
+  /**
    * Generate the list of all the views in the current project grouped into
    * view types.
    */
@@ -234,5 +261,6 @@ export default class ViewManager {
     }
     return json;
   }
+
 
 }

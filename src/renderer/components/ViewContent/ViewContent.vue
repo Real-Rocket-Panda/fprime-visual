@@ -35,6 +35,7 @@ export default Vue.extend({
       cy.json(this.config);
 
       CyManager.setCy(cy);
+      CyManager.setLayoutConfig(fprimes.viewManager.getDefaultAutoLayoutConfig());
       CyManager.setGraph(fprimes.viewManager.getSimpleGraphFor(this.name));
       // Update layout
       if (this.render!.needLayout) {
