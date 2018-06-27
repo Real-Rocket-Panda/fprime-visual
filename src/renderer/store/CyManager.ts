@@ -116,13 +116,13 @@ class CyManager {
         };
         layoutOption = Object.assign(layoutOption,
           this.layoutConfig.Parameters);
-        console.log("layout option:", layoutOption);
 
         let layout: any = this.cy!.layout(layoutOption);
         layout.run();
         layout = undefined;
       } else {
         this.stickPort();
+        this.movebackPort();
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
         // Show the viewport again
