@@ -1,3 +1,5 @@
+import fprime from "fprime";
+
 export enum PanelName {
   Output = "Output",
   Analysis = "Analysis",
@@ -12,7 +14,11 @@ export default {
     /**
      * The name of the current panel. Should be either "Output" or "Analysis"
      */
-    curPanel: "",
+    curPanel: PanelName.Output,
+    /**
+     * The output information of the compile process
+     */
+    compilerOutput: fprime.viewManager.CompilerOutput,
   },
 
   /**
@@ -29,16 +35,20 @@ export default {
   },
 
   /**
-   * Show the Output panel.
+   * 
    */
-  OutputPanel() {
+  showOutput() {
     this.showPanel(PanelName.Output);
+    document.getElementById("msg-output-tab")!.firstElementChild!
+      .dispatchEvent(new Event("click"));
   },
 
   /**
-   * Show the Analysis panel.
+   * 
    */
-  AnalysisPanel() {
+  showAnalysis() {
     this.showPanel(PanelName.Analysis);
+    document.getElementById("msg-analysis-tab")!.firstElementChild!
+      .dispatchEvent(new Event("click"));
   },
 };

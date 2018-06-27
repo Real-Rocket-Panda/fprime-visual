@@ -1,14 +1,15 @@
 {
-    "Analyzers": [
-        {
-            "Name":"",
-            "Path":"",
-            "OutputFilePath":"",
-            "Type":""
-        }
-    ],
-    "FPPCompilerPath": "fppcompiler",
-    "FPPCompilerParameters": "",
-    "FPPCompilerOutputPath": "model.xml",
-    "DefaultStyleFilePath": ""
+  "Analyzers": [
+    {
+      "Name": "AcmeRuleChecker",
+      "Path": "acme-checker.jar",
+      "OutputFilePath": "acme_output",
+      "Type": ""
+    }
+  ],
+  "FPPCompilerPath": "fppcompiler",
+  "FPPCompilerParameters": "",
+  "FPPCompilerOutputPath": "fpp_output",
+  "DefaultStyleFilePath": "",
+  "ViewStyleFileFolder": ""
 }

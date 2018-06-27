@@ -1,6 +1,10 @@
 <template>
   <div style="height:100%">
-    <v-tabs :height="height">
+    <v-tabs
+      :height="height"
+      hide-slider
+      show-arrows
+    >
       <v-tab
         v-for="i in items"
         :key="i.id"
@@ -19,7 +23,7 @@
           </v-btn>
       </v-tab>
     </v-tabs>
-    <router-view></router-view>
+    <router-view :offset="height"></router-view>
   </div>
 </template>
 
@@ -27,6 +31,7 @@
 import Vue from "vue";
 import { Event } from "electron";
 import View from "@/store/view";
+import CyManager from "@/store/CyManager";
 
 export default Vue.extend({
   props: ["height"],
@@ -48,12 +53,19 @@ export default Vue.extend({
       let viewName = clsbtn!.getAttribute("data-id")!;
       let idx = View.CloseViewByName(viewName);
       if (this.items.length === 0) {
-        this.$router.replace("/view");
+        this.$router.replace("/");
       } else if (viewName === this.$route.params.viewName) {
         idx = --idx > 0 ? idx : 0;
         this.$router.replace(this.getViewRoute(this.items[idx]));
       }
     },
+  },
+  updated() {
+    if (this.$route.params.viewName) {
+      setTimeout(() => {
+        CyManager.endUpdate();
+      }, 100);
+    }
   },
   data() {
     return { items: View.state.opened };
@@ -65,6 +77,10 @@ export default Vue.extend({
 .view-tab-item > .tabs__item {
   padding-left: 10px;
   padding-right: 0px;
+}
+
+.view-tab-item > .tabs__item--active {
+  background-color: #E0E0E0;
 }
 </style>
 
