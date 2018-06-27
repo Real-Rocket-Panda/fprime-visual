@@ -2,8 +2,6 @@ import { expect } from "chai";
 import ViewManager from "fprime/ViewManagement/ViewManager";
 import { ICytoscapeJSON, NodeType } from "fprime/ViewManagement/ViewDescriptor";
 
-const testProjectPath = "./test/static";
-
 describe("ViewManager render", () => {
   let viewManager: ViewManager;
   before(() => {
@@ -20,7 +18,7 @@ describe("ViewManager render", () => {
 
   it("should return { needLayout: true } when a view is" +
     "rendered the first time", () => {
-      viewManager.build(testProjectPath).then(() => {
+      viewManager.build().then(() => {
         expect(viewManager.render("REFLogger")!.needLayout).to.equal(true);
       });
     });
@@ -66,7 +64,7 @@ describe("ViewManager updateViewDescriptor", () => {
   });
 
   it("should update the cytoscape json", () => {
-    viewManager.build(testProjectPath).then(() => {
+    viewManager.build().then(() => {
       viewManager.render("REFLogger");
       viewManager.updateViewDescriptorFor("REFLogger", json);
       expect(viewManager.render("REFLogger")!.descriptor).to.deep.equal(json);
