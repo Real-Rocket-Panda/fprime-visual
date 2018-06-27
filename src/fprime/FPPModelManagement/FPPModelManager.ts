@@ -1,7 +1,6 @@
 import IConfig from "../Common/Config";
 import DataImporter from "../DataImport/DataImporter";
 import { Promise } from "es6-promise";
-import { isNull } from "util";
 
 /**
  * 
@@ -111,12 +110,6 @@ export default class FPPModelManager {
         instances: [],
         components: [],
       };
-
-      console.log(this.generateTopologies(
-        data.namespace.system[0].topology,
-      ));
-      console.log(this.instances);
-      console.log(this.components);
       this.topologies.forEach((e: IFPPTopology) => {
         viewlist.topologies.push(e.name);
       });
@@ -151,7 +144,7 @@ export default class FPPModelManager {
         });
 
         ins = this.filterUnusedPorts(ins, cons);
-        console.log(ins);
+        // console.log(ins);
         return {
           instances: ins,
           connections: cons,

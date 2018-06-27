@@ -7,7 +7,6 @@ export default class LayoutGenerator {
    */
   public getDefaultAutoLayoutConfig(config: IConfig): {[key: string]: any} {
     let defaultLayout: {[key: string]: any} = {};
-    console.log(config);
     config.AutoLayout.forEach((i) => {
         if (i.Default === true) {
             defaultLayout = i;

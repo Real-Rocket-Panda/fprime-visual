@@ -12,7 +12,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Chrome } from "vue-color";
-import CyManager from "@/components/ViewContent/CyManager";
+import CyManager from "@/store/CyManager";
 
 var colors = { hex: '#000000' }
 
