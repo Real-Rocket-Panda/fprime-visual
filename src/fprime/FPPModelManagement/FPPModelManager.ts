@@ -1,179 +1,157 @@
 import IConfig from "../Common/Config";
 import DataImporter from "../DataImport/DataImporter";
 import { Promise } from "es6-promise";
+import { isNull } from "util";
 
+/**
+ * 
+ */
 export enum ViewType {
   Function = "Function View",
   InstanceCentric = "InstanceCentric View",
   Component = "Component View",
 }
 
-export interface IMockComponent {
+/**
+ * 
+ */
+export interface IFPPComponent {
   name: string;
   namespace: string;
   ports: string[];
 }
 
-export interface IMockInstance {
+/**
+ * 
+ */
+export interface IFPPInstance {
   id: string;
   model_id: number;
   ports: { [p: string]: string };
   properties: { [p: string]: string };
 }
 
-export interface IMockConnection {
-  from: { inst: IMockInstance, port: string };
-  to: { inst: IMockInstance, port: string };
+/**
+ * 
+ */
+export interface IFPPConnection {
+  from: { inst: IFPPInstance, port: string };
+  to: { inst: IFPPInstance, port: string };
 }
 
-export interface IMockTopology {
+/**
+ * 
+ */
+export interface IFPPTopology {
   name: string;
-  connections: IMockConnection[];
+  connections: IFPPConnection[];
 }
 
-export interface IMockModel {
-  instances: IMockInstance[];
-  connections: IMockConnection[];
-  components: IMockComponent[];
+/**
+ * 
+ */
+export interface IFPPModel {
+  instances: IFPPInstance[];
+  connections: IFPPConnection[];
+  components: IFPPComponent[];
 }
 
+/**
+ *
+ */
 export default class FPPModelManager {
   private dataImporter: DataImporter = new DataImporter();
-  private instances: IMockInstance[];
-  private topologies: IMockTopology[];
-  private components: IMockComponent[];
+  private instances: IFPPInstance[] = [];
+  private topologies: IFPPTopology[] = [];
+  private components: IFPPComponent[] = [];
   private keywords: string[] = ["base_id", "name"];
-  constructor() {
-    this.instances = [];
-    this.topologies = [];
-    this.components = [];
-  }
 
+  /**
+   *
+   */
+  public loadModel(config: IConfig): Promise<{
+    output: string;
+    viewlist: { [k: string]: string[] };
+  }> {
 
-  public loadModel(config: IConfig): Promise<{[k: string]: string[]}> {
-    const models = this.dataImporter.invokeCompiler(config);
-    return models.then((data): Promise<any> => {
+    // Reset all the model object lists
+    this.reset();
+
+    // Invoke the compiler
+    const compilerResult = this.dataImporter.invokeCompiler(config);
+
+    return compilerResult.then((re) => {
+      // Load the model from xml object and return the view list
+      const data = re.representation;
       if (data == null || data.namespace == null) {
-        // console.log("model is null!!");
-        return new Promise((_resolve, reject) => {
-          reject("model is null");
-        });
+        throw new Error("fail to parse model data, model is null!");
+      }
+      // Load the model data to FPP model manager
+      if (!data.namespace.system || data.namespace.system.length !== 1) {
+        throw new Error(
+          "fail to parse model data, the number of system section is invalid",
+        );
       }
 
-      if (data.namespace.system && data.namespace.system.length === 1) {
+      this.components = this.components.concat(this.generateComponents(
+        data.namespace.component,
+      ));
 
-        data.namespace.component.forEach((ele: any) => {
-          const ps: string[] = [];
-          ele.port.forEach((p: any) => {
-            ps.push(p.$.name);
-          });
+      this.instances = this.instances.concat(this.generateInstances(
+        data.namespace.system[0].instance,
+      ));
 
-          this.components.push({
-            name: ele.$.name,
-            namespace: ele.$.namespace,
-            ports: ps,
-          });
-        });
+      this.topologies = this.topologies.concat(this.generateTopologies(
+        data.namespace.system[0].topology,
+      ));
 
-        // console.dir(this.components);
-        data.namespace.system[0].instance.forEach((ele: any) => {
-          const props: { [p: string]: string } = {};
-          for (const key in ele.$) {
-            if (!ele.$.hasOwnProperty(key)) {
-              continue;
-            }
-            if (this.keywords.indexOf(key) === -1) {
-                props[key] = ele.$[key];
-            }
-          }
-          const ps: {[p: string]: string} = {};
-          if (ele.$.type) {
-            const type = ele.$.type.split("\.");
-            if (type.length === 2) {
-              const namespace = type[0];
-              const name = type[1];
-              this.components.forEach((c: IMockComponent) => {
-                if (c.name === name && c.namespace === namespace) {
-                  let cnt = 1;
-                  c.ports.forEach((p: string) => {
-                      ps["p" + cnt] = p;
-                      cnt++;
-                    });
-                }
-              });
+      // Return the view list of the model
+      const viewlist: { [k: string]: string[] } = {
+        topologies: [],
+        instances: [],
+        components: [],
+      };
 
-            }
-          }
-          this.instances.push({
-              id: ele.$.name,
-              model_id: ele.$.base_id,
-              ports: ps,
-              properties: props,
-          });
-        });
-
-        // console.log(this.instances);
-
-        data.namespace.system[0].topology.forEach((ele: any) => {
-          const cons: IMockConnection[] = [];
-          ele.connection.forEach((con: any) => {
-            const source = this.instances.filter(
-              (i) => i.id === con.source[0].$.instance)[0];
-            const target = this.instances.filter(
-              (i) => i.id === con.target[0].$.instance)[0];
-
-            cons.push({
-                from: {inst: source, port: con.source[0].$.port},
-                to: {inst: target, port: con.target[0].$.port},
-            });
-            // console.log(cons);
-          });
-
-          this.topologies.push({
-            name: ele.$.name,
-            connections: cons,
-          });
-
-        });
-        // console.log(this.topologies);
-        // console.log(this.components);
-
-      }
-
-      return new Promise((resolve, _reject) => {
-        const viewList: {[k: string]: string[]}
-          = {topologies: [], instances: [], components: []};
-        this.topologies.forEach((e: IMockTopology) => {
-          viewList.topologies.push(e.name);
-        });
-        this.instances.forEach((e: IMockInstance) => {
-          viewList.instances.push(e.id);
-        });
-        this.components.forEach((e: IMockComponent) => {
-          viewList.components.push(e.name);
-        });
-
-        resolve(viewList);
+      console.log(this.generateTopologies(
+        data.namespace.system[0].topology,
+      ));
+      console.log(this.instances);
+      console.log(this.components);
+      this.topologies.forEach((e: IFPPTopology) => {
+        viewlist.topologies.push(e.name);
       });
-    });
 
+      this.instances.forEach((e: IFPPInstance) => {
+        viewlist.instances.push(e.id);
+      });
+
+      this.components.forEach((e: IFPPComponent) => {
+        viewlist.components.push(e.name);
+      });
+
+      // Add output information
+      const output = re.output + "View list generated...\n";
+      return { output, viewlist };
+    });
   }
 
   public query(viewName: string, viewType: string): any {
     switch (viewType) {
       case ViewType.Function: {
-        const cons: IMockConnection[] = this.topologies.filter(
-              (i) => i.name === viewName)[0].connections;
-        const ins: IMockInstance[] = [];
+        const cons: IFPPConnection[] = this.topologies.filter(
+          (i) => i.name === viewName)[0].connections;
+        let ins: IFPPInstance[] = [];
         cons.forEach((c) => {
-            if (ins.indexOf(c.from.inst) === -1) {
-              ins.push(c.from.inst);
-            }
-            if (ins.indexOf(c.to.inst) === -1) {
-              ins.push(c.to.inst);
-            }
+          if (ins.indexOf(c.from.inst) === -1) {
+            ins.push(Object.assign({}, c.from.inst));
+          }
+          if (ins.indexOf(c.to.inst) === -1) {
+            ins.push(Object.assign({}, c.to.inst));
+          }
         });
 
+        ins = this.filterUnusedPorts(ins, cons);
+        console.log(ins);
         return {
           instances: ins,
           connections: cons,
@@ -181,8 +159,8 @@ export default class FPPModelManager {
         };
       }
       case ViewType.Component: {
-        const ins: IMockInstance[] = [];
-        const cons: IMockConnection[] = [];
+        const ins: IFPPInstance[] = [];
+        const cons: IFPPConnection[] = [];
         const comps = this.components.filter((i) => i.name === viewName);
         // console.log(comps);
         return {
@@ -192,23 +170,24 @@ export default class FPPModelManager {
         };
       }
       case ViewType.InstanceCentric: {
-        const ins: IMockInstance[] = [];
-        const cons: IMockConnection[] = [];
+        let ins: IFPPInstance[] = [];
+        const cons: IFPPConnection[] = [];
         const root = this.instances.filter((i) => i.id === viewName)[0];
 
         this.topologies.forEach((t) => {
           t.connections.forEach((c) => {
             if (c.from.inst === root) {
-              ins.push(c.to.inst);
+              ins.push(Object.assign({}, c.to.inst));
               cons.push(c);
             }
             if (c.to.inst === root) {
-              ins.push(c.from.inst);
+              ins.push(Object.assign({}, c.from.inst));
               cons.push(c);
             }
           });
         });
-        ins.push(root);
+        ins = this.filterUnusedPorts(ins, cons);
+        ins.push(Object.assign({}, root));
         return {
           instances: ins,
           connections: cons,
@@ -221,17 +200,133 @@ export default class FPPModelManager {
     }
   }
 
-  public getMockFunctionView2(): IMockModel {
-    const cons: IMockConnection[] = [];
-    this.topologies.forEach((e) => {
-      e.connections.forEach((c) => {
-        cons.push(c);
+  private reset() {
+    this.instances = [];
+    this.topologies = [];
+    this.components = [];
+  }
+
+  private generateComponents(components: any[]): IFPPComponent[] {
+    const res: IFPPComponent[] = [];
+
+    if (components === null) {
+      return res;
+    }
+
+    components.forEach((ele: any) => {
+      const ps: string[] = [];
+      ele.port.forEach((p: any) => {
+        ps.push(p.$.name);
+      });
+
+      res.push({
+        name: ele.$.name,
+        namespace: ele.$.namespace,
+        ports: ps,
       });
     });
-    return  {
-      instances: this.instances,
-      connections: cons,
-      components: this.components,
-    };
+
+    return res;
+  }
+
+  private generateInstances(instances: any[]): IFPPInstance[] {
+    const res: IFPPInstance[] = [];
+
+    if (instances === null) {
+      return res;
+    }
+
+    instances.forEach((ele: any) => {
+      const props: { [p: string]: string } = {};
+      for (const key in ele.$) {
+        if (!ele.$.hasOwnProperty(key)) {
+          continue;
+        }
+        if (this.keywords.indexOf(key) === -1) {
+          props[key] = ele.$[key];
+        }
+      }
+      const ps: { [p: string]: string } = {};
+      if (ele.$.type === null) {
+        throw new Error("The type of element is null.");
+      }
+
+      const type = ele.$.type.split("\.");
+      if (type.length !== 2) {
+        throw new Error("Invalid type format for [" + type + "]");
+      }
+
+      const namespace = type[0];
+      const name = type[1];
+      this.components.forEach((c: IFPPComponent) => {
+        if (c.name === name && c.namespace === namespace) {
+          let cnt = 1;
+          c.ports.forEach((p: string) => {
+            ps["p" + cnt] = p;
+            cnt++;
+          });
+        }
+      });
+
+      res.push({
+        id: ele.$.name,
+        model_id: ele.$.base_id,
+        ports: ps,
+        properties: props,
+      });
+    });
+
+    return res;
+  }
+
+  private generateTopologies(topologies: any[]): IFPPTopology[] {
+    const res: IFPPTopology[] = [];
+
+    if (topologies === null) {
+      return res;
+    }
+
+    topologies.forEach((ele: any) => {
+      const cons: IFPPConnection[] = [];
+      ele.connection.forEach((con: any) => {
+        const source = this.instances.filter(
+          (i) => i.id === con.source[0].$.instance)[0];
+        const target = this.instances.filter(
+          (i) => i.id === con.target[0].$.instance)[0];
+
+        cons.push({
+          from: { inst: source, port: con.source[0].$.port },
+          to: { inst: target, port: con.target[0].$.port },
+        });
+      });
+
+      res.push({
+        name: ele.$.name,
+        connections: cons,
+      });
+    });
+
+    return res;
+  }
+
+  private filterUnusedPorts(
+    ins: IFPPInstance[], cons: IFPPConnection[],
+  ): IFPPInstance[] {
+        ins.forEach((i) => {
+          const ps: {[k: string]: string} = {};
+          Object.keys(i.ports).forEach((key) => {
+            const p = i.ports[key];
+            cons.forEach((c) => {
+              if (c.from.port === p) {
+                ps[key] = p;
+              }
+              if (c.to.port === p) {
+                ps[key] = p;
+              }
+            });
+          });
+          i.ports = ps;
+        });
+        return ins;
   }
 }
