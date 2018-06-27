@@ -279,7 +279,15 @@ export default class ViewDescriptor {
       Object.keys(graph.nodes)
         .map((id) => graph.nodes[id])
         .map((n) => {
-          const i = { data: { id: n.id }, classes: n.type } as any;
+          const i = {
+            data: {
+              id: n.id,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+              direction: undefined,
+            },
+            classes: n.type,
+          } as any;
           const s = descriptor["#" + n.id];
           if (s && s.style.x && s.style.y) {
             i.position = { x: parseFloat(s.style.x), y: parseFloat(s.style.y) };

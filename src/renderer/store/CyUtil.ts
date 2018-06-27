@@ -1,4 +1,4 @@
-import { BoundingBox12, Position } from "cytoscape";
+import { BoundingBox12, Position, NodeSingular } from "cytoscape";
 
 export class CyUtil {
 
@@ -83,13 +83,82 @@ export class CyUtil {
     const x2: number = cb.x2 + (pw / 2) - offset;
     const y1: number = cb.y1 - (ph / 2) + offset;
     const y2: number = cb.y2 + (ph / 2) - offset;
-    return {
-      x1,
-      x2,
-      y1,
-      y2,
-    };
+    return { x1, x2, y1, y2 };
   }
+
+  public adjustCompsAllPortImg(comp: NodeSingular,
+                               ports: cytoscape.NodeCollection): void {
+    ports.forEach((p) => { this.adjustPortImg(comp, p); });
+  }
+
+  public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
+    let edge: number;
+    const bb = (comp as any).boundingBox();
+    const pos = port.position();
+    edge = this.decideEdge(bb, pos);
+    const img = this.decideImgNum(edge, undefined);
+    switch (img) {
+      case 1:
+        port.data("img", "\\static\\ports\\up.png");
+        break;
+      case 2:
+        port.data("img", "\\static\\ports\\right.png");
+        break;
+      case 3:
+        port.data("img", "\\static\\ports\\down.png");
+        break;
+      case 4:
+        port.data("img", "\\static\\ports\\left.png");
+        break;
+      default:
+        port.data("img", "\\static\\ports\\up.png");
+        break;
+    }
+  }
+
+  private decideEdge(bb: BoundingBox12, pos: Position): number {
+    if (pos.y <= bb.y1) {
+      return 1;
+    } else if (pos.x <= bb.x1) {
+      return 4;
+    } else if (pos.x >= bb.x2) {
+      return 2;
+    } else if (pos.y >= bb.y2) {
+      return 3;
+    }
+    return 0;
+  }
+
+  private decideImgNum(edge: number, direction = 1): number {
+    let res: number;
+    if (edge === 1) {
+      if (direction === 1) {
+        res = 1;
+      } else {
+        res = 3;
+      }
+    } else if (edge === 2) {
+      if (direction === 1) {
+        res = 2;
+      } else {
+        res = 4;
+      }
+    } else if (edge === 3) {
+      if (direction === 1) {
+        res = 3;
+      } else {
+        res = 1;
+      }
+    } else {
+      if (direction === 1) {
+        res = 4;
+      } else {
+        res = 2;
+      }
+    }
+    return res;
+  }
+
 
   /**
    * Calculate the position of intersection between a box and the
