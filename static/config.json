@@ -11,5 +11,28 @@
   "FPPCompilerParameters": "",
   "FPPCompilerOutputPath": "fpp_output",
   "DefaultStyleFilePath": "",
-  "ViewStyleFileFolder": ""
+  "ViewStyleFileFolder": "",
+  "AutoLayout": [
+    {
+      "Name": "cose-bilkent",
+      "Default": true,
+      "Parameters": {
+        "nodeRepulsion": 1000000,
+        "nodeDimensionsIncludeLabels": true,
+        "fit": true,
+        "padding": 10,
+        "animate": false,
+        "randomize": true,
+        "tile": true,
+        "nodeOverlap": 4
+      }
+    },
+    {
+      "Name": "mock",
+      "Default": false,
+      "Parameters": {
+        "key1": "mock"
+      }
+    }
+  ]
 }

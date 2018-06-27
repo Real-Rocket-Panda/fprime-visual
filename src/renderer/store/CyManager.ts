@@ -18,6 +18,10 @@ class CyManager {
    */
   private cy?: cytoscape.Core;
 
+  public get Cy() {
+    return this.cy;
+  }
+
   /**
    * The class for utils of cytoscape, including move ports back and
    * stick ports
@@ -44,19 +48,23 @@ class CyManager {
    */
   private batch: any;
 
-  public get Cy() {
-    return this.cy;
-  }
+  /**
+   * The layout configuration.
+   */
+  private layoutConfig: { [key: string]: any } = {};
 
   /**
-   * 
-   * @param container 
+   * Initialize the cytoscape container and cyutil.
+   * @param container The container HTML element <div id="cytoscape"></div>
    */
   public init(container: HTMLElement) {
     this.container = container;
     this.cy = cytoscape({ container });
     this.cyutil = new CyUtil(this.cy);
+    // Setup the resize function
     this.resize();
+    // Set the layout configuration from config file
+    this.layoutConfig = fprime.viewManager.getDefaultAutoLayoutConfig();
   }
 
   public destroy() {
@@ -97,23 +105,20 @@ class CyManager {
     this.cy!.resize();
     this.batch = () => {
       if (needLayout) {
-        let layout: any = this.cy!.layout({
-          name: "cose-bilkent",
-          nodeRepulsion: 1000000,
-          nodeDimensionsIncludeLabels: true,
-          fit: true,
-          padding: 10,
-          animate: false,
-          randomize: true,
-          tile: true,
-          nodeOverlap: 4,
+        let layoutOption = {
+          name: this.layoutConfig.Name,
           stop: () => {
             this.stickPort();
             this.movebackPort();
             // Show the viewport again
             this.container!.style.visibility = "visible";
           },
-        } as any);
+        };
+        layoutOption = Object.assign(layoutOption,
+          this.layoutConfig.Parameters);
+        console.log("layout option:", layoutOption);
+
+        let layout: any = this.cy!.layout(layoutOption);
         layout.run();
         layout = undefined;
       } else {

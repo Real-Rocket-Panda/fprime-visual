@@ -10,4 +10,9 @@ export default interface IConfig {
     OutputFilePath: string,
     Type: string,
   }>;
+  AutoLayout: Array<{
+    Name: string,
+    Default: boolean,
+    Parameters: { [key: string]: string },
+  }>;
 }
