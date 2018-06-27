@@ -8,14 +8,7 @@ export default interface IConfig {
             Name: string,
             Path: string,
             OutputFilePath: string,
-            Type: string,
-        }
-    >;
-    AutoLayout: Array<
-        {
-            Name: string,
-            Default: boolean,
-            Paremeters: {[key: string]: string},
+            Yype: string,
         }
     >;
 }

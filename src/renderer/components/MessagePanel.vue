@@ -4,11 +4,10 @@
     :class="{ 'message-panel-active': show }"
     :style="{ bottom: offset + 'px' }"
   >
-    <v-tabs :height="25" v-model="curtab">
+    <v-tabs :height="25">
       <v-tab
         ripple
         id="msg-output-tab"
-        :key="output"
         @click="outputPanel"
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Output</span>
@@ -16,24 +15,18 @@
       <v-tab
         ripple
         id="msg-analysis-tab"
-        :key="analysis"
         @click="analysisPanel"
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Analysis</span>
       </v-tab>
-      <v-tab-item :key="output">
-        <p>{{ compilerOutput }}</p>
-      </v-tab-item>
-      <v-tab-item :key="analysis">
-        <p>This is the analysis panel</p>
-      </v-tab-item>
     </v-tabs>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import panel, { PanelName } from "@/store/panel";
+import Panel from "@/store/panel";
+import { PanelName } from "@/store/panel";
 
 export default Vue.extend({
   props: ["offset"],
@@ -44,50 +37,29 @@ export default Vue.extend({
     },
     analysisPanel() {
       this.state.curPanel = PanelName.Analysis;
-    }
-  },
-  data() {
-    return {
-      state: panel.state,
-      curtab: "Output",
-      output: PanelName.Output,
-      analysis: PanelName.Analysis,
-    };
+    },
   },
   computed: {
-    show(): boolean {
-      return this.state.show;
-    },
-    compilerOutput(): string {
-      return this.state.compilerOutput.content;
-    }
-  }
+    show(): boolean { return this.state.show; },
+  },
+  data() {
+    return { state: Panel.state };
+  },
 });
 </script>
 
 <style>
 .message-panel {
   display: none;
-  height: 250px;
+  height: 200px;
   width: 100%;
   position: fixed;
-  box-shadow: 0px -0.5px 1px #bdbdbd;
+  box-shadow: 0px -0.5px 1px #BDBDBD;
   background-color: white;
 }
 
 .message-panel-active {
   display: block;
   z-index: 1000;
-}
-
-.message-panel .tabs__content {
-  transition: none;
-  margin: 8px;
-  white-space: pre-wrap;
-}
-
-.message-panel .tabs__content p {
-  overflow: scroll;
-  max-height: 220px;
 }
 </style>

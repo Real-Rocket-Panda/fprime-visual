@@ -1,8 +1,11 @@
 import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
-import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
+import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import LayoutGenerator from "./LayoutGenerator";
+import IConfig from "../Common/Config";
+import * as path from "path";
+
+declare var __static: string;
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -35,24 +38,24 @@ export default class ViewManager {
   private cytoscapeJSONs: { [view: string]: ICytoscapeJSON } = {};
 
   private configManager: ConfigManager = new ConfigManager();
+  private config: IConfig;
 
   /**
    * The style manager provide support for save/load style files for a view
    * and load the default appearance.
    */
   private styleManager: StyleManager = new StyleManager();
-  private defaultStyle?: IStyle[];
+  private defaultStyle?: Array<{
+    selector: string;
+    style: {
+      [key: string]: any;
+    };
+  }>;
 
   /**
    * The model manager where to get the model data of the current project.
    */
   private modelManager: FPPModelManager = new FPPModelManager();
-
-  /**
-   * The layout gennerator where to manage the layout algorithm with
-   * related paremeters.
-   */
-  private layoutGennerator: LayoutGenerator = new LayoutGenerator();
 
   /**
    * The view list of the current project.
@@ -68,53 +71,30 @@ export default class ViewManager {
   }
 
   /**
-   * 
+   * Initialize all the fields.
    */
-  private compilerOutput = { content: "" };
-
-  public get CompilerOutput() {
-    return this.compilerOutput;
+  constructor() {
+    // Set to an empty config
+    this.config = this.configManager.getConfig();
+    // TODO: This is wrong. The build method should be invoke based on UI
+    // interactions. For now, we just mock the behavior.
+    this.build();
   }
 
   /**
    * Build the current FPrime project and get the view list.
-   * @param dir The folder path of a project.
    */
-  public build(dir: string) {
-    // Set the project path
-    this.configManager.ProjectPath = dir;
+  public build() {
     // Load the project config.
-    this.configManager.loadConfig();
-    // Initialize the layoutGenerator
+    // TODO: for now, we are using a fake config file in the static folder.
+    this.configManager.loadConfig(path.resolve(__static, "config.json"));
+    this.config = this.configManager.getConfig();
     // Load the default style from the config
-    this.defaultStyle = this.styleManager.getDefaultStyles(
-      this.configManager.Config.DefaultStyleFilePath);
-    // Load the FPP model
-    return this.modelManager
-      .loadModel(this.configManager.Config)
-      .then((data) => {
-        this.compilerOutput.content = data.output + "\n\n";
-        this.generateViewList(data.viewlist);
-      })
-      .catch((err) => {
-        this.compilerOutput.content = err + "\n\n";
-      });
-  }
-
-  /**
-   * Rebuild the project with the current path.
-   */
-  public rebuild() {
-    return this.build(this.configManager.ProjectPath);
-  }
-
-  /**
-   * 
-   */
-  public refresh() {
-    // Load the default style from the config
-    this.defaultStyle = this.styleManager.getDefaultStyles(
-      this.configManager.Config.DefaultStyleFilePath);
+    this.defaultStyle = this.styleManager
+        .getDefaultStyles(this.config.DefaultStyleFilePath);
+    return this.modelManager.loadModel(this.config).then((viewList) => {
+      this.generateViewList(viewList);
+    });
   }
 
   /**
@@ -190,25 +170,6 @@ export default class ViewManager {
   }
 
   /**
-   * return the default config for the auto-layout algorithm
-   */
-  public getDefaultAutoLayoutConfig(): {[key: string]: any} {
-    console.log(this.layoutGennerator.getDefaultAutoLayoutConfig(
-      this.configManager.Config));
-    return this.layoutGennerator.getDefaultAutoLayoutConfig(
-      this.configManager.Config);
-  }
-
-  /**
-   * return the config for the auto-layout algorithm
-   */
-  public getAutoLayoutConfigByName(name: string): {[key: string]: any} {
-    return this.layoutGennerator.getAutoLayoutConfigByName(
-      this.configManager.Config, name,
-    );
-  }
-
-  /**
    * Generate the list of all the views in the current project grouped into
    * view types.
    */
@@ -261,6 +222,5 @@ export default class ViewManager {
     }
     return json;
   }
-
 
 }

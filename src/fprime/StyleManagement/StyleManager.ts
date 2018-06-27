@@ -4,15 +4,7 @@ import * as path from "path";
 
 declare var __static: string;
 
-export interface IStyle {
-  selector: string;
-  style: { [key: string]: any };
-}
-
 export default class StyleManager {
-  /**
-   * The location of the system level default style css file.
-   */
   private systemStylePath = path.resolve(__static, "default.css");
 
   /**
@@ -20,7 +12,10 @@ export default class StyleManager {
    * system level default default style.
    * @param file The absolute path for the project style file.
    */
-  public getDefaultStyles(file?: string): IStyle[] {
+  public getDefaultStyles(file?: string): Array<{
+      selector: string;
+      style: { [key: string]: any }
+    }> {
     const systemCSS = css.parse(fs.readFileSync(
       this.systemStylePath, "utf-8"));
     const systemStyle = this.getStyleFromCSS(systemCSS);
@@ -42,11 +37,7 @@ export default class StyleManager {
     return systemStyle;
   }
 
-  /**
-   * Get an array of IStyle from the given css ast.
-   * @param ast The ast of the css file.
-   */
-  private getStyleFromCSS(ast: any): IStyle[] {
+  private getStyleFromCSS(ast: any) {
     return ast.stylesheet.rules.map((ele: any) => {
       const styles: {[key: string]: string} = {};
       ele.declarations.forEach((style: any) => {

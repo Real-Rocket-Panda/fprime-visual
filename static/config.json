@@ -1,33 +1,14 @@
 {
-  "Analyzers": [
-    {
-      "Name": "AcmeRuleChecker",
-      "Path": "acme-checker.jar",
-      "OutputFilePath": "acme_output",
-      "Type": ""
-    }
-  ],
-  "FPPCompilerPath": "fppcompiler",
-  "FPPCompilerParameters": "",
-  "FPPCompilerOutputPath": "model.xml",
-  "DefaultStyleFilePath": "",
-  "AutoLayout": [
-    {
-      "Name": "cose-bilkent",
-      "Default": true,
-      "Paremeters": {
-        "nodeRepulsion": 1000000,
-        "animate": "end",
-        "animationEasing": "ease-out",
-        "animationDuration": 0
-      }
-    }, 
-    {
-      "Name": "mock",
-      "Default": false,
-      "Paremeters": {
-        "key1": "mock"
-      }
-    }
-  ]
+    "Analyzers": [
+        {
+            "Name":"",
+            "Path":"",
+            "OutputFilePath":"",
+            "Type":""
+        }
+    ],
+    "FPPCompilerPath": "fppcompiler",
+    "FPPCompilerParameters": "",
+    "FPPCompilerOutputPath": "model.xml",
+    "DefaultStyleFilePath": ""
 }

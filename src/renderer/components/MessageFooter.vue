@@ -27,20 +27,24 @@
 
 <script lang="ts">
 import Vue from "vue";
-import panel from "@/store/panel";
+import Panel from "@/store/panel";
 
 export default Vue.extend({
-  props: ["height"],
+  props: ['height'],
   name: "message-footer",
   methods: {
     showOutput() {
-      panel.showOutput();
+      Panel.OutputPanel();
+      document.getElementById("msg-output-tab")!.firstElementChild!
+        .dispatchEvent(new Event("click"));
     },
     showAnalysis() {
-      panel.showAnalysis();
+      Panel.AnalysisPanel();
+      document.getElementById("msg-analysis-tab")!.firstElementChild!
+        .dispatchEvent(new Event("click"));
     }
   }
-});
+})
 </script>
 
 <style>
