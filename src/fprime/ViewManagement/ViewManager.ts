@@ -81,6 +81,8 @@ export default class ViewManager {
    * @param dir The folder path of a project.
    */
   public build(dir: string) {
+    // Cleanup the views
+    this.cleanup();
     // Set the project path
     this.configManager.ProjectPath = dir;
     // Load the project config.

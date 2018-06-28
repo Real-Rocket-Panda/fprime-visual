@@ -83,6 +83,7 @@ import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
 import CyManager from "@/store/CyManager";
+import view from "@/store/view";
 
 export default Vue.extend({
   name: "fprime-visual",
@@ -133,19 +134,16 @@ export default Vue.extend({
       if (dirs) {
         this.building = true;
         fprime.viewManager.build(dirs[0]).finally(() => {
-          this.building = false;
-          if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
-            panel.showOutput();
-          }
+          // Close all the opening views
+          view.CloseAll();
+          this.$router.replace("/");
+          this.showOutputPanel();
         });
       }
     },
     rebuild() {
       fprime.viewManager.rebuild().finally(() => {
-        this.building = false;
-        if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
-          panel.showOutput();
-        }
+        this.showOutputPanel();
       });
     },
     refresh() {
@@ -158,6 +156,14 @@ export default Vue.extend({
         CyManager.getDescriptor(),
       )
     },
+    showOutputPanel() {
+      // Hide the progress animation
+      this.building = false;
+      // Show the output panel
+      if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
+        panel.showOutput();
+      }
+    }
   }
 });
 </script>

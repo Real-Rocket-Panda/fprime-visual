@@ -15,20 +15,39 @@ export class CyUtil {
    * @param ports: collection of the ports that connect to the component
    */
 
+
   public portMoveBackComp(comp: cytoscape.NodeCollection,
-                          ports: cytoscape.NodeCollection): void {
+    ports: cytoscape.NodeCollection): void {
+    interface IEdge2Porints {
+      [key: string]: any;
+    }
+    const edge2points: IEdge2Porints = {};
     ports.forEach((port: cytoscape.NodeSingular) => {
       // get the edge from component to port
       const id: string = "#" + comp.id() + "-" + port.id();
       const edge: any = this.cy.edges(id);
-
       // get the posotion of intersection between bounding box and the edge
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
         edge.targetEndpoint(),
-        comp.boundingBox({ includeOverlays: false } as any));
+        (comp as any).boundingBox({ includeOverlays: false }));
       // resposition the port
       port.position(intersection);
+      const edge2 = this.decideEdge(
+        (comp as any).boundingBox({ includeOverlays: false }),
+        intersection);
+      if (edge2 in edge2points) {
+        edge2points[edge2].push(port);
+      } else {
+        edge2points[edge2] = [port];
+      }
+    });
+
+    Object.keys(edge2points).forEach((edge: string) => {
+      this.distributePositions(
+        (comp as any).boundingBox({ includeOverlays: false }),
+        edge === "1" || edge === "3",
+        edge2points[edge]);
     });
   }
 
@@ -38,7 +57,7 @@ export class CyUtil {
    * @param ports collection of the ports that connect to the component
    */
   public portMoveWizComp(comp: cytoscape.NodeCollection,
-                         ports: cytoscape.NodeCollection): any {
+    ports: cytoscape.NodeCollection): any {
     return (this.cy as any).automove({
       nodesMatching: ports,
       reposition: "drag",
@@ -87,7 +106,7 @@ export class CyUtil {
   }
 
   public adjustCompsAllPortImg(comp: NodeSingular,
-                               ports: cytoscape.NodeCollection): void {
+    ports: cytoscape.NodeCollection): void {
     ports.forEach((p) => { this.adjustPortImg(comp, p); });
   }
 
@@ -115,6 +134,27 @@ export class CyUtil {
         break;
     }
   }
+
+
+  private distributePositions(bb: BoundingBox12,
+    horizontal: boolean,
+    ports: NodeSingular[]): void {
+    const axis = horizontal ? "x" : "y";
+    ports.sort((a: NodeSingular, b: NodeSingular) => {
+      if (a.position(axis) > b.position(axis)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    const base = horizontal ? bb.x1 : bb.y1;
+    const distance = horizontal ? (bb.x2 - bb.x1) : (bb.y2 - bb.y1);
+    const unitDis = distance / (ports.length + 1);
+    for (let i = 0; i < ports.length; i++) {
+      ports[i].position(axis, (i + 1) * unitDis + base);
+    }
+  }
+
 
   private decideEdge(bb: BoundingBox12, pos: Position): number {
     if (pos.y <= bb.y1) {

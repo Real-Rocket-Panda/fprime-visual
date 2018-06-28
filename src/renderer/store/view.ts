@@ -86,6 +86,13 @@ export default {
   },
 
   /**
+   * Close all the opening tabs.
+   */
+  CloseAll() {
+    opened.splice(0, opened.length);
+  },
+
+  /**
    * Get the IViewListItem of a view with given name.
    * @param name The name of the view.
    * @returns The corresponding view item; null if no view with such name.
