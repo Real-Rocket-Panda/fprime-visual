@@ -179,8 +179,8 @@ export default class FPPModelManager {
             }
           });
         });
-        ins = this.filterUnusedPorts(ins, cons);
         ins.push(Object.assign({}, root));
+        ins = this.filterUnusedPorts(ins, cons);
         return {
           instances: ins,
           connections: cons,
