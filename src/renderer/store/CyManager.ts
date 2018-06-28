@@ -13,8 +13,9 @@ nodeResize(cytoscape, jquery, konva);
 
 const boundingBoxOpt = {
   includeOverlays: false,
-  includeEdges: false,
+  includeEdges: true,
   includeLabels: false,
+  includeNodes: true,
 };
 
 class CyManager {
