@@ -21,7 +21,7 @@ export interface INode {
   id: string;
   modelID: string;
   type: NodeType;
-  properties: {[key: string]: any};
+  properties: { [key: string]: any };
 }
 
 /**
@@ -100,7 +100,7 @@ export default class ViewDescriptor {
       // Covert all the instances to a node in the graph
       view.graph.nodes[i.id] = {
         id: i.id,
-        modelID: "",
+        modelID: i.model_id,  // Get instance id in the model file
         type: NodeType.Instance,
         properties: i.properties,
       };
@@ -108,7 +108,7 @@ export default class ViewDescriptor {
       // Covert all the ports to a node in the graph
       // The name of the port has the format: <instance id>_<port id>
       Object.keys(i.ports).forEach((p) => {
-        const pname = i.id + "_" + (i.ports as any)[p];
+        const pname = i.id + "_" + i.ports[p].name;
         view.graph.nodes[pname] = {
           id: pname,
           modelID: "",
@@ -118,14 +118,27 @@ export default class ViewDescriptor {
 
         // Add a virtual edge from instance to the port.
         // The edge has the format: <instance id>-<instance id>_<port id>
-        const vedge = i.id + "-" + pname;
-        view.graph.edges[vedge] = {
-          id: vedge,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-          from: view.graph.nodes[i.id],
-          to: view.graph.nodes[pname],
-        };
+        if (i.ports[p].properties.direction === "in") {
+          // in port, from port to instance
+          const vedge = pname + "-" + i.id;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Instance2Port,
+            from: view.graph.nodes[pname],
+            to: view.graph.nodes[i.id],
+          };
+        } else {
+          // out port, from instance to port
+          const vedge = i.id + "-" + pname;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Instance2Port,
+            from: view.graph.nodes[i.id],
+            to: view.graph.nodes[pname],
+          };
+        }
       });
     });
 
@@ -140,25 +153,36 @@ export default class ViewDescriptor {
 
       // Covert all the ports to a node in the graph
       // The name of the port has the format: <instance id>_<port id>
-      Object.keys(i.ports).forEach((p) => {
-        const pname = i.name + "_" + (i.ports as any)[p];
+      i.ports.forEach((p) => {
+        const pname = i.name + "_" + p.name;
         view.graph.nodes[pname] = {
           id: pname,
           modelID: "",
           type: NodeType.Port,
-          properties: i.ports.filter((port) => port.name === p)[0].properties,
+          properties: p.properties,
         };
 
         // Add a virtual edge from instance to the port.
         // The edge has the format: <instance id>-<instance id>_<port id>
-        const vedge = i.name + "-" + pname;
-        view.graph.edges[vedge] = {
-          id: vedge,
-          modelID: "",
-          type: EdgeType.Component2Port,
-          from: view.graph.nodes[i.name],
-          to: view.graph.nodes[pname],
-        };
+        if (p.properties.direction === "in") {
+          const vedge = pname + "-" + i.name;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes[pname],
+            to: view.graph.nodes[i.name],
+          };
+        } else {
+          const vedge = i.name + "-" + pname;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes[i.name],
+            to: view.graph.nodes[pname],
+          };
+        }
       });
     });
 
@@ -166,8 +190,8 @@ export default class ViewDescriptor {
     // The edge has the format: <from instance id>_<from port id>-
     //  <to instance id>_<to instance id>
     model.connections.forEach((t) => {
-      const from = `${t.from.inst.id}_${t.from.port}`;
-      const to = `${t.to.inst.id}_${t.to.port}`;
+      const from = `${t.from.inst.id}_${t.from.port.name}`;
+      const to = `${t.to.inst.id}_${t.to.port.name}`;
       const edge = from + "-" + to;
       view.graph.edges[edge] = {
         id: edge,
@@ -287,9 +311,10 @@ export default class ViewDescriptor {
           const i = {
             data: {
               id: n.id,
-              img: "\\static\\ports\\up.png",
-              type: (n.type === NodeType.Port) ?
-                n.properties.type : undefined,
+              img: (n.type === NodeType.Port) ?
+                "\\static\\ports\\up.png" : undefined,
+              kind: (n.type === NodeType.Port) ?
+                n.properties.kind : undefined,
               direction: (n.type === NodeType.Port) ?
                 n.properties.direction : undefined,
             },
@@ -340,8 +365,15 @@ export default class ViewDescriptor {
       .filter((e) => e.type === EdgeType.Instance2Port
         || e.type === EdgeType.Component2Port)
       .forEach((e) => {
-        const from = "#" + e.from.id;
-        const to = `#${e.to.id}`;
+        let from = "";
+        let to = "";
+        if (e.from.type === NodeType.Port) {
+          to = `#${e.from.id}`;
+          from = `#${e.to.id}`;
+        } else {
+          from = `#${e.from.id}`;
+          to = `#${e.to.id}`;
+        }
         if (!graph[from]) {
           graph[from] = [to];
         } else {

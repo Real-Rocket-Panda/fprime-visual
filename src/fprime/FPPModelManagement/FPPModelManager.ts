@@ -16,7 +16,7 @@ export enum ViewType {
  */
 export interface IFPPPort {
   name: string;
-  properties: {[key: string]: any};
+  properties: { [key: string]: any };
 }
 
 /**
@@ -25,7 +25,6 @@ export interface IFPPPort {
 export interface IFPPComponent {
   name: string;
   namespace: string;
-  // ports: string[];
   ports: IFPPPort[];
 }
 
@@ -34,9 +33,8 @@ export interface IFPPComponent {
  */
 export interface IFPPInstance {
   id: string;
-  model_id: number;
+  model_id: string;
   ports: { [p: string]: IFPPPort };
-  // ports: { [p: string]: string };
   properties: { [p: string]: string };
 }
 
@@ -154,7 +152,7 @@ export default class FPPModelManager {
         });
 
         ins = this.filterUnusedPorts(ins, cons);
-        console.log(ins);
+        // console.log(ins);
         return {
           instances: ins,
           connections: cons,
@@ -165,7 +163,7 @@ export default class FPPModelManager {
         const ins: IFPPInstance[] = [];
         const cons: IFPPConnection[] = [];
         const comps = this.components.filter((i) => i.name === viewName);
-        console.log(comps);
+        // console.log(comps);
         return {
           instances: ins,
           connections: cons,
@@ -269,10 +267,8 @@ export default class FPPModelManager {
       const name = type[1];
       this.components.forEach((c: IFPPComponent) => {
         if (c.name === name && c.namespace === namespace) {
-          let cnt = 1;
           c.ports.forEach((p: IFPPPort) => {
-            ps["p" + cnt] = p;
-            cnt++;
+            ps[p.name] = p;
           });
         }
       });
@@ -305,10 +301,14 @@ export default class FPPModelManager {
 
 
         cons.push({
-          from: { inst: source, port:
-            this.getPortByInstance(source, con.source[0].$.port)},
-          to: { inst: target, port:
-            this.getPortByInstance(target, con.target[0].$.port)},
+          from: {
+            inst: source,
+            port: this.getPortByInstance(source, con.source[0].$.port),
+          },
+          to: {
+            inst: target,
+            port: this.getPortByInstance(target, con.target[0].$.port),
+          },
         });
       });
 
@@ -322,14 +322,7 @@ export default class FPPModelManager {
   }
 
   private getPortByInstance(ins: IFPPInstance, portName: string): IFPPPort {
-    const prop: string[] = ins.properties.type.split(".");
-    const name: string = prop[1];
-    const namespace: string = prop[0];
-    const comp = this.components.filter(
-      (c) => c.name === name && c.namespace === namespace,
-    )[0];
-
-    return comp.ports.filter((p) => p.name === portName)[0];
+    return this.getPortsByInstance(ins).filter((p) => p.name === portName)[0];
   }
 
   private getPortsByInstance(ins: IFPPInstance): IFPPPort[] {
@@ -346,21 +339,21 @@ export default class FPPModelManager {
   private filterUnusedPorts(
     ins: IFPPInstance[], cons: IFPPConnection[],
   ): IFPPInstance[] {
-        ins.forEach((i) => {
-          const ps: {[k: string]: IFPPPort} = {};
-          Object.keys(i.ports).forEach((key) => {
-            const p = i.ports[key];
-            cons.forEach((c) => {
-              if (c.from.port === p) {
-                ps[key] = p;
-              }
-              if (c.to.port === p) {
-                ps[key] = p;
-              }
-            });
-          });
-          i.ports = ps;
+    ins.forEach((i) => {
+      const ps: { [k: string]: IFPPPort } = {};
+      Object.keys(i.ports).forEach((key) => {
+        const p = i.ports[key];
+        cons.forEach((c) => {
+          if (c.from.port === p) {
+            ps[key] = p;
+          }
+          if (c.to.port === p) {
+            ps[key] = p;
+          }
         });
-        return ins;
+      });
+      i.ports = ps;
+    });
+    return ins;
   }
 }
