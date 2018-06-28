@@ -15,6 +15,7 @@ const boundingBoxOpt = {
   includeOverlays: false,
   includeEdges: false,
   includeLabels: false,
+  includeNodes: true,
 };
 
 class CyManager {
