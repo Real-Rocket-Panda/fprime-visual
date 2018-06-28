@@ -1,5 +1,9 @@
 import { BoundingBox12, Position, NodeSingular } from "cytoscape";
-
+const boundingBoxOpt = {
+  includeOverlays: false,
+  includeEdges: false,
+  includeLabels: false,
+};
 export class CyUtil {
 
   private cy: cytoscape.Core;
@@ -30,11 +34,11 @@ export class CyUtil {
       const intersection: any = this.getEdgeBoxIntesection(
         edge.sourceEndpoint(),
         edge.targetEndpoint(),
-        (comp as any).boundingBox({ includeOverlays: false }));
+        (comp as any).boundingBox(boundingBoxOpt));
       // resposition the port
       port.position(intersection);
       const edge2 = this.decideEdge(
-        (comp as any).boundingBox({ includeOverlays: false }),
+        (comp as any).boundingBox(boundingBoxOpt),
         intersection);
       if (edge2 in edge2points) {
         edge2points[edge2].push(port);
@@ -45,7 +49,7 @@ export class CyUtil {
 
     Object.keys(edge2points).forEach((edge: string) => {
       this.distributePositions(
-        (comp as any).boundingBox({ includeOverlays: false }),
+        (comp as any).boundingBox(boundingBoxOpt),
         edge === "1" || edge === "3",
         edge2points[edge]);
     });
@@ -112,7 +116,7 @@ export class CyUtil {
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
     let edge: number;
-    const bb = (comp as any).boundingBox();
+    const bb = (comp as any).boundingBox(boundingBoxOpt);
     const pos = port.position();
     edge = this.decideEdge(bb, pos);
     const img = this.decideImgNum(edge, undefined);
