@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import * as fs from "fs";
+import * as path from "path";
 import ViewManager from "fprime/ViewManagement/ViewManager";
 import { ICytoscapeJSON } from "fprime/ViewManagement/ViewDescriptor";
 import { NodeType, EdgeType } from "fprime/ViewManagement/ViewDescriptor";
@@ -89,9 +90,9 @@ describe("ViewManager build", () => {
       "Error: fail to invoke compiler\n" +
       "Cause: Error: fail to convert representation file\n" +
       "Cause: Error: fail to read the representation file\n" +
-      "Cause: Error: ENOENT: no such file or directory, open" +
-      " '/Users/changjian/Desktop/FPrimeVisual/fprime-visual/" +
-      "test/static/fpp_output'\n\n");
+      "Cause: Error: ENOENT: no such file or directory, open '" +
+      path.resolve("./", "test/static/fpp_output") +
+      "'\n\n");
   });
 
   it("should print compile message", async () => {
@@ -107,9 +108,9 @@ describe("ViewManager build", () => {
       "Error: fail to invoke compiler\n" +
       "Cause: Error: fail to convert representation file\n" +
       "Cause: Error: fail to read the representation file\n" +
-      "Cause: Error: ENOENT: no such file or directory, open" +
-      " '/Users/changjian/Desktop/FPrimeVisual/fprime-visual/" +
-      "test/static/fpp_output'\n\n");
+      "Cause: Error: ENOENT: no such file or directory, open '" +
+      path.resolve("./", "test/static/fpp_output") +
+      "'\n\n");
   });
 });
 
