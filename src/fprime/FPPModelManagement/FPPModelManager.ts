@@ -12,12 +12,21 @@ export enum ViewType {
 }
 
 /**
+ *
+ */
+export interface IFPPPort {
+  name: string;
+  properties: {[key: string]: any};
+}
+
+/**
  * 
  */
 export interface IFPPComponent {
   name: string;
   namespace: string;
-  ports: string[];
+  // ports: string[];
+  ports: IFPPPort[];
 }
 
 /**
@@ -26,7 +35,8 @@ export interface IFPPComponent {
 export interface IFPPInstance {
   id: string;
   model_id: number;
-  ports: { [p: string]: string };
+  ports: { [p: string]: IFPPPort };
+  // ports: { [p: string]: string };
   properties: { [p: string]: string };
 }
 
@@ -34,8 +44,8 @@ export interface IFPPInstance {
  * 
  */
 export interface IFPPConnection {
-  from: { inst: IFPPInstance, port: string };
-  to: { inst: IFPPInstance, port: string };
+  from: { inst: IFPPInstance, port: IFPPPort };
+  to: { inst: IFPPInstance, port: IFPPPort };
 }
 
 /**
@@ -144,7 +154,7 @@ export default class FPPModelManager {
         });
 
         ins = this.filterUnusedPorts(ins, cons);
-        // console.log(ins);
+        console.log(ins);
         return {
           instances: ins,
           connections: cons,
@@ -155,7 +165,7 @@ export default class FPPModelManager {
         const ins: IFPPInstance[] = [];
         const cons: IFPPConnection[] = [];
         const comps = this.components.filter((i) => i.name === viewName);
-        // console.log(comps);
+        console.log(comps);
         return {
           instances: ins,
           connections: cons,
@@ -207,9 +217,15 @@ export default class FPPModelManager {
     }
 
     components.forEach((ele: any) => {
-      const ps: string[] = [];
-      ele.port.forEach((p: any) => {
-        ps.push(p.$.name);
+      const ps: IFPPPort[] = [];
+      ele.port.forEach((port: any) => {
+        const p: IFPPPort = {
+          name: port.$.name,
+          properties: {},
+        };
+
+        p.properties = port.$;
+        ps.push(p);
       });
 
       res.push({
@@ -239,7 +255,7 @@ export default class FPPModelManager {
           props[key] = ele.$[key];
         }
       }
-      const ps: { [p: string]: string } = {};
+      const ps: { [p: string]: IFPPPort } = {};
       if (ele.$.type === null) {
         throw new Error("The type of element is null.");
       }
@@ -254,7 +270,7 @@ export default class FPPModelManager {
       this.components.forEach((c: IFPPComponent) => {
         if (c.name === name && c.namespace === namespace) {
           let cnt = 1;
-          c.ports.forEach((p: string) => {
+          c.ports.forEach((p: IFPPPort) => {
             ps["p" + cnt] = p;
             cnt++;
           });
@@ -287,9 +303,12 @@ export default class FPPModelManager {
         const target = this.instances.filter(
           (i) => i.id === con.target[0].$.instance)[0];
 
+
         cons.push({
-          from: { inst: source, port: con.source[0].$.port },
-          to: { inst: target, port: con.target[0].$.port },
+          from: { inst: source, port:
+            this.getPortByInstance(source, con.source[0].$.port)},
+          to: { inst: target, port:
+            this.getPortByInstance(target, con.target[0].$.port)},
         });
       });
 
@@ -302,11 +321,33 @@ export default class FPPModelManager {
     return res;
   }
 
+  private getPortByInstance(ins: IFPPInstance, portName: string): IFPPPort {
+    const prop: string[] = ins.properties.type.split(".");
+    const name: string = prop[1];
+    const namespace: string = prop[0];
+    const comp = this.components.filter(
+      (c) => c.name === name && c.namespace === namespace,
+    )[0];
+
+    return comp.ports.filter((p) => p.name === portName)[0];
+  }
+
+  private getPortsByInstance(ins: IFPPInstance): IFPPPort[] {
+    const prop: string[] = ins.properties.type.split(".");
+    const name: string = prop[1];
+    const namespace: string = prop[0];
+    const comp = this.components.filter(
+      (c) => c.name === name && c.namespace === namespace,
+    )[0];
+
+    return comp.ports;
+  }
+
   private filterUnusedPorts(
     ins: IFPPInstance[], cons: IFPPConnection[],
   ): IFPPInstance[] {
         ins.forEach((i) => {
-          const ps: {[k: string]: string} = {};
+          const ps: {[k: string]: IFPPPort} = {};
           Object.keys(i.ports).forEach((key) => {
             const p = i.ports[key];
             cons.forEach((c) => {

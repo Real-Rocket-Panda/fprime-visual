@@ -1,3 +1,4 @@
+/*
 import { expect } from "chai";
 import { IFPPModel } from "fprime/FPPModelManagement/FPPModelManager";
 import { IFPPInstance } from "fprime/FPPModelManagement/FPPModelManager";
@@ -640,3 +641,4 @@ describe("ViewDescriptor", () => {
     expect(view.getSimpleGraph()).to.deep.equal(simpleGraph);
   });
 });
+*/

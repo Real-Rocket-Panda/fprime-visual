@@ -21,6 +21,7 @@ export interface INode {
   id: string;
   modelID: string;
   type: NodeType;
+  properties: {[key: string]: any};
 }
 
 /**
@@ -101,6 +102,7 @@ export default class ViewDescriptor {
         id: i.id,
         modelID: "",
         type: NodeType.Instance,
+        properties: i.properties,
       };
 
       // Covert all the ports to a node in the graph
@@ -111,6 +113,7 @@ export default class ViewDescriptor {
           id: pname,
           modelID: "",
           type: NodeType.Port,
+          properties: i.ports[p].properties,
         };
 
         // Add a virtual edge from instance to the port.
@@ -132,6 +135,7 @@ export default class ViewDescriptor {
         id: i.name,
         modelID: "",
         type: NodeType.component,
+        properties: {},
       };
 
       // Covert all the ports to a node in the graph
@@ -142,6 +146,7 @@ export default class ViewDescriptor {
           id: pname,
           modelID: "",
           type: NodeType.Port,
+          properties: i.ports.filter((port) => port.name === p)[0].properties,
         };
 
         // Add a virtual edge from instance to the port.
@@ -283,8 +288,10 @@ export default class ViewDescriptor {
             data: {
               id: n.id,
               img: "\\static\\ports\\up.png",
-              type: undefined,
-              direction: undefined,
+              type: (n.type === NodeType.Port) ?
+                n.properties.type : undefined,
+              direction: (n.type === NodeType.Port) ?
+                n.properties.direction : undefined,
             },
             classes: n.type,
           } as any;
