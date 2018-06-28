@@ -1,5 +1,9 @@
 import { BoundingBox12, Position, NodeSingular } from "cytoscape";
-
+const boundingBoxOpt = {
+  includeOverlays: false,
+  includeEdges: false,
+  includeLabels: false,
+};
 export class CyUtil {
 
   private cy: cytoscape.Core;
@@ -49,7 +53,7 @@ export class CyUtil {
       // resposition the port
       port.position(intersection);
       const edge2 = this.decideEdge(
-        (comp as any).boundingBox({ includeOverlays: false }),
+        (comp as any).boundingBox(boundingBoxOpt),
         intersection);
       if (edge2 in edge2points) {
         edge2points[edge2].push(port);
@@ -60,7 +64,7 @@ export class CyUtil {
 
     Object.keys(edge2points).forEach((edge: string) => {
       this.distributePositions(
-        (comp as any).boundingBox({ includeOverlays: false }),
+        (comp as any).boundingBox(boundingBoxOpt),
         edge === "1" || edge === "3",
         edge2points[edge]);
     });
@@ -131,7 +135,7 @@ export class CyUtil {
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
     let edge: number;
-    const bb = (comp as any).boundingBox();
+    const bb = (comp as any).boundingBox(boundingBoxOpt);
     const pos = port.position();
     edge = this.decideEdge(bb, pos);
     const img = this.decideImgNum(edge, undefined);
@@ -178,13 +182,14 @@ export class CyUtil {
 
 
   private decideEdge(bb: BoundingBox12, pos: Position): number {
-    if (pos.y <= bb.y1) {
+    const float = 0.01;
+    if (pos.y <= bb.y1 + float) {
       return 1;
-    } else if (pos.x <= bb.x1) {
+    } else if (pos.x <= bb.x1 + float) {
       return 4;
-    } else if (pos.x >= bb.x2) {
+    } else if (pos.x >= bb.x2 - float) {
       return 2;
-    } else if (pos.y >= bb.y2) {
+    } else if (pos.y >= bb.y2 - float) {
       return 3;
     }
     return 0;
@@ -241,11 +246,6 @@ export class CyUtil {
         ({ x: box.x1, y: target.y });
     }
 
-    // type = 1: the target point is outside of the box.
-    // type = -1: the target point is inside of the box.
-    const type = (this.constrain(source.x, box.x1, box.x2) !== source.x &&
-      this.constrain(source.y, box.y1, box.y2) !== source.y) ?
-      -1 : 1;
 
     const wid = box.w; // wid of bounding box
     const high = box.h; // height of bounding box
@@ -256,9 +256,9 @@ export class CyUtil {
     let xOff: number = 0;
     let yOff: number = 0;
 
-    const signy = type * (target.y - source.y) /
+    const signy = (target.y - source.y) /
       Math.abs(target.y - source.y);
-    const signx = type * (target.x - source.x) /
+    const signx = (target.x - source.x) /
       Math.abs(target.x - source.x);
 
     if (ratioLine < ratioBox) {  // left or right

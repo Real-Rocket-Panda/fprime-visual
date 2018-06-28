@@ -11,6 +11,13 @@ cytoscape.use(coseBilkent);
 cytoscape.use(automove);
 nodeResize(cytoscape, jquery, konva);
 
+const boundingBoxOpt = {
+  includeOverlays: false,
+  includeEdges: false,
+  includeLabels: false,
+  includeNodes: true,
+};
+
 class CyManager {
 
   /**
@@ -109,7 +116,7 @@ class CyManager {
           name: this.layoutConfig.Name,
           stop: () => {
             this.stickPort();
-            this.movebackPort();
+            this.movebackAllPort();
             // Show the viewport again
             this.container!.style.visibility = "visible";
           },
@@ -122,7 +129,7 @@ class CyManager {
         layout = undefined;
       } else {
         this.stickPort();
-        this.movebackPort();
+        this.movebackAllPort();
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
         // Show the viewport again
@@ -235,7 +242,7 @@ class CyManager {
       });
   }
 
-  private movebackPort(): void {
+  private movebackAllPort(): void {
     const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
     Object.keys(simpleGraph).forEach((c) => {
       const comp = this.cy!.$(c);
@@ -263,7 +270,7 @@ class CyManager {
           portIns.position(),
           this.cyutil!.generateBox(
             compIns.boundingBox(
-              ({ includeOverlays: false } as any),
+              (boundingBoxOpt as any),
             ) as cytoscape.BoundingBox12,
             portIns.width(),
             portIns.height(),
@@ -273,7 +280,7 @@ class CyManager {
         this.cyutil!.positionOutBox(
           portIns.position(),
           compIns.boundingBox(
-            ({ includeOverlays: false } as any),
+            (boundingBoxOpt as any),
           ) as cytoscape.BoundingBox12);
 
         // Adjust port image
