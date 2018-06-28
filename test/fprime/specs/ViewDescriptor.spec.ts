@@ -326,22 +326,42 @@ describe("ViewDescriptor", () => {
       elements: {
         nodes: [
           {
-            data: { id: "ins_1" },
+            data: {
+              id: "ins_1",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Instance,
             position: { x: 50, y: 50 },
           },
           {
-            data: { id: "ins_1_p1" },
+            data: {
+              id: "ins_1_p1",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Port,
             position: { x: 60, y: 60 },
           },
           {
-            data: { id: "ins_2" },
+            data: {
+              id: "ins_2",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Instance,
             position: { x: 200, y: 200 },
           },
           {
-            data: { id: "ins_2_p1" },
+            data: {
+              id: "ins_2_p1",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Port,
             position: { x: 210, y: 210 },
           },
@@ -483,21 +503,41 @@ describe("ViewDescriptor", () => {
       elements: {
         nodes: [
           {
-            data: { id: "ins_1" },
+            data: {
+              id: "ins_1",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Instance,
           },
           {
-            data: { id: "ins_1_p1" },
+            data: {
+              id: "ins_1_p1",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Port,
             position: { x: 60, y: 60 },
           },
           {
-            data: { id: "ins_2" },
+            data: {
+              id: "ins_2",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Instance,
             position: { x: 200, y: 200 },
           },
           {
-            data: { id: "ins_2_p1" },
+            data: {
+              id: "ins_2_p1",
+              direction: undefined,
+              img: "\\static\\ports\\up.png",
+              type: undefined,
+            },
             classes: NodeType.Port,
           },
         ],

@@ -71,7 +71,7 @@ export interface ICytoscapeJSON {
   style: Array<{ selector: string, style: { [key: string]: any } }>;
   elements: {
     nodes: Array<{
-      data: { id: string },
+      data: { id: string, [key: string]: any },
       classes: string,
       position?: { x: number, y: number },
     }>,
