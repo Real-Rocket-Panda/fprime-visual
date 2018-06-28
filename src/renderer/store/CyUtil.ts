@@ -161,7 +161,7 @@ export class CyUtil {
 
 
   private decideEdge(bb: BoundingBox12, pos: Position): number {
-    const float = 0.01;
+    const float = 0.0001;
     if (pos.y <= bb.y1 + float) {
       return 1;
     } else if (pos.x <= bb.x1 + float) {
