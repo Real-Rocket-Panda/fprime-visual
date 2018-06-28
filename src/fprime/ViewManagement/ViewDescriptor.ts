@@ -330,7 +330,8 @@ export default class ViewDescriptor {
     Object
       .keys(this.graph.edges)
       .map((key) => this.graph.edges[key])
-      .filter((e) => e.type === EdgeType.Instance2Port)
+      .filter((e) => e.type === EdgeType.Instance2Port
+        || EdgeType.Component2Port)
       .forEach((e) => {
         const from = "#" + e.from.id;
         const to = `#${e.to.id}`;
