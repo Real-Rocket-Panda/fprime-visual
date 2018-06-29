@@ -134,11 +134,11 @@ export class CyUtil {
   }
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
-    let edge: number;
     const bb = (comp as any).boundingBox(boundingBoxOpt);
     const pos = port.position();
-    edge = this.decideEdge(bb, pos);
-    const img = this.decideImgNum(edge, undefined);
+    const dir = port.data("direction") === "out" ? 1 : -1;
+    const edge = this.decideEdge(bb, pos);
+    const img = this.decideImgNum(edge, dir);
     switch (img) {
       case 1:
         port.data("img", "\\static\\ports\\up.png");
