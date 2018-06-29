@@ -92,7 +92,7 @@ describe("ViewDescriptor", () => {
         id: "comp_1",
         modelID: "",
         type: NodeType.component,
-        properties: {},
+        properties: { type: "ref.comp_1" },
       },
       comp_1_p1: {
         id: "comp_1_p1",
@@ -110,7 +110,7 @@ describe("ViewDescriptor", () => {
         id: "comp_2",
         modelID: "",
         type: NodeType.component,
-        properties: {},
+        properties: { type: "ref.comp_2" },
       },
       comp_2_p1: {
         id: "comp_2_p1",
@@ -468,7 +468,7 @@ describe("ViewDescriptor", () => {
               img: "\\static\\ports\\up.png",
               kind: "async",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-async fprime-port-out",
             position: { x: 60, y: 60 },
           },
           {
@@ -488,7 +488,7 @@ describe("ViewDescriptor", () => {
               img: "\\static\\ports\\up.png",
               kind: "sync",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-sync fprime-port-in",
             position: { x: 210, y: 210 },
           },
           {
@@ -508,7 +508,7 @@ describe("ViewDescriptor", () => {
               img: "\\static\\ports\\up.png",
               kind: "async",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-async fprime-port-in",
             position: { x: 310, y: 310 },
           },
           {
@@ -518,7 +518,7 @@ describe("ViewDescriptor", () => {
               img: "\\static\\ports\\up.png",
               kind: "async",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-async fprime-port-out",
             position: { x: 330, y: 330 },
           },
         ],
@@ -699,7 +699,7 @@ describe("ViewDescriptor", () => {
               img: "\\static\\ports\\up.png",
               kind: "async",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-async fprime-port-out",
             position: { x: 60, y: 60 },
           },
           {
@@ -719,7 +719,7 @@ describe("ViewDescriptor", () => {
               img: "\\static\\ports\\up.png",
               kind: "sync",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-sync fprime-port-in",
           },
         ],
         edges: [

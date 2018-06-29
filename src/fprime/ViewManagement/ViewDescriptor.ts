@@ -148,7 +148,7 @@ export default class ViewDescriptor {
         id: i.name,
         modelID: "",
         type: NodeType.component,
-        properties: {},
+        properties: { type: i.namespace + "." + i.name },
       };
 
       // Covert all the ports to a node in the graph
@@ -318,7 +318,7 @@ export default class ViewDescriptor {
               direction: (n.type === NodeType.Port) ?
                 n.properties.direction : undefined,
             },
-            classes: n.type,
+            classes: this.generateNodeClasses(n),
           } as any;
           const s = descriptor["#" + n.id];
           if (s && s.style.x && s.style.y) {
@@ -381,6 +381,37 @@ export default class ViewDescriptor {
         }
       });
     return graph;
+  }
+
+  private generateNodeClasses(node: INode): string {
+    const prop = node.properties;
+    switch (node.type) {
+      case NodeType.Instance: {
+        return [
+          node.type,
+          prop.type ? `fprime-component-${prop.type}` : "",
+        ].filter((i) => i !== "").join(" ");
+      }
+
+      case NodeType.Port: {
+        return [
+          node.type,
+          prop.type ? `fprime-port-${prop.type}` : "",
+          prop.kind ? `fprime-port-${prop.kind}` : "",
+          prop.direction ? `fprime-port-${prop.direction}` : "",
+        ].filter((i) => i !== "").join(" ");
+      }
+
+      case NodeType.component: {
+        return [
+          node.type,
+          prop.type ? `fprime-component-${prop.type}` : "",
+        ].filter((i) => i !== "").join(" ");
+      }
+
+      default:
+        return "";
+    }
   }
 
 }
