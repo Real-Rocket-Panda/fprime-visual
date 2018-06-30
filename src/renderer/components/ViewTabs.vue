@@ -46,10 +46,7 @@ export default Vue.extend({
      *  2. User closes the tab other than the current. Just close it.
      */
     closeTab(event: Event) {
-      let clsbtn = (event.target as Element).firstElementChild;
-      if (!clsbtn) {
-        return;
-      }
+      let clsbtn = (event.target as Element);
       let viewName = clsbtn!.getAttribute("data-id")!;
       let idx = View.CloseViewByName(viewName);
       if (this.items.length === 0) {
@@ -74,12 +71,12 @@ export default Vue.extend({
 </script>
 
 <style>
-.view-tab-item > .tabs__item {
+.view-tab-item > .v-tabs__item {
   padding-left: 10px;
   padding-right: 0px;
 }
 
-.view-tab-item > .tabs__item--active {
+.view-tab-item > .v-tabs__item--active {
   background-color: #E0E0E0;
 }
 </style>

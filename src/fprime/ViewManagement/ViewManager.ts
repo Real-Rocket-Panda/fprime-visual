@@ -2,7 +2,7 @@ import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
 import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import LayoutGenerator from "./LayoutGenerator";
+import LayoutGenerator, { IAlgorithmList } from "./LayoutGenerator";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -55,6 +55,15 @@ export default class ViewManager {
   private layoutGennerator: LayoutGenerator = new LayoutGenerator();
 
   /**
+   * The list of the available auto layout algorithms in the config.
+   */
+  private layoutAlgorithms: IAlgorithmList = { selected: "", algorithms: [] };
+
+  public get LayoutAlgorithms() {
+    return this.layoutAlgorithms;
+  }
+
+  /**
    * The view list of the current project.
    */
   private viewList: IViewList = {
@@ -76,6 +85,10 @@ export default class ViewManager {
     return this.compilerOutput;
   }
 
+  public appendOutput(v: string) {
+    this.compilerOutput.content += v + "\n";
+  }
+
   /**
    * Build the current FPrime project and get the view list.
    * @param dir The folder path of a project.
@@ -88,6 +101,10 @@ export default class ViewManager {
     // Load the project config.
     this.configManager.loadConfig();
     // Initialize the layoutGenerator
+    const layouts = this.layoutGennerator.getAutoLayoutList(
+      this.configManager.Config);
+    this.layoutAlgorithms.selected = layouts.selected;
+    this.layoutAlgorithms.algorithms = layouts.algorithms;
     // Load the default style from the config
     this.defaultStyle = this.styleManager.getDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);
@@ -95,11 +112,11 @@ export default class ViewManager {
     return this.modelManager
       .loadModel(this.configManager.Config)
       .then((data) => {
-        this.compilerOutput.content = data.output + "\n\n";
+        this.compilerOutput.content = data.output + "\n";
         this.generateViewList(data.viewlist);
       })
       .catch((err) => {
-        this.compilerOutput.content = err + "\n\n";
+        this.compilerOutput.content = err + "\n";
       });
   }
 
@@ -213,21 +230,30 @@ export default class ViewManager {
   }
 
   /**
-   * return the default config for the auto-layout algorithm
+   * Return the current selected layout config
    */
-  public getDefaultAutoLayoutConfig(): { [key: string]: any } {
-    return this.layoutGennerator.getDefaultAutoLayoutConfig(
-      this.configManager.Config);
-  }
-
-  /**
-   * return the config for the auto-layout algorithm
-   */
-  public getAutoLayoutConfigByName(name: string): { [key: string]: any } {
+  public getCurrentAutoLayoutConfig(): { [key: string]: any } {
     return this.layoutGennerator.getAutoLayoutConfigByName(
-      this.configManager.Config, name,
+      this.configManager.Config, this.layoutAlgorithms.selected,
     );
   }
+
+  // /**
+  //  * return the default config for the auto-layout algorithm
+  //  */
+  // public getDefaultAutoLayoutConfig(): { [key: string]: any } {
+  //   return this.layoutGennerator.getDefaultAutoLayoutConfig(
+  //     this.configManager.Config);
+  // }
+
+  // /**
+  //  * return the config for the auto-layout algorithm
+  //  */
+  // public getAutoLayoutConfigByName(name: string): { [key: string]: any } {
+  //   return this.layoutGennerator.getAutoLayoutConfigByName(
+  //     this.configManager.Config, name,
+  //   );
+  // }
 
   /**
    * Clean up the memeory

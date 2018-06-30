@@ -7,20 +7,14 @@
       >
         <v-toolbar-title class="mr-3">FPrime Visual</v-toolbar-title>
         <!-- open button -->
-        <!-- <v-tooltip bottom> -->
-          <v-btn icon @click="openProject">
-            <v-icon>folder_open</v-icon>
-          </v-btn>
-          <!-- <span>open</span> -->
-        <!-- </v-tooltip> -->
+        <v-btn small icon @click="openProject">
+          <v-icon>folder_open</v-icon>
+        </v-btn>
         <!-- build button -->
         <v-dialog v-model="building" persistent max-width="40">
-          <!-- <v-tooltip slot="activator" bottom> -->
-            <v-btn icon @click="rebuild" slot="activator">
-              <v-icon>play_circle_filled</v-icon>
-            </v-btn>
-            <!-- <span>build</span> -->
-          <!-- </v-tooltip> -->
+          <v-btn small icon @click="rebuild" slot="activator">
+            <v-icon>play_circle_filled</v-icon>
+          </v-btn>
           <v-card width="40" height="40" :style="{padding: '4px 4px'}">
             <v-progress-circular
               indeterminate
@@ -28,30 +22,26 @@
             </v-progress-circular>
           </v-card>
         </v-dialog>
-        <!-- refresh button -->
-        <!-- <v-tooltip bottom> -->
-          <v-btn icon @click="refresh">
-            <v-icon>refresh</v-icon>
-          </v-btn>
-          <!-- <span>refresh</span> -->
-        <!-- </v-tooltip> -->
         <!-- save button -->
-        <!-- <v-tooltip bottom> -->
-          <v-btn icon @click="saveView">
-            <v-icon>save</v-icon>
-          </v-btn>
-          <!-- <span>save</span> -->
-        <!-- </v-tooltip> -->
+        <v-btn small icon @click="saveView">
+          <v-icon>save</v-icon>
+        </v-btn>
+
+        <v-divider vertical></v-divider>
+        
+        <layout-selector></layout-selector>
+        <color-picker></color-picker>
+        <v-btn small icon @click="refresh">
+          <v-icon>refresh</v-icon>
+        </v-btn>
+
+        <v-divider vertical></v-divider>
+
         <!-- analysis button -->
-        <!-- <v-tooltip bottom> -->
-          <v-btn icon>
-            <v-icon>insert_chart</v-icon>
-          </v-btn>
-          <!-- <span>analysis</span> -->
-        <!-- </v-tooltip> -->
-        <!-- <v-tooltip bottom> -->
-          <color-picker></color-picker>
-        <!-- </v-tooltip> -->
+        <v-btn small icon>
+          <v-icon>insert_chart</v-icon>
+        </v-btn>
+
       </v-toolbar>
       
       <v-navigation-drawer app fixed permanent clipped
@@ -79,6 +69,7 @@ import ViewTabs from "./components/ViewTabs.vue";
 import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
+import LayoutSelector from "./components/LayoutSelector.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
@@ -87,7 +78,14 @@ import view from "@/store/view";
 
 export default Vue.extend({
   name: "fprime-visual",
-  components: { ViewList, ViewTabs, MessageFooter, MessagePanel, ColorPicker },
+  components: {
+    ViewList,
+    ViewTabs,
+    MessageFooter,
+    MessagePanel,
+    ColorPicker,
+    LayoutSelector
+  },
   data() {
     return { building: false };
   },
@@ -148,13 +146,20 @@ export default Vue.extend({
     },
     refresh() {
       fprime.viewManager.refresh();
+      // Force update the current view
+      const viewName = this.$route.params.viewName;
+      const render = fprime.viewManager.render(viewName);
+      if (render) {
+        CyManager.startUpdate(viewName, render.needLayout, render.descriptor);
+        CyManager.endUpdate();
+      }
     },
     saveView() {
       // TODO: seems not good :(
       fprime.viewManager.saveViewDescriptorFor(
         this.$route.params.viewName,
-        CyManager.getDescriptor(),
-      )
+        CyManager.getDescriptor()
+      );
     },
     showOutputPanel() {
       // Hide the progress animation
