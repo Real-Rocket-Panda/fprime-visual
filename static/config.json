@@ -86,6 +86,17 @@
         "directed": true,
         "nodeDimensionsIncludeLabels": true
       }
+    },
+    {
+      "Name": "dagre",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "nodeDimensionsIncludeLabels": true
+      }
     }
   ]
 }

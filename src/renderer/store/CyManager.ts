@@ -1,6 +1,7 @@
 import cytoscape, { EventObject } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
+import dagre from "cytoscape-dagre";
 import konva from "konva";
 import jquery from "jquery";
 import automove from "rp-automove";
@@ -10,6 +11,7 @@ import fprime from "fprime";
 cytoscape.use(coseBilkent);
 cytoscape.use(automove);
 nodeResize(cytoscape, jquery, konva);
+cytoscape.use(dagre);
 
 const boundingBoxOpt = {
   includeOverlays: false,
