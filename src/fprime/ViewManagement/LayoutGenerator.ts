@@ -22,14 +22,20 @@ export default class LayoutGenerator {
    * return the default config for the auto-layout algorithm
    */
   public getDefaultAutoLayoutConfig(config: IConfig): { [key: string]: any } {
-    let defaultLayout: { [key: string]: any } = {};
-    config.AutoLayout.forEach((i) => {
-      if (i.Default === true) {
-        defaultLayout = i;
-        return;
-      }
-    });
-    return defaultLayout;
+    let layout = {} as any;
+    const al = config.AutoLayout.find((a) => a.Default);
+    if (al) {
+      const params = {} as any;
+      Object.keys(al.Parameters).forEach((key) => {
+        params[key] = eval(al.Parameters[key]);
+      });
+      layout = {
+        Name: al.Name,
+        Default: al.Default,
+        Parameters: params,
+      };
+    }
+    return layout;
   }
 
   /**
@@ -38,13 +44,19 @@ export default class LayoutGenerator {
   public getAutoLayoutConfigByName(config: IConfig, name: string): {
     [key: string]: any,
   } {
-    let layout: { [key: string]: any } = {};
-    config.AutoLayout.forEach((i) => {
-      if (i.Name === name) {
-        layout = i;
-        return;
-      }
-    });
+    let layout = {} as any;
+    const al = config.AutoLayout.find((a) => a.Name === name);
+    if (al) {
+      const params = {} as any;
+      Object.keys(al.Parameters).forEach((key) => {
+        params[key] = eval(al.Parameters[key]);
+      });
+      layout = {
+        Name: al.Name,
+        Default: al.Default,
+        Parameters: params,
+      };
+    }
     return layout;
   }
 }
