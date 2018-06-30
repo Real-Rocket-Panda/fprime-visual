@@ -134,8 +134,15 @@ export default class ViewManager {
    * user changes the style file and want to reload the view without build the
    * entire project again.
    */
-  public refresh() {
-    this.cleanup();
+  public refresh(viewName?: string) {
+    if (viewName) {
+      delete this.viewDescriptors[viewName];
+      delete this.cytoscapeJSONs[viewName];
+      // Remove the existing style file for the view.
+      this.styleManager.deleteStyleFor(viewName, this.configManager);
+    } else {
+      this.cleanup();
+    }
     // Load the default style from the config
     this.defaultStyle = this.styleManager.getDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);

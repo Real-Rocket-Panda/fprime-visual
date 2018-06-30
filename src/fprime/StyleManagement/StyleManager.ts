@@ -78,6 +78,18 @@ export default class StyleManager {
   }
 
   /**
+   * Delete the style file of a view.
+   * @param viewName The name of the view
+   * @param config The config manager
+   */
+  public deleteStyleFor(viewName: string, config: ConfigManager) {
+    const filepath = this.generateFilePathForView(viewName, config);
+    if (fs.existsSync(filepath)) {
+      fs.unlinkSync(filepath);
+    }
+  }
+
+  /**
    * Merge two styles into one. Merge won't change the value in x (the first
    * parameter).
    * @param x An array of IStyle to merge to.

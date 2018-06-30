@@ -145,11 +145,11 @@ export default Vue.extend({
       });
     },
     refresh() {
-      fprime.viewManager.refresh();
       // Force update the current view
       const viewName = this.$route.params.viewName;
-      const render = fprime.viewManager.render(viewName);
-      if (render) {
+      if (viewName) {
+        fprime.viewManager.refresh(viewName);
+        const render = fprime.viewManager.render(viewName)!;
         CyManager.startUpdate(viewName, render.needLayout, render.descriptor);
         CyManager.endUpdate();
       }
