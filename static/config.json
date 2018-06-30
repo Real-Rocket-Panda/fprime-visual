@@ -71,8 +71,8 @@
         "nodeDimensionsIncludeLabels": true,
         "startAngle": "3 / 2 * Math.PI",
         "minNodeSpacing": 10,
-        "concentric": "new Function('nodes', 'return nodes.degree()')",
-        "levelWidth": "new Function('nodes', 'return nodes.maxDegree() / 4')"
+        "concentric": "(function(nodes) { return nodes.degree() })",
+        "levelWidth": "(function(nodes) { return nodes.maxDegree() })"
       }
     },
     {
