@@ -92,13 +92,13 @@ describe("ViewManager build", () => {
       "Cause: Error: fail to read the representation file\n" +
       "Cause: Error: ENOENT: no such file or directory, open '" +
       path.resolve("./", "test/static/fpp_output") +
-      "'\n\n");
+      "'\n");
   });
 
   it("should print compile message", async () => {
     await viewManager.build(__project);
     expect(viewManager.CompilerOutput.content).to.equal(
-      "user specified compiler...\nView list generated...\n\n\n");
+      "user specified compiler...\nView list generated...\n\n");
   });
 
   it("should print error message when rebuild a non-exist project",
@@ -110,7 +110,7 @@ describe("ViewManager build", () => {
       "Cause: Error: fail to read the representation file\n" +
       "Cause: Error: ENOENT: no such file or directory, open '" +
       path.resolve("./", "test/static/fpp_output") +
-      "'\n\n");
+      "'\n");
   });
 });
 

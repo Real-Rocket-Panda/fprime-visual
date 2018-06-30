@@ -20,6 +20,17 @@ const configJSON = {
   FPPCompilerOutputPath: path.resolve(__static, "fpp_output"),
   DefaultStyleFilePath: "",
   ViewStyleFileFolder: "",
+  AutoLayout: [
+    {
+      Name: "cose-bilkent",
+      Default: true,
+      Parameters: {
+        fit: true,
+        padding: 10,
+        animate: false,
+      },
+    },
+  ],
 };
 
 const projectJSON = {
@@ -36,6 +47,17 @@ const projectJSON = {
   FPPCompilerOutputPath: path.resolve(__project, "model.xml"),
   DefaultStyleFilePath: path.resolve(__project, "mystyle.css"),
   ViewStyleFileFolder: "",
+  AutoLayout: [
+    {
+      Name: "cose-bilkent",
+      Default: true,
+      Parameters: {
+        fit: true,
+        padding: 10,
+        animate: false,
+      },
+    },
+  ],
 };
 
 describe("Config manager", () => {
