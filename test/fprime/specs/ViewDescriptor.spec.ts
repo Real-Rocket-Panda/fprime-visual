@@ -1,60 +1,125 @@
 import { expect } from "chai";
 import { IFPPModel } from "fprime/FPPModelManagement/FPPModelManager";
 import { IFPPInstance } from "fprime/FPPModelManagement/FPPModelManager";
-import ViewDescriptor, { IGraph } from "fprime/ViewManagement/ViewDescriptor";
+import ViewDescriptor, { IEdge } from "fprime/ViewManagement/ViewDescriptor";
+import { IGraph, INode } from "fprime/ViewManagement/ViewDescriptor";
 import { NodeType, EdgeType } from "fprime/ViewManagement/ViewDescriptor";
 import { ICytoscapeJSON } from "fprime/ViewManagement/ViewDescriptor";
 import { IStyle } from "fprime/StyleManagement/StyleManager";
 
 const ins1: IFPPInstance = {
   id: "ins_1",
-  model_id: 1,
-  ports: { p1: "p1", p2: "p2" },
+  model_id: "1",
+  ports: {
+    p1: { name: "p1", properties: { direction: "out", kind: "async" } },
+    p2: { name: "p2", properties: { direction: "out", kind: "sync" } },
+  },
   properties: { key1: "val1", key2: "val2" },
 };
 
 const ins2: IFPPInstance = {
   id: "ins_2",
-  model_id: 2,
-  ports: { p1: "p1" },
+  model_id: "2",
+  ports: { p1: { name: "p1", properties: { direction: "in", num: "2",
+                                           kind: "async" } } },
   properties: { key1: "val1" },
 };
 
 const mockModel: IFPPModel = {
   instances: [ins1, ins2],
   connections: [
-    { from: { inst: ins1, port: "p1" }, to: { inst: ins2, port: "p1" } },
-    { from: { inst: ins1, port: "p2" }, to: { inst: ins2, port: "p1" } },
+    {
+      from: { inst: ins1, port: ins1.ports.p1 },
+      to: { inst: ins2, port: ins2.ports.p1 },
+    },
+    {
+      from: { inst: ins1, port: ins1.ports.p2 },
+      to: { inst: ins2, port: ins2.ports.p1 },
+    },
   ],
   components: [
     {
       name: "comp_1",
       namespace: "ref",
-      ports: ["p1", "p2"],
+      ports: [
+        { name: "p1", properties: { direction: "out", kind: "async" } },
+        { name: "p2", properties: { direction: "out", kind: "sync" } },
+      ],
     },
     {
       name: "comp_2",
       namespace: "ref",
-      ports: ["p1"],
+      ports: [{ name: "p1", properties: { direction: "in", num: "2",
+                                          kind: "async" } }],
     },
   ],
 };
 
 describe("ViewDescriptor", () => {
   it("should build from FPP model", () => {
-    const nodes = {
-      ins_1: { id: "ins_1", modelID: "", type: NodeType.Instance },
-      ins_1_p1: { id: "ins_1_p1", modelID: "", type: NodeType.Port },
-      ins_1_p2: { id: "ins_1_p2", modelID: "", type: NodeType.Port },
-      ins_2: { id: "ins_2", modelID: "", type: NodeType.Instance },
-      ins_2_p1: { id: "ins_2_p1", modelID: "", type: NodeType.Port },
-      comp_1: { id: "comp_1", modelID: "", type: NodeType.component },
-      comp_1_p1: { id: "comp_1_p1", modelID: "", type: NodeType.Port },
-      comp_1_p2: { id: "comp_1_p2", modelID: "", type: NodeType.Port },
-      comp_2: { id: "comp_2", modelID: "", type: NodeType.component },
-      comp_2_p1: { id: "comp_2_p1", modelID: "", type: NodeType.Port },
+    const nodes: { [key: string]: INode } = {
+      ins_1: {
+        id: "ins_1",
+        modelID: "1",
+        type: NodeType.Instance,
+        properties: { key1: "val1", key2: "val2" },
+      },
+      ins_1_p1: {
+        id: "ins_1_p1",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "out", kind: "async" },
+      },
+      ins_1_p2: {
+        id: "ins_1_p2",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "out", kind: "sync" },
+      },
+      ins_2: {
+        id: "ins_2",
+        modelID: "2",
+        type: NodeType.Instance,
+        properties: { key1: "val1" },
+      },
+      ins_2_p1: {
+        id: "ins_2_p1",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "in", num: "2", kind: "async" },
+      },
+      comp_1: {
+        id: "comp_1",
+        modelID: "",
+        type: NodeType.component,
+        properties: { type: "ref.comp_1" },
+      },
+      comp_1_p1: {
+        id: "comp_1_p1",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "out", kind: "async" },
+      },
+      comp_1_p2: {
+        id: "comp_1_p2",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "out", kind: "sync" },
+      },
+      comp_2: {
+        id: "comp_2",
+        modelID: "",
+        type: NodeType.component,
+        properties: { type: "ref.comp_2" },
+      },
+      comp_2_p1: {
+        id: "comp_2_p1",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "in", kind: "async", num: "2" },
+      },
     };
-    const edges = {
+    const edges: { [key: string]: IEdge } = {
       "ins_1-ins_1_p1": {
         id: "ins_1-ins_1_p1",
         modelID: "",
@@ -69,12 +134,12 @@ describe("ViewDescriptor", () => {
         from: nodes.ins_1,
         to: nodes.ins_1_p2,
       },
-      "ins_2-ins_2_p1": {
-        id: "ins_2-ins_2_p1",
+      "ins_2_p1-ins_2": {
+        id: "ins_2_p1-ins_2",
         modelID: "",
         type: EdgeType.Instance2Port,
-        from: nodes.ins_2,
-        to: nodes.ins_2_p1,
+        from: nodes.ins_2_p1,
+        to: nodes.ins_2,
       },
       "ins_1_p1-ins_2_p1": {
         id: "ins_1_p1-ins_2_p1",
@@ -104,18 +169,26 @@ describe("ViewDescriptor", () => {
         from: nodes.comp_1,
         to: nodes.comp_1_p2,
       },
-      "comp_2-comp_2_p1": {
-        id: "comp_2-comp_2_p1",
+      "comp_2_p1-comp_2": {
+        id: "comp_2_p1-comp_2",
         modelID: "",
         type: EdgeType.Component2Port,
-        from: nodes.comp_2,
-        to: nodes.comp_2_p1,
+        from: nodes.comp_2_p1,
+        to: nodes.comp_2,
       },
     };
 
+    const graph: IGraph = { nodes, edges };
+
+    Object.keys(edges).forEach((key) => {
+      expect(key)
+        .to.equal(edges[key].id)
+        .to.equal(edges[key].from.id + "-" + edges[key].to.id);
+    });
+
     expect(ViewDescriptor.buildFrom(mockModel)).to.deep.equal({
       descriptor: {},
-      graph: { nodes, edges },
+      graph,
     });
   });
 
@@ -172,7 +245,7 @@ describe("ViewDescriptor", () => {
             classes: EdgeType.Instance2Port,
           },
           {
-            data: { id: "ins_2-ins_2_p1", source: "ins_2", target: "ins_2_p1" },
+            data: { id: "ins_2_p1-ins_2", source: "ins_2_p1", target: "ins_2" },
             classes: EdgeType.Instance2Port,
           },
           {
@@ -253,57 +326,110 @@ describe("ViewDescriptor", () => {
         selector: "#ins_2_p1",
         style: { x: "210", y: "210" },
       },
+      "#comp_1": {
+        selector: "#comp_1",
+        style: { x: "300", y: "300" },
+      },
+      "#comp_1_p1": {
+        selector: "#comp_1_p1",
+        style: { x: "310", y: "310" },
+      },
+      "#comp_1_p2": {
+        selector: "#comp_1_p2",
+        style: { x: "330", y: "330" },
+      },
     };
 
-    const nodes = {
+    const nodes: { [key: string]: INode } = {
       ins_1: {
         id: "ins_1",
-        modelID: "",
+        modelID: "1",
         type: NodeType.Instance,
+        properties: {},
       },
       ins_1_p1: {
         id: "ins_1_p1",
         modelID: "",
         type: NodeType.Port,
+        properties: { direction: "out", kind: "async" },
       },
       ins_2: {
         id: "ins_2",
-        modelID: "",
+        modelID: "2",
         type: NodeType.Instance,
+        properties: {},
       },
       ins_2_p1: {
         id: "ins_2_p1",
         modelID: "",
         type: NodeType.Port,
+        properties: { direction: "in", kind: "sync" },
+      },
+      comp_1: {
+        id: "comp_1",
+        modelID: "",
+        type: NodeType.component,
+        properties: {},
+      },
+      comp_1_p1: {
+        id: "comp_1_p1",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "in", kind: "async" },
+      },
+      comp_1_p2: {
+        id: "comp_1_p2",
+        modelID: "",
+        type: NodeType.Port,
+        properties: { direction: "out", kind: "async" },
       },
     };
 
-    const graph: IGraph = {
-      nodes,
-      edges: {
-        "ins_1-ins_1_p1": {
-          id: "ins_1-ins_1_p1",
-          from: nodes.ins_1,
-          to: nodes.ins_1_p1,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-        },
-        "ins_2-ins_2_p1": {
-          id: "ins_2-ins_2_p1",
-          from: nodes.ins_2,
-          to: nodes.ins_2_p1,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-        },
-        "ins_1_p1-ins_2_p1": {
-          id: "ins_1_p1-ins_2_p1",
-          from: nodes.ins_1_p1,
-          to: nodes.ins_2_p1,
-          modelID: "",
-          type: EdgeType.Port2Port,
-        },
+    const edges: { [key: string]: IEdge } = {
+      "ins_1-ins_1_p1": {
+        id: "ins_1-ins_1_p1",
+        from: nodes.ins_1,
+        to: nodes.ins_1_p1,
+        modelID: "",
+        type: EdgeType.Instance2Port,
+      },
+      "ins_2_p1-ins_2": {
+        id: "ins_2_p1-ins_2",
+        from: nodes.ins_2_p1,
+        to: nodes.ins_2,
+        modelID: "",
+        type: EdgeType.Instance2Port,
+      },
+      "ins_1_p1-ins_2_p1": {
+        id: "ins_1_p1-ins_2_p1",
+        from: nodes.ins_1_p1,
+        to: nodes.ins_2_p1,
+        modelID: "",
+        type: EdgeType.Port2Port,
+      },
+      "comp_1_p1-comp_1": {
+        id: "comp_1_p1-comp_1",
+        from: nodes.comp_1_p1,
+        to: nodes.comp_1,
+        modelID: "",
+        type: EdgeType.Component2Port,
+      },
+      "comp_1-comp_1_p2": {
+        id: "comp_1-comp_1_p2",
+        from: nodes.comp_1,
+        to: nodes.comp_1_p2,
+        modelID: "",
+        type: EdgeType.Component2Port,
       },
     };
+
+    const graph: IGraph = { nodes, edges };
+
+    Object.keys(edges).forEach((key) => {
+      expect(key)
+        .to.equal(edges[key].id)
+        .to.equal(edges[key].from.id + "-" + edges[key].to.id);
+    });
 
     const json: ICytoscapeJSON = {
       style: [
@@ -329,8 +455,8 @@ describe("ViewDescriptor", () => {
             data: {
               id: "ins_1",
               direction: undefined,
-              img: "\\static\\ports\\up.png",
-              type: undefined,
+              img: undefined,
+              kind: undefined,
             },
             classes: NodeType.Instance,
             position: { x: 50, y: 50 },
@@ -338,19 +464,19 @@ describe("ViewDescriptor", () => {
           {
             data: {
               id: "ins_1_p1",
-              direction: undefined,
+              direction: "out",
               img: "\\static\\ports\\up.png",
-              type: undefined,
+              kind: "async",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-async fprime-port-out",
             position: { x: 60, y: 60 },
           },
           {
             data: {
               id: "ins_2",
               direction: undefined,
-              img: "\\static\\ports\\up.png",
-              type: undefined,
+              img: undefined,
+              kind: undefined,
             },
             classes: NodeType.Instance,
             position: { x: 200, y: 200 },
@@ -358,12 +484,42 @@ describe("ViewDescriptor", () => {
           {
             data: {
               id: "ins_2_p1",
-              direction: undefined,
+              direction: "in",
               img: "\\static\\ports\\up.png",
-              type: undefined,
+              kind: "sync",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-sync fprime-port-in",
             position: { x: 210, y: 210 },
+          },
+          {
+            data: {
+              id: "comp_1",
+              direction: undefined,
+              img: undefined,
+              kind: undefined,
+            },
+            classes: NodeType.component,
+            position: { x: 300, y: 300 },
+          },
+          {
+            data: {
+              id: "comp_1_p1",
+              direction: "in",
+              img: "\\static\\ports\\up.png",
+              kind: "async",
+            },
+            classes: NodeType.Port + " fprime-port-async fprime-port-in",
+            position: { x: 310, y: 310 },
+          },
+          {
+            data: {
+              id: "comp_1_p2",
+              direction: "out",
+              img: "\\static\\ports\\up.png",
+              kind: "async",
+            },
+            classes: NodeType.Port + " fprime-port-async fprime-port-out",
+            position: { x: 330, y: 330 },
           },
         ],
         edges: [
@@ -377,9 +533,9 @@ describe("ViewDescriptor", () => {
           },
           {
             data: {
-              id: "ins_2-ins_2_p1",
-              source: "ins_2",
-              target: "ins_2_p1",
+              id: "ins_2_p1-ins_2",
+              source: "ins_2_p1",
+              target: "ins_2",
             },
             classes: EdgeType.Instance2Port,
           },
@@ -390,6 +546,22 @@ describe("ViewDescriptor", () => {
               target: "ins_2_p1",
             },
             classes: EdgeType.Port2Port,
+          },
+          {
+            data: {
+              id: "comp_1_p1-comp_1",
+              source: "comp_1_p1",
+              target: "comp_1",
+            },
+            classes: EdgeType.Component2Port,
+          },
+          {
+            data: {
+              id: "comp_1-comp_1_p2",
+              source: "comp_1",
+              target: "comp_1_p2",
+            },
+            classes: EdgeType.Component2Port,
           },
         ],
       },
@@ -432,55 +604,64 @@ describe("ViewDescriptor", () => {
       },
     };
 
-    const nodes = {
+    const nodes: { [key: string]: INode } = {
       ins_1: {
         id: "ins_1",
         modelID: "",
         type: NodeType.Instance,
+        properties: {},
       },
       ins_1_p1: {
         id: "ins_1_p1",
         modelID: "",
         type: NodeType.Port,
+        properties: { direction: "out", kind: "async" },
       },
       ins_2: {
         id: "ins_2",
         modelID: "",
         type: NodeType.Instance,
+        properties: {},
       },
       ins_2_p1: {
         id: "ins_2_p1",
         modelID: "",
         type: NodeType.Port,
+        properties: { direction: "in", kind: "sync" },
       },
     };
 
-    const graph: IGraph = {
-      nodes,
-      edges: {
-        "ins_1-ins_1_p1": {
-          id: "ins_1-ins_1_p1",
-          from: nodes.ins_1,
-          to: nodes.ins_1_p1,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-        },
-        "ins_2-ins_2_p1": {
-          id: "ins_2-ins_2_p1",
-          from: nodes.ins_2,
-          to: nodes.ins_2_p1,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-        },
-        "ins_1_p1-ins_2_p1": {
-          id: "ins_1_p1-ins_2_p1",
-          from: nodes.ins_1_p1,
-          to: nodes.ins_2_p1,
-          modelID: "",
-          type: EdgeType.Port2Port,
-        },
+    const edges: { [key: string]: IEdge } = {
+      "ins_1-ins_1_p1": {
+        id: "ins_1-ins_1_p1",
+        from: nodes.ins_1,
+        to: nodes.ins_1_p1,
+        modelID: "",
+        type: EdgeType.Instance2Port,
+      },
+      "ins_2_p1-ins_2": {
+        id: "ins_2_p1-ins_2",
+        from: nodes.ins_2_p1,
+        to: nodes.ins_2,
+        modelID: "",
+        type: EdgeType.Instance2Port,
+      },
+      "ins_1_p1-ins_2_p1": {
+        id: "ins_1_p1-ins_2_p1",
+        from: nodes.ins_1_p1,
+        to: nodes.ins_2_p1,
+        modelID: "",
+        type: EdgeType.Port2Port,
       },
     };
+
+    const graph: IGraph = { nodes, edges };
+
+    Object.keys(edges).forEach((key) => {
+      expect(key)
+        .to.equal(edges[key].id)
+        .to.equal(edges[key].from.id + "-" + edges[key].to.id);
+    });
 
     const json: ICytoscapeJSON = {
       style: [
@@ -506,27 +687,27 @@ describe("ViewDescriptor", () => {
             data: {
               id: "ins_1",
               direction: undefined,
-              img: "\\static\\ports\\up.png",
-              type: undefined,
+              img: undefined,
+              kind: undefined,
             },
             classes: NodeType.Instance,
           },
           {
             data: {
               id: "ins_1_p1",
-              direction: undefined,
+              direction: "out",
               img: "\\static\\ports\\up.png",
-              type: undefined,
+              kind: "async",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-async fprime-port-out",
             position: { x: 60, y: 60 },
           },
           {
             data: {
               id: "ins_2",
               direction: undefined,
-              img: "\\static\\ports\\up.png",
-              type: undefined,
+              img: undefined,
+              kind: undefined,
             },
             classes: NodeType.Instance,
             position: { x: 200, y: 200 },
@@ -534,11 +715,11 @@ describe("ViewDescriptor", () => {
           {
             data: {
               id: "ins_2_p1",
-              direction: undefined,
+              direction: "in",
               img: "\\static\\ports\\up.png",
-              type: undefined,
+              kind: "sync",
             },
-            classes: NodeType.Port,
+            classes: NodeType.Port + " fprime-port-sync fprime-port-in",
           },
         ],
         edges: [
@@ -552,9 +733,9 @@ describe("ViewDescriptor", () => {
           },
           {
             data: {
-              id: "ins_2-ins_2_p1",
-              source: "ins_2",
-              target: "ins_2_p1",
+              id: "ins_2_p1-ins_2",
+              source: "ins_2_p1",
+              target: "ins_2",
             },
             classes: EdgeType.Instance2Port,
           },
@@ -580,59 +761,88 @@ describe("ViewDescriptor", () => {
   });
 
   it("should return simple graph", () => {
-    const nodes = {
+    const nodes: { [key: string]: INode } = {
       ins_1: {
         id: "ins_1",
         modelID: "",
         type: NodeType.Instance,
+        properties: {},
       },
       ins_1_p1: {
         id: "ins_1_p1",
         modelID: "",
         type: NodeType.Port,
+        properties: { direction: "out", kind: "async" },
       },
       ins_2: {
         id: "ins_2",
         modelID: "",
         type: NodeType.Instance,
+        properties: {},
       },
       ins_2_p1: {
         id: "ins_2_p1",
         modelID: "",
         type: NodeType.Port,
+        properties: { direction: "out", kind: "sync" },
+      },
+      comp_1: {
+        id: "comp_1",
+        modelID: "",
+        type: NodeType.component,
+        properties: {},
+      },
+      comp_1_p1: {
+        id: "comp_1_p1",
+        modelID: "",
+        type: NodeType.Port,
+        properties: {},
       },
     };
 
-    const graph: IGraph = {
-      nodes,
-      edges: {
-        "ins_1-ins_1_p1": {
-          id: "ins_1-ins_1_p1",
-          from: nodes.ins_1,
-          to: nodes.ins_1_p1,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-        },
-        "ins_2-ins_2_p1": {
-          id: "ins_2-ins_2_p1",
-          from: nodes.ins_2,
-          to: nodes.ins_2_p1,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-        },
-        "ins_1_p1-ins_2_p1": {
-          id: "ins_1_p1-ins_2_p1",
-          from: nodes.ins_1_p1,
-          to: nodes.ins_2_p1,
-          modelID: "",
-          type: EdgeType.Port2Port,
-        },
+    const edges: { [key: string]: IEdge } = {
+      "ins_1-ins_1_p1": {
+        id: "ins_1-ins_1_p1",
+        from: nodes.ins_1,
+        to: nodes.ins_1_p1,
+        modelID: "",
+        type: EdgeType.Instance2Port,
+      },
+      "ins_2_p1-ins_2": {
+        id: "ins_2_p1-ins_2",
+        from: nodes.ins_2_p1,
+        to: nodes.ins_2,
+        modelID: "",
+        type: EdgeType.Instance2Port,
+      },
+      "ins_1_p1-ins_2_p1": {
+        id: "ins_1_p1-ins_2_p1",
+        from: nodes.ins_1_p1,
+        to: nodes.ins_2_p1,
+        modelID: "",
+        type: EdgeType.Port2Port,
+      },
+      "comp_1-comp_1_p1": {
+        id: "comp_1-comp_1_p1",
+        from: nodes.comp_1,
+        to: nodes.comp_1_p1,
+        modelID: "",
+        type: EdgeType.Component2Port,
       },
     };
+
+    const graph: IGraph = { nodes, edges };
+
+    Object.keys(edges).forEach((key) => {
+      expect(key)
+        .to.equal(edges[key].id)
+        .to.equal(edges[key].from.id + "-" + edges[key].to.id);
+    });
 
     const simpleGraph = {
       "#ins_1": ["#ins_1_p1"],
       "#ins_2": ["#ins_2_p1"],
+      "#comp_1": ["#comp_1_p1"],
     };
 
     const view = new ViewDescriptor();
