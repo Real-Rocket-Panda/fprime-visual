@@ -28,10 +28,63 @@
       }
     },
     {
-      "Name": "mock",
+      "Name": "random",
       "Default": false,
       "Parameters": {
-        "key1": "mock"
+        "animate": false,
+        "fit": true,
+        "padding": 10
+      }
+    },
+    {
+      "Name": "grid",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "avoidOverlapPadding": 10
+      }
+    },
+    {
+      "Name": "circle",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "avoidOverlapPadding": 10,
+        "nodeDimensionsIncludeLabels": true,
+        "startAngle": "3 / 2 * Math.PI"
+      }
+    },
+    {
+      "Name": "concentric",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "nodeDimensionsIncludeLabels": true,
+        "startAngle": "3 / 2 * Math.PI",
+        "minNodeSpacing": 10,
+        "concentric": "(function(nodes) { return nodes.degree() })",
+        "levelWidth": "(function(nodes) { return nodes.maxDegree() })"
+      }
+    },
+    {
+      "Name": "breadthfirst",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "directed": true,
+        "nodeDimensionsIncludeLabels": true
       }
     }
   ]

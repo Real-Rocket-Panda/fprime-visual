@@ -56,11 +56,6 @@ class CyManager {
   private batch: any;
 
   /**
-   * The layout configuration.
-   */
-  private layoutConfig: { [key: string]: any } = {};
-
-  /**
    * Initialize the cytoscape container and cyutil.
    * @param container The container HTML element <div id="cytoscape"></div>
    */
@@ -70,8 +65,6 @@ class CyManager {
     this.cyutil = new CyUtil(this.cy);
     // Setup the resize function
     this.resize();
-    // Set the layout configuration from config file
-    this.layoutConfig = fprime.viewManager.getDefaultAutoLayoutConfig();
   }
 
   public destroy() {
@@ -112,8 +105,9 @@ class CyManager {
     this.cy!.resize();
     this.batch = () => {
       if (needLayout) {
+        const layoutConfig = fprime.viewManager.getCurrentAutoLayoutConfig();
         let layoutOption = {
-          name: this.layoutConfig.Name,
+          name: layoutConfig.Name,
           stop: () => {
             this.stickPort();
             this.movebackAllPort();
@@ -122,11 +116,18 @@ class CyManager {
           },
         };
         layoutOption = Object.assign(layoutOption,
-          this.layoutConfig.Parameters);
+          layoutConfig.Parameters);
 
         let layout: any = this.cy!.layout(layoutOption);
-        layout.run();
-        layout = undefined;
+        // If the layout is invalid, it should be undefined.
+        if (layout) {
+          layout.run();
+          layout = undefined;
+        } else {
+          fprime.viewManager.appendOutput(
+            `Error: the layout configuration ` +
+            `'${layoutConfig.Name}' is invalid.`);
+        }
       } else {
         this.stickPort();
         this.movebackAllPort();

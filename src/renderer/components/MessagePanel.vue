@@ -49,7 +49,7 @@ export default Vue.extend({
   data() {
     return {
       state: panel.state,
-      curtab: "Output",
+      curtab: 1,
       output: PanelName.Output,
       analysis: PanelName.Analysis,
     };
@@ -80,13 +80,13 @@ export default Vue.extend({
   z-index: 1000;
 }
 
-.message-panel .tabs__content {
+.message-panel .v-tabs__content {
   transition: none;
   margin: 8px;
   white-space: pre-wrap;
 }
 
-.message-panel .tabs__content p {
+.message-panel .v-tabs__content p {
   overflow: scroll;
   max-height: 220px;
 }
