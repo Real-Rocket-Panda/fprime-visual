@@ -3,19 +3,45 @@
     <v-app>
       <!-- app top toolbar -->
       <v-toolbar app fixed clipped-left flat height="40px"
-        :style="{zIndex: 1000}"
+        :style="{zIndex: 1000}" id="fprime-header-toolbar"
       >
         <v-toolbar-title class="mr-3">FPrime Visual</v-toolbar-title>
-        <v-btn icon>
-          <v-icon>play_circle_filled</v-icon>
+        <!-- open button -->
+        <v-btn small icon @click="openProject">
+          <v-icon>folder_open</v-icon>
         </v-btn>
-        <v-btn icon>
+        <!-- build button -->
+        <v-dialog v-model="building" persistent max-width="40">
+          <v-btn small icon @click="rebuild" slot="activator">
+            <v-icon>play_circle_filled</v-icon>
+          </v-btn>
+          <v-card width="40" height="40" :style="{padding: '4px 4px'}">
+            <v-progress-circular
+              indeterminate
+              color="primary">
+            </v-progress-circular>
+          </v-card>
+        </v-dialog>
+        <!-- save button -->
+        <v-btn small icon @click="saveView">
+          <v-icon>save</v-icon>
+        </v-btn>
+
+        <v-divider vertical></v-divider>
+        
+        <layout-selector></layout-selector>
+        <color-picker></color-picker>
+        <v-btn small icon @click="refresh">
           <v-icon>refresh</v-icon>
         </v-btn>
-        <v-btn icon>
+
+        <v-divider vertical></v-divider>
+
+        <!-- analysis button -->
+        <v-btn small icon>
           <v-icon>insert_chart</v-icon>
         </v-btn>
-        <color-picker></color-picker>
+
       </v-toolbar>
       
       <v-navigation-drawer app fixed permanent clipped
@@ -43,10 +69,26 @@ import ViewTabs from "./components/ViewTabs.vue";
 import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
+import LayoutSelector from "./components/LayoutSelector.vue";
+import { remote } from "electron";
+import fprime from "fprime";
+import panel, { PanelName } from "@/store/panel";
+import CyManager from "@/store/CyManager";
+import view from "@/store/view";
 
 export default Vue.extend({
   name: "fprime-visual",
-  components: { ViewList, ViewTabs, MessageFooter, MessagePanel, ColorPicker },
+  components: {
+    ViewList,
+    ViewTabs,
+    MessageFooter,
+    MessagePanel,
+    ColorPicker,
+    LayoutSelector
+  },
+  data() {
+    return { building: false };
+  },
   mounted() {
     let resizing = false;
     let counter = 0;
@@ -80,6 +122,53 @@ export default Vue.extend({
         resizing = false;
       }
     });
+  },
+  methods: {
+    openProject() {
+      const dirs = remote.dialog.showOpenDialog({
+        title: "Open a project",
+        properties: ["openDirectory"]
+      });
+      if (dirs) {
+        this.building = true;
+        fprime.viewManager.build(dirs[0]).finally(() => {
+          // Close all the opening views
+          view.CloseAll();
+          this.$router.replace("/");
+          this.showOutputPanel();
+        });
+      }
+    },
+    rebuild() {
+      fprime.viewManager.rebuild().finally(() => {
+        this.showOutputPanel();
+      });
+    },
+    refresh() {
+      // Force update the current view
+      const viewName = this.$route.params.viewName;
+      if (viewName) {
+        fprime.viewManager.refresh(viewName);
+        const render = fprime.viewManager.render(viewName)!;
+        CyManager.startUpdate(viewName, render.needLayout, render.descriptor);
+        CyManager.endUpdate();
+      }
+    },
+    saveView() {
+      // TODO: seems not good :(
+      fprime.viewManager.saveViewDescriptorFor(
+        this.$route.params.viewName,
+        CyManager.getDescriptor()
+      );
+    },
+    showOutputPanel() {
+      // Hide the progress animation
+      this.building = false;
+      // Show the output panel
+      if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
+        panel.showOutput();
+      }
+    }
   }
 });
 </script>
@@ -94,6 +183,10 @@ export default Vue.extend({
 #view-list-nav > .navigation-drawer__border {
   cursor: ew-resize;
   width: 2px;
-  background-color: rgba(150,150,150,0.12);
+  background-color: rgba(150, 150, 150, 0.12);
+}
+
+#fprime-header-toolbar .tooltip {
+  height: 48px;
 }
 </style>

@@ -1,0 +1,27 @@
+.fprime-instance {
+  height: 100;
+  width: 100;
+}
+
+#ins_1 {
+  width: 200;
+  height: 200;
+  background-color: red;
+  x: 50;
+  y: 50;
+}
+
+#ins_1_p1 {
+  x: 60;
+  y: 60;
+}
+
+#ins_2 {
+  x: 200;
+  y: 200;
+}
+
+#ins_2_p1 {
+  x: 210;
+  y: 210;
+}

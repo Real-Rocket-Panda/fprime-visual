@@ -1,0 +1,5 @@
+{
+    "DefaultStyleFilePath": "mystyle.css",
+    "FPPCompilerPath": "fast_compiler",
+    "FPPCompilerOutputPath": "model.xml"
+}

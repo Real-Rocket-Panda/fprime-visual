@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn icon :style="{color: colors.hex}" @click="changeColor">
+    <v-btn small icon :style="{color: colors.hex}" @click="changeColor">
       <v-icon>format_color_fill</v-icon>
     </v-btn>
     <div id="chrome-color-picker" :class="{'color-picker-active': show}">
@@ -12,7 +12,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Chrome } from "vue-color";
-import CyManager from "@/components/ViewContent/CyManager";
+import CyManager from "@/store/CyManager";
 
 var colors = { hex: '#000000' }
 

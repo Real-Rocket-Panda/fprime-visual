@@ -1,14 +1,102 @@
 {
-    "Analyzers": [
-        {
-            "Name":"",
-            "Path":"",
-            "OutputFilePath":"",
-            "Type":""
-        }
-    ],
-    "FPPCompilerPath": "fppcompiler",
-    "FPPCompilerParameters": "",
-    "FPPCompilerOutputPath": "model.xml",
-    "DefaultStyleFilePath": ""
+  "Analyzers": [
+    {
+      "Name": "AcmeRuleChecker",
+      "Path": "acme-checker.jar",
+      "OutputFilePath": "acme_output",
+      "Type": ""
+    }
+  ],
+  "FPPCompilerPath": "fppcompiler",
+  "FPPCompilerParameters": "",
+  "FPPCompilerOutputPath": "fpp_output",
+  "DefaultStyleFilePath": "",
+  "ViewStyleFileFolder": "",
+  "AutoLayout": [
+    {
+      "Name": "cose-bilkent",
+      "Default": true,
+      "Parameters": {
+        "nodeRepulsion": 1000000,
+        "nodeDimensionsIncludeLabels": true,
+        "fit": true,
+        "padding": 10,
+        "animate": false,
+        "randomize": true,
+        "tile": true,
+        "nodeOverlap": 4
+      }
+    },
+    {
+      "Name": "random",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10
+      }
+    },
+    {
+      "Name": "grid",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "avoidOverlapPadding": 10
+      }
+    },
+    {
+      "Name": "circle",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "avoidOverlapPadding": 10,
+        "nodeDimensionsIncludeLabels": true,
+        "startAngle": "3 / 2 * Math.PI"
+      }
+    },
+    {
+      "Name": "concentric",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "nodeDimensionsIncludeLabels": true,
+        "startAngle": "3 / 2 * Math.PI",
+        "minNodeSpacing": 10,
+        "concentric": "(function(nodes) { return nodes.degree() })",
+        "levelWidth": "(function(nodes) { return nodes.maxDegree() })"
+      }
+    },
+    {
+      "Name": "breadthfirst",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "directed": true,
+        "nodeDimensionsIncludeLabels": true
+      }
+    },
+    {
+      "Name": "dagre",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "nodeDimensionsIncludeLabels": true
+      }
+    }
+  ]
 }

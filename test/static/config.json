@@ -1,14 +1,26 @@
 {
-    "Analyzers": [
-        {
-            "Name":"",
-            "Path":"",
-            "OutputFilePath":"",
-            "Type":""
-        }
-    ],
-    "FPPCompilerPath": "fppcompiler",
-    "FPPCompilerParameters": "",
-    "FPPCompilerOutputPath": "model.xml",
-    "DefaultStyleFilePath": ""
+  "Analyzers": [
+    {
+      "Name": "AcmeRuleChecker",
+      "Path": "acme-checker.jar",
+      "OutputFilePath": "acme_output",
+      "Type": ""
+    }
+  ],
+  "FPPCompilerPath": "fppcompiler",
+  "FPPCompilerParameters": "",
+  "FPPCompilerOutputPath": "fpp_output",
+  "DefaultStyleFilePath": "",
+  "ViewStyleFileFolder": "",
+  "AutoLayout": [
+    {
+      "Name": "cose-bilkent",
+      "Default": true,
+      "Parameters": {
+        "fit": true,
+        "padding": 10,
+        "animate": false
+      }
+    }
+  ]
 }

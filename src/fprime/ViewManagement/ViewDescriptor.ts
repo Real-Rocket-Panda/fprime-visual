@@ -1,38 +1,5 @@
-import { IMockModel } from "../FPPModelManagement/FPPModelManager";
-
-/**
- * The interface of the node style.
- * id is the element ID of the node in the graph.
- * style is a map of css style attributes.
- * x?, y? are optional numbers of the element's postion.
- */
-export interface INodeStyle {
-  id: string;
-  style: { [key: string]: any };
-  x?: number;
-  y?: number;
-}
-
-/**
- * The interface of the edge style.
- * id is the element ID of the edge in the graph.
- * style is a map of css style attributes.
- */
-export interface IEdgeStyle {
-  id: string;
-  style: { [key: string]: any };
-}
-
-/**
- * The interface of the style descriptor. It contains all the style information
- * of the elements in the graph. nodes is a map of all the style information
- * of the nodes, edges is a map for the edges in the graph. The key of the map
- * is the element ID of each element.
- */
-export interface IStyleDescriptor {
-  nodes: { [id: string]: INodeStyle };
-  edges: { [id: string]: IEdgeStyle };
-}
+import { IFPPModel } from "../FPPModelManagement/FPPModelManager";
+import { IStyle } from "../StyleManagement/StyleManager";
 
 /**
  * The node types of the nodes in the graph. These are used as the classes in
@@ -54,6 +21,7 @@ export interface INode {
   id: string;
   modelID: string;
   type: NodeType;
+  properties: { [key: string]: any };
 }
 
 /**
@@ -66,7 +34,7 @@ export interface INode {
 export enum EdgeType {
   Port2Port = "port-port",
   Instance2Port = "instance-port",
-  Component2Port = "instance-component",
+  Component2Port = "component-port",
 }
 
 /**
@@ -90,7 +58,6 @@ export interface IEdge {
  * diagram. nodes is a map of all the nodes. edges is a map of all the edges
  * including the special edges from component to port. The key of the map is the
  * elementID.
- * 
  */
 export interface IGraph {
   nodes: { [id: string]: INode };
@@ -105,7 +72,7 @@ export interface ICytoscapeJSON {
   style: Array<{ selector: string, style: { [key: string]: any } }>;
   elements: {
     nodes: Array<{
-      data: { id: string },
+      data: { id: string, [key: string]: any },
       classes: string,
       position?: { x: number, y: number },
     }>,
@@ -125,7 +92,7 @@ export default class ViewDescriptor {
    * Build the graph of a view descriptor from the given model data.
    * @param model The mocked model data
    */
-  public static buildFrom(model: IMockModel): ViewDescriptor {
+  public static buildFrom(model: IFPPModel): ViewDescriptor {
     const view = new ViewDescriptor();
 
     // For all the instances in a model
@@ -133,30 +100,45 @@ export default class ViewDescriptor {
       // Covert all the instances to a node in the graph
       view.graph.nodes[i.id] = {
         id: i.id,
-        modelID: "",
+        modelID: i.model_id,  // Get instance id in the model file
         type: NodeType.Instance,
+        properties: i.properties,
       };
 
       // Covert all the ports to a node in the graph
       // The name of the port has the format: <instance id>_<port id>
       Object.keys(i.ports).forEach((p) => {
-        const pname = i.id + "_" + (i.ports as any)[p];
+        const pname = i.id + "_" + i.ports[p].name;
         view.graph.nodes[pname] = {
           id: pname,
           modelID: "",
           type: NodeType.Port,
+          properties: i.ports[p].properties,
         };
 
         // Add a virtual edge from instance to the port.
         // The edge has the format: <instance id>-<instance id>_<port id>
-        const vedge = i.id + "-" + pname;
-        view.graph.edges[vedge] = {
-          id: vedge,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-          from: view.graph.nodes[i.id],
-          to: view.graph.nodes[pname],
-        };
+        if (i.ports[p].properties.direction === "in") {
+          // in port, from port to instance
+          const vedge = pname + "-" + i.id;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Instance2Port,
+            from: view.graph.nodes[pname],
+            to: view.graph.nodes[i.id],
+          };
+        } else {
+          // out port, from instance to port
+          const vedge = i.id + "-" + pname;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Instance2Port,
+            from: view.graph.nodes[i.id],
+            to: view.graph.nodes[pname],
+          };
+        }
       });
     });
 
@@ -166,28 +148,41 @@ export default class ViewDescriptor {
         id: i.name,
         modelID: "",
         type: NodeType.component,
+        properties: { type: i.namespace + "." + i.name },
       };
 
       // Covert all the ports to a node in the graph
       // The name of the port has the format: <instance id>_<port id>
-      Object.keys(i.ports).forEach((p) => {
-        const pname = i.name + "_" + (i.ports as any)[p];
+      i.ports.forEach((p) => {
+        const pname = i.name + "_" + p.name;
         view.graph.nodes[pname] = {
           id: pname,
           modelID: "",
           type: NodeType.Port,
+          properties: p.properties,
         };
 
         // Add a virtual edge from instance to the port.
         // The edge has the format: <instance id>-<instance id>_<port id>
-        const vedge = i.name + "-" + pname;
-        view.graph.edges[vedge] = {
-          id: vedge,
-          modelID: "",
-          type: EdgeType.Instance2Port,
-          from: view.graph.nodes[i.name],
-          to: view.graph.nodes[pname],
-        };
+        if (p.properties.direction === "in") {
+          const vedge = pname + "-" + i.name;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes[pname],
+            to: view.graph.nodes[i.name],
+          };
+        } else {
+          const vedge = i.name + "-" + pname;
+          view.graph.edges[vedge] = {
+            id: vedge,
+            modelID: "",
+            type: EdgeType.Component2Port,
+            from: view.graph.nodes[i.name],
+            to: view.graph.nodes[pname],
+          };
+        }
       });
     });
 
@@ -195,8 +190,8 @@ export default class ViewDescriptor {
     // The edge has the format: <from instance id>_<from port id>-
     //  <to instance id>_<to instance id>
     model.connections.forEach((t) => {
-      const from = `${t.from.inst.id}_${t.from.port}`;
-      const to = `${t.to.inst.id}_${t.to.port}`;
+      const from = `${t.from.inst.id}_${t.from.port.name}`;
+      const to = `${t.to.inst.id}_${t.to.port.name}`;
       const edge = from + "-" + to;
       view.graph.edges[edge] = {
         id: edge,
@@ -213,46 +208,75 @@ export default class ViewDescriptor {
   /**
    * Parse the style information from a cytoscape JSON format to an
    * IStyleDescriptor instance.
-   * @param descriptor 
+   * @param json The cytoscapre json object.
    */
-  public static parseStyleFrom(descriptor: ICytoscapeJSON): IStyleDescriptor {
-    const style: IStyleDescriptor = { nodes: {}, edges: {} };
-    // Convert all the style to INodeStyle and IEdgeStyle
-    descriptor.style.forEach((s) => {
-      // Only parse the elements with id.
-      if (s.selector[0] !== "#") {
+  public static parseStyleFrom(json: ICytoscapeJSON): { [id: string]: IStyle } {
+    const styles: { [id: string]: IStyle } = {};
+    json.style.forEach((s) => {
+      // Skip style for core, this is generated by cytoscape, not sure it's
+      // meaning.
+      if (s.selector === "core") {
         return;
       }
-      const id = s.selector.substr(1);
-      // Having '-' in the middle should be an edge.
-      if (id.indexOf("-") !== -1) {
-        style.edges[id] = { id, style: s.style };
-      } else { // Otherwise, it's a node
-        style.nodes[id] = { id, style: s.style };
-      }
-    });
-    // Covert the x/y info in elements to INodeStyle
-    descriptor.elements.nodes.forEach((n) => {
-      if (style.nodes[n.data.id]) {
-        style.nodes[n.data.id].x = n.position!.x;
-        style.nodes[n.data.id].y = n.position!.y;
+      if (styles[s.selector]) {
+        const olds = styles[s.selector];
+        styles[s.selector] = {
+          selector: s.selector,
+          style: Object.assign(olds.style, s.style),
+        };
       } else {
-        style.nodes[n.data.id] = {
-          id: n.data.id,
-          style: {},
-          x: n.position!.x,
-          y: n.position!.y,
+        styles[s.selector] = {
+          selector: s.selector,
+          style: Object.assign({}, s.style),
         };
       }
     });
-    return style;
+    // The main different between IStyle from cytoscape json style is the place
+    // to store x/y information. In cytoscape, x/y is stored in nodes; in our
+    // case we have to store it in style itself.
+    json.elements.nodes.forEach((n) => {
+      const id = "#" + n.data.id;
+      if (styles[id]) {
+        styles[id].style.x = n.position!.x;
+        styles[id].style.y = n.position!.y;
+      } else {
+        styles[id] = {
+          selector: "#" + n.data.id,
+          style: { x: n.position!.x, y: n.position!.y },
+        };
+      }
+    });
+    return styles;
   }
 
-  public styleDescriptor: IStyleDescriptor;
-  public graph: IGraph;
+  private descriptor: { [id: string]: IStyle };
+  private graph: IGraph;
+
+  public get Descriptor() {
+    return this.descriptor;
+  }
+
+  public set Descriptor(desc: { [id: string]: IStyle }) {
+    this.descriptor = desc;
+  }
+
+  /**
+   * Return an array of IStyle from the view descriptor for saving purpose.
+   */
+  public get CSSStyles() {
+    return Object.keys(this.descriptor).map((key) => this.descriptor[key]);
+  }
+
+  public set CSSStyles(styles: IStyle[]) {
+    const descriptor: { [id: string]: IStyle } = {};
+    styles.forEach((s) => {
+      descriptor[s.selector] = s;
+    });
+    this.descriptor = descriptor;
+  }
 
   constructor() {
-    this.styleDescriptor = { nodes: {}, edges: {} };
+    this.descriptor = {};
     this.graph = { nodes: {}, edges: {} };
   }
 
@@ -264,32 +288,18 @@ export default class ViewDescriptor {
     needLayout: boolean,
     descriptor: ICytoscapeJSON,
   } {
-    const styleDescriptor = this.styleDescriptor;
+    const descriptor = this.descriptor;
     const graph = this.graph;
 
-    // Add style information to the JSON
-    // The style for each individual node (components or ports)
-    const nodeStyles =
-      Object.keys(styleDescriptor.nodes)
-        .map((id) => styleDescriptor.nodes[id])
-        .map((n) => {
-          return {
-            selector: "#" + n.id,
-            style: n.style,
-          };
-        });
-    // The style for each individual edge.
-    const edgeStyles =
-      Object.keys(styleDescriptor.edges)
-        .map((id) => styleDescriptor.edges[id])
-        .map((e) => {
-          return {
-            selector: "#" + e.id,
-            style: e.style,
-          };
-        });
-    // Combine the two styles
-    const styles = nodeStyles.concat(edgeStyles);
+    // Copy the style from descriptor to cytoscape style filed
+    const styles = Object.keys(descriptor)
+      .map((key) => {
+        const s = Object.assign({}, descriptor[key].style);
+        delete s.x;
+        delete s.y;
+        return { selector: descriptor[key].selector, style: s };
+      })
+      .filter((s) => Object.keys(s.style).length > 0);
 
     // Add node and edge information to the JSON
     let needLayout = false;
@@ -298,10 +308,21 @@ export default class ViewDescriptor {
       Object.keys(graph.nodes)
         .map((id) => graph.nodes[id])
         .map((n) => {
-          const i = { data: { id: n.id }, classes: n.type } as any;
-          const style = styleDescriptor.nodes[n.id];
-          if (style && style.x && style.y) {
-            i.position = { x: style.x!, y: style.y! };
+          const i = {
+            data: {
+              id: n.id,
+              img: (n.type === NodeType.Port) ?
+                "\\static\\ports\\up.png" : undefined,
+              kind: (n.type === NodeType.Port) ?
+                n.properties.kind : undefined,
+              direction: (n.type === NodeType.Port) ?
+                n.properties.direction : undefined,
+            },
+            classes: this.generateNodeClasses(n),
+          } as any;
+          const s = descriptor["#" + n.id];
+          if (s && s.style.x && s.style.y) {
+            i.position = { x: parseFloat(s.style.x), y: parseFloat(s.style.y) };
           } else {
             // If any of the node does not have the x/y info, we should set
             // needlayout to true to ask the UI render to layout the diagram.
@@ -331,17 +352,28 @@ export default class ViewDescriptor {
   }
 
   /**
-   * 
+   * Get a simple graph object with format
+   * {
+   *    [instance id]: [[port id]...]
+   * }
    */
   public getSimpleGraph(): { [key: string]: string[] } {
     const graph: { [key: string]: string[] } = {};
     Object
       .keys(this.graph.edges)
       .map((key) => this.graph.edges[key])
-      .filter((e) => e.type === EdgeType.Instance2Port)
+      .filter((e) => e.type === EdgeType.Instance2Port
+        || e.type === EdgeType.Component2Port)
       .forEach((e) => {
-        const from = "#" + e.from.id;
-        const to = `#${e.to.id}`;
+        let from = "";
+        let to = "";
+        if (e.from.type === NodeType.Port) {
+          to = `#${e.from.id}`;
+          from = `#${e.to.id}`;
+        } else {
+          from = `#${e.from.id}`;
+          to = `#${e.to.id}`;
+        }
         if (!graph[from]) {
           graph[from] = [to];
         } else {
@@ -349,6 +381,37 @@ export default class ViewDescriptor {
         }
       });
     return graph;
+  }
+
+  private generateNodeClasses(node: INode): string {
+    const prop = node.properties;
+    switch (node.type) {
+      case NodeType.Instance: {
+        return [
+          node.type,
+          prop.type ? `fprime-component-${prop.type}` : "",
+        ].filter((i) => i !== "").join(" ");
+      }
+
+      case NodeType.Port: {
+        return [
+          node.type,
+          prop.type ? `fprime-port-${prop.type}` : "",
+          prop.kind ? `fprime-port-${prop.kind}` : "",
+          prop.direction ? `fprime-port-${prop.direction}` : "",
+        ].filter((i) => i !== "").join(" ");
+      }
+
+      case NodeType.component: {
+        return [
+          node.type,
+          prop.type ? `fprime-component-${prop.type}` : "",
+        ].filter((i) => i !== "").join(" ");
+      }
+
+      default:
+        return "";
+    }
   }
 
 }
