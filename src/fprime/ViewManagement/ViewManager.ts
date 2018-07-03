@@ -1,4 +1,4 @@
-import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
+import ViewDescriptor, { ICytoscapeJSON, IRenderJSON } from "./ViewDescriptor";
 import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
@@ -136,10 +136,10 @@ export default class ViewManager {
    */
   public refresh(viewName?: string) {
     if (viewName) {
+      // Delete the in-memory style information, this would cause losing all
+      // the unsaved changes.
       delete this.viewDescriptors[viewName];
       delete this.cytoscapeJSONs[viewName];
-      // Remove the existing style file for the view.
-      this.styleManager.deleteStyleFor(viewName, this.configManager);
     } else {
       this.cleanup();
     }
@@ -157,10 +157,8 @@ export default class ViewManager {
    * @returns The render JSON object for rendering, the current system uses
    * cytoscape as the front-end rendering library.
    */
-  public render(viewName: string): {
-    needLayout: boolean,
-    descriptor: ICytoscapeJSON,
-  } | null {
+  public render(viewName: string,
+                forceLayout: boolean = false): IRenderJSON | null {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
@@ -173,9 +171,13 @@ export default class ViewManager {
     }
     // Find the Cytoscape JSON if already exists.
     if (this.cytoscapeJSONs[viewName]) {
-      // TODO: should not use JSON.parse to do deep clone.
       return {
-        needLayout: false,
+        needLayout: forceLayout,
+        elesHasPosition: this.cytoscapeJSONs[viewName]
+          .elements.nodes.map((i) => i.data.id),
+        // If the cytoscape JSON exists, it is returned by render layer,
+        // thus all the nodes should have postion.
+        elesNoPosition: [],
         descriptor: this.cytoscapeJSONs[viewName],
       };
     }
@@ -184,7 +186,10 @@ export default class ViewManager {
     const viewDescriptor = this.generateViewDescriptorFor(viewName);
     this.viewDescriptors[viewName] = viewDescriptor;
     // Convert the view descriptor to the render JSON (cytoscape format)
-    return this.generateRenderJSONFrom(viewDescriptor);
+    const json = this.generateRenderJSONFrom(viewDescriptor);
+    // Set the forceLayout layout flag
+    json.needLayout = json.needLayout || forceLayout;
+    return json;
   }
 
   /**
@@ -319,10 +324,7 @@ export default class ViewManager {
    * cytoscape as our front-end renderer.
    * @param viewDescriptor The view descriptor to convert.
    */
-  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): {
-    needLayout: boolean,
-    descriptor: ICytoscapeJSON,
-  } {
+  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): IRenderJSON {
     const json = viewDescriptor.generateCytoscapeJSON();
     // Merge the default styles with all the other styles.
     if (this.defaultStyle) {

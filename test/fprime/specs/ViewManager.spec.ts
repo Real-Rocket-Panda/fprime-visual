@@ -163,6 +163,8 @@ describe("ViewManager updateViewDescriptor", () => {
     viewManager.updateViewDescriptorFor(viewName, json);
     expect(viewManager.render(viewName)).to.deep.equal({
       needLayout: false,
+      elesHasPosition: ["ins_1", "ins_1_p1", "ins_2", "ins_2_p1"],
+      elesNoPosition: [],
       descriptor: json,
     });
   });

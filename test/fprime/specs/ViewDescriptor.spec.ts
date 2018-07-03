@@ -572,6 +572,9 @@ describe("ViewDescriptor", () => {
     (view as any).graph = graph;
     expect(view.generateCytoscapeJSON()).to.deep.equal({
       needLayout: false,
+      elesHasPosition: ["ins_1", "ins_1_p1", "ins_2", "ins_2_p1", "comp_1",
+        "comp_1_p1", "comp_1_p2"],
+      elesNoPosition: [],
       descriptor: json,
     });
   });
@@ -756,6 +759,8 @@ describe("ViewDescriptor", () => {
     (view as any).graph = graph;
     expect(view.generateCytoscapeJSON()).to.deep.equal({
       needLayout: true,
+      elesHasPosition: ["ins_1_p1", "ins_2"],
+      elesNoPosition: ["ins_1", "ins_2_p1"],
       descriptor: json,
     });
   });
