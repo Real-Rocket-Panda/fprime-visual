@@ -1,5 +1,0 @@
-#!/bin/sh
-
-echo "Mock Compiler."
-echo "Generating..."
-sleep 5

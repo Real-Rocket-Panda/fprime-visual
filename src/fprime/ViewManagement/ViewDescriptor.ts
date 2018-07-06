@@ -1,5 +1,5 @@
 import { IFPPModel } from "../FPPModelManagement/FPPModelManager";
-import { IStyle } from "../StyleManagement/StyleManager";
+import { IStyle } from "../DataImport/StyleConverter";
 
 /**
  * The node types of the nodes in the graph. These are used as the classes in

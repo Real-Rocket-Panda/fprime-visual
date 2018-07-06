@@ -85,20 +85,20 @@ describe("ViewManager build", () => {
 
   it("should print error message when the project not exists", async () => {
     await viewManager.build("invalid_project");
-    expect(viewManager.CompilerOutput.content)
+    expect(viewManager.OutputMessage.compile)
       .to.equal("Error: project path is invalid\n");
   });
 
   it("should print compile message", async () => {
     await viewManager.build(__project);
-    expect(viewManager.CompilerOutput.content).to.equal(
+    expect(viewManager.OutputMessage.compile).to.equal(
       "user specified compiler...\nView list generated...\n\n");
   });
 
   it("should print error message when rebuild a non-exist project",
      async () => {
     await viewManager.rebuild();
-    expect(viewManager.CompilerOutput.content)
+    expect(viewManager.OutputMessage.compile)
       .to.equal("Error: project path is invalid\n");
   });
 });

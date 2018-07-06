@@ -18,7 +18,7 @@ export default {
     /**
      * The output information of the compile process
      */
-    compilerOutput: fprime.viewManager.CompilerOutput,
+    outputMessage: fprime.viewManager.OutputMessage,
   },
 
   /**

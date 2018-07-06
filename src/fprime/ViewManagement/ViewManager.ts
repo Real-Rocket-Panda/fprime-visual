@@ -1,5 +1,5 @@
 import ViewDescriptor, { ICytoscapeJSON, IRenderJSON } from "./ViewDescriptor";
-import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
+import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
 import LayoutGenerator from "./LayoutGenerator";
@@ -42,7 +42,6 @@ export default class ViewManager {
    * and load the default appearance.
    */
   private styleManager: StyleManager = new StyleManager();
-  private defaultStyle?: IStyle[];
 
   /**
    * The model manager where to get the model data of the current project.
@@ -96,14 +95,14 @@ export default class ViewManager {
   /**
    * The output message to show on the output panel.
    */
-  private compilerOutput = { content: "" };
+  private outputMessage = { compile: "", analysis: "" };
 
-  public get CompilerOutput() {
-    return this.compilerOutput;
+  public get OutputMessage() {
+    return this.outputMessage;
   }
 
   public appendOutput(v: string) {
-    this.compilerOutput.content += v + "\n";
+    this.outputMessage.compile += v + "\n";
   }
 
   /**
@@ -132,15 +131,15 @@ export default class ViewManager {
       this.analyzers.selections = analyzers;
 
       // Load the default style from the config
-      this.defaultStyle = this.styleManager.getDefaultStyles(
+      this.styleManager.loadDefaultStyles(
         this.configManager.Config.DefaultStyleFilePath);
 
       // Load the FPP model
       const data = await this.modelManager.loadModel(this.configManager.Config);
-      this.compilerOutput.content = data.output + "\n";
+      this.outputMessage.compile = data.output + "\n";
       this.generateViewList(data.viewlist);
     } catch (err) {
-      this.compilerOutput.content = err + "\n";
+      this.outputMessage.compile = err + "\n";
     }
   }
 
@@ -148,8 +147,6 @@ export default class ViewManager {
    * Rebuild the project with the current path.
    */
   public rebuild() {
-    // Clean up
-    this.cleanup();
     return this.build(this.configManager.ProjectPath);
   }
 
@@ -168,7 +165,7 @@ export default class ViewManager {
       this.cleanup();
     }
     // Load the default style from the config
-    this.defaultStyle = this.styleManager.getDefaultStyles(
+    this.styleManager.loadDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);
   }
 
@@ -274,22 +271,17 @@ export default class ViewManager {
     );
   }
 
-  // /**
-  //  * return the default config for the auto-layout algorithm
-  //  */
-  // public getDefaultAutoLayoutConfig(): { [key: string]: any } {
-  //   return this.layoutGenerator.getDefaultAutoLayoutConfig(
-  //     this.configManager.Config);
-  // }
-
-  // /**
-  //  * return the config for the auto-layout algorithm
-  //  */
-  // public getAutoLayoutConfigByName(name: string): { [key: string]: any } {
-  //   return this.layoutGenerator.getAutoLayoutConfigByName(
-  //     this.configManager.Config, name,
-  //   );
-  // }
+  public async getCurrentAnalysisResult() {
+    try {
+      const re = await this.analyzerManager.getAnalysisResultFor(
+        this.analyzers.selected, this.configManager.Config);
+      this.outputMessage.analysis = re.output + "\n";
+      return re.styles;
+    } catch (e) {
+      this.outputMessage.analysis = "fail to call the analyzer,\n" + e;
+    }
+    return [];
+  }
 
   /**
    * Clean up the memeory
@@ -351,10 +343,8 @@ export default class ViewManager {
   private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): IRenderJSON {
     const json = viewDescriptor.generateCytoscapeJSON();
     // Merge the default styles with all the other styles.
-    if (this.defaultStyle) {
-      json.descriptor.style = this.styleManager.mergeStyle(
-        this.defaultStyle, json.descriptor.style);
-    }
+    json.descriptor.style = this.styleManager.mergeStyle(
+      this.styleManager.DefaultStyle, json.descriptor.style);
     return json;
   }
 

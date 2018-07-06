@@ -39,9 +39,17 @@
 
         <!-- analysis button -->
         <toolbar-selector :option-list="analyzers"></toolbar-selector>
-        <v-btn small icon>
-          <v-icon>insert_chart</v-icon>
-        </v-btn>
+        <v-dialog v-model="analyzing" persistent max-width="40">
+          <v-btn small icon @click="analysis" slot="activator">
+            <v-icon>insert_chart</v-icon>
+          </v-btn>
+          <v-card width="40" height="40" :style="{padding: '4px 4px'}">
+            <v-progress-circular
+              indeterminate
+              color="primary">
+            </v-progress-circular>
+          </v-card>
+        </v-dialog>
 
       </v-toolbar>
       
@@ -90,6 +98,7 @@ export default Vue.extend({
   data() {
     return {
       building: false,
+      analyzing: false,
       layoutAlgorithms: fprime.viewManager.LayoutAlgorithms,
       analyzers: fprime.viewManager.Analyzers,
     };
@@ -170,6 +179,14 @@ export default Vue.extend({
       // Show the output panel
       if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
         panel.showOutput();
+      }
+    },
+    async analysis() {
+      this.analyzing = true;
+      await fprime.viewManager.getCurrentAnalysisResult();
+      this.analyzing = false;
+      if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
+        panel.showAnalysis();
       }
     }
   }

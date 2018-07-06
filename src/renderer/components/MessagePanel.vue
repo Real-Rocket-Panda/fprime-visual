@@ -22,11 +22,12 @@
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Analysis</span>
       </v-tab>
+      <v-tab></v-tab>
       <v-tab-item :key="output">
         <p>{{ compilerOutput }}</p>
       </v-tab-item>
       <v-tab-item :key="analysis">
-        <p>This is the analysis panel</p>
+        <p>{{ analysisOutput }}</p>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -58,7 +59,7 @@ export default Vue.extend({
   data() {
     return {
       state: panel.state,
-      curtab: 1,
+      curtab: 2,
       output: PanelName.Output,
       analysis: PanelName.Analysis,
       panelWidth: 0,
@@ -69,7 +70,10 @@ export default Vue.extend({
       return this.state.show;
     },
     compilerOutput(): string {
-      return this.state.compilerOutput.content;
+      return this.state.outputMessage.compile;
+    },
+    analysisOutput(): string {
+      return this.state.outputMessage.analysis;
     }
   }
 });
