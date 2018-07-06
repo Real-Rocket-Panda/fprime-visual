@@ -124,25 +124,23 @@ export default Vue.extend({
     });
   },
   methods: {
-    openProject() {
+    async openProject() {
       const dirs = remote.dialog.showOpenDialog({
         title: "Open a project",
         properties: ["openDirectory"]
       });
       if (dirs) {
         this.building = true;
-        fprime.viewManager.build(dirs[0]).finally(() => {
-          // Close all the opening views
-          view.CloseAll();
-          this.$router.replace("/");
-          this.showOutputPanel();
-        });
+        await fprime.viewManager.build(dirs[0]);
+        // Close all the opening views
+        view.CloseAll();
+        this.$router.replace("/");
+        this.showOutputPanel();
       }
     },
-    rebuild() {
-      fprime.viewManager.rebuild().finally(() => {
-        this.showOutputPanel();
-      });
+    async rebuild() {
+      await fprime.viewManager.rebuild()
+      this.showOutputPanel();
     },
     refresh() {
       // Force update the current view

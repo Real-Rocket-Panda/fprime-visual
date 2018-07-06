@@ -93,31 +93,29 @@ export default class ViewManager {
    * Build the current FPrime project and get the view list.
    * @param dir The folder path of a project.
    */
-  public build(dir: string) {
-    // Cleanup the views
-    this.cleanup();
-    // Set the project path
-    this.configManager.ProjectPath = dir;
-    // Load the project config.
-    this.configManager.loadConfig();
-    // Initialize the layoutGenerator
-    const layouts = this.layoutGennerator.getAutoLayoutList(
-      this.configManager.Config);
-    this.layoutAlgorithms.selected = layouts.selected;
-    this.layoutAlgorithms.algorithms = layouts.algorithms;
-    // Load the default style from the config
-    this.defaultStyle = this.styleManager.getDefaultStyles(
-      this.configManager.Config.DefaultStyleFilePath);
-    // Load the FPP model
-    return this.modelManager
-      .loadModel(this.configManager.Config)
-      .then((data) => {
-        this.compilerOutput.content = data.output + "\n";
-        this.generateViewList(data.viewlist);
-      })
-      .catch((err) => {
-        this.compilerOutput.content = err + "\n";
-      });
+  public async build(dir: string) {
+    try {
+      // Cleanup the views
+      this.cleanup();
+      // Set the project path
+      this.configManager.ProjectPath = dir;
+      // Load the project config.
+      this.configManager.loadConfig();
+      // Initialize the layoutGenerator
+      const layouts = this.layoutGennerator.getAutoLayoutList(
+        this.configManager.Config);
+      this.layoutAlgorithms.selected = layouts.selected;
+      this.layoutAlgorithms.algorithms = layouts.algorithms;
+      // Load the default style from the config
+      this.defaultStyle = this.styleManager.getDefaultStyles(
+        this.configManager.Config.DefaultStyleFilePath);
+      // Load the FPP model
+      const data = await this.modelManager.loadModel(this.configManager.Config);
+      this.compilerOutput.content = data.output + "\n";
+      this.generateViewList(data.viewlist);
+    } catch (err) {
+      this.compilerOutput.content = err + "\n";
+    }
   }
 
   /**

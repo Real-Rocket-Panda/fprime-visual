@@ -2,7 +2,8 @@
   <div
     class="message-panel"
     :class="{ 'message-panel-active': show }"
-    :style="{ bottom: offset + 'px' }"
+    :style="{ bottom: offset + 'px', width: panelWidth + 'px' }"
+    v-resize="onResize"
   >
     <v-tabs :height="25" v-model="curtab">
       <v-tab
@@ -44,7 +45,15 @@ export default Vue.extend({
     },
     analysisPanel() {
       this.state.curPanel = PanelName.Analysis;
+    },
+    onResize() {
+      this.panelWidth = this.$el.parentElement!.clientWidth;
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.onResize();
+    })
   },
   data() {
     return {
@@ -52,6 +61,7 @@ export default Vue.extend({
       curtab: 1,
       output: PanelName.Output,
       analysis: PanelName.Analysis,
+      panelWidth: 0,
     };
   },
   computed: {
@@ -69,7 +79,6 @@ export default Vue.extend({
 .message-panel {
   display: none;
   height: 250px;
-  width: 100%;
   position: fixed;
   box-shadow: 0px -0.5px 1px #bdbdbd;
   background-color: white;

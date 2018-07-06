@@ -2,16 +2,16 @@
   "Analyzers": [
     {
       "Name": "AcmeRuleChecker",
-      "Path": "acme-checker.jar",
-      "OutputFilePath": "acme_output",
-      "Type": ""
+      "Path": "${System}/acme-checker.jar",
+      "OutputFilePath": "./acme_output/acme_result.css",
+      "Type": "Rule Checker"
     }
   ],
-  "FPPCompilerPath": "fppcompiler",
-  "FPPCompilerParameters": "",
-  "FPPCompilerOutputPath": "fpp_output",
-  "DefaultStyleFilePath": "",
-  "ViewStyleFileFolder": "",
+  "FPPCompilerPath": "${System}/Parser.jar",
+  "FPPCompilerParameters": "${Project} ${Project}/fpp_output",
+  "FPPCompilerOutputPath": "./fpp_output",
+  "DefaultStyleFilePath": "./style.css",
+  "ViewStyleFileFolder": "./styles",
   "AutoLayout": [
     {
       "Name": "cose-bilkent",

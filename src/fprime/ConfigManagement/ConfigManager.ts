@@ -5,6 +5,13 @@ import IConfig from "../Common/Config";
 declare var __static: string;
 
 export default class ConfigManager {
+
+  private readonly needResolve: string[] = [
+    "Analyzers", "Analyzers.Path", "Analyzers.OutputFilePath",
+    "FPPCompilerPath", "FPPCompilerParameters", "FPPCompilerOutputPath",
+    "DefaultStyleFilePath", "ViewStyleFileFolder",
+  ];
+
   /**
    * The path of the current project. All the project related relative
    * paths should be resolved based this path.
@@ -41,7 +48,6 @@ export default class ConfigManager {
   constructor() {
     this.systemConfig = JSON.parse(fs.readFileSync(
       this.systemConfigPath, "utf-8"));
-    this.resolvePath(__static, this.systemConfig);
     // Make a copy of the system config
     this.config = Object.assign({}, this.systemConfig);
   }
@@ -56,39 +62,53 @@ export default class ConfigManager {
     // By default it search config with name config.json
     const dir = path.resolve(this.projectPath, "config.json");
     if (fs.existsSync(dir)) {
-      const pjConfig = (JSON.parse(fs.readFileSync(dir, "utf-8")) as IConfig);
-      // Resolve the path to absolute path
-      this.resolvePath(this.projectPath, pjConfig);
+      const pjConfig = JSON.parse(fs.readFileSync(dir, "utf-8"));
       // Merge the config
-      pjConfig.Analyzers = this.systemConfig.Analyzers
-        .concat(pjConfig.Analyzers ? pjConfig.Analyzers : []);
-      this.config = Object.assign(this.config, pjConfig);
+      Object.keys(pjConfig).forEach((key) => {
+        if (pjConfig[key] instanceof Array) {
+          (this.config as any)[key] = (this.config as any)[key]
+            .concat(pjConfig[key]);
+        } else {
+          (this.config as any)[key] = pjConfig[key];
+        }
+      });
+      // Resolve the path to absolute path
+      this.resolvePath(this.config);
+    } else {
+      throw new Error("project path is invalid");
     }
   }
 
   /**
-   * Resolve the path in the configuration file from the base path.
-   * @param base The base path to resolve.
+   * Resolve the path in the configuration file. It should replace ${System}
+   * by __static path and replace ${Project} by projectPath
    * @param config The configuration json.
    */
-  private resolvePath(base: string, config: IConfig) {
-    if (config.Analyzers) {
-      config.Analyzers.forEach((a) => {
-        a.Path = path.resolve(base, a.Path);
-        a.OutputFilePath = path.resolve(base, a.OutputFilePath);
-      });
+  private resolvePath(obj: any, namespace: string = "") {
+    Object.keys(obj).forEach((key) => {
+      if (this.needResolve.indexOf(namespace + key) === -1) {
+        return;
+      }
+      if (typeof obj[key] === "string" && obj[key]) {
+        obj[key] = this.resolve(obj[key]);
+      } else if (typeof obj[key] === "object") {
+        if (obj[key] instanceof Array) {
+          obj[key].forEach((i: any) => this.resolvePath(i, key + "."));
+        } else {
+          this.resolvePath(obj[key], key + ".");
+        }
+      }
+    });
+  }
+
+  private resolve(p: string): string {
+    if (p.includes("${System}")) {
+      return p.replace(/\$\{System\}/g, path.resolve(__static));
     }
-    if (config.DefaultStyleFilePath) {
-      config.DefaultStyleFilePath = path.resolve(base,
-        config.DefaultStyleFilePath);
+    if (p.includes("${Project}")) {
+      return p.replace(/\$\{Project\}/g, path.resolve(this.projectPath));
     }
-    if (config.FPPCompilerPath) {
-      config.FPPCompilerPath = path.resolve(base, config.FPPCompilerPath);
-    }
-    if (config.FPPCompilerOutputPath) {
-      config.FPPCompilerOutputPath = path.resolve(base,
-        config.FPPCompilerOutputPath);
-    }
+    return path.resolve(this.projectPath, p);
   }
 
 }

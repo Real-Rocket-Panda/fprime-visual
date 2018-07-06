@@ -1,7 +1,6 @@
 import * as child from "node-exec-promise";
 import IConfig from "../Common/Config";
 import CompilerConverter from "./CompilerConverter";
-import { Promise } from "es6-promise";
 import * as path from "path";
 
 declare var __static: string;
@@ -21,35 +20,14 @@ export default class DataImporter {
   private compilerConverter: CompilerConverter = new CompilerConverter();
 
   /**
-   * 
-   * @param config 
+   * Invoke the compiler to get the std output and the representation file.
+   * @param config The project configuration
    */
-  public invokeCompiler(config: IConfig): Promise<ICompilerResult> {
+  public async invokeCompiler(config: IConfig): Promise<ICompilerResult> {
     const cmd = path.resolve(__static, config.FPPCompilerPath);
-    const re = new Promise<{
-      stdout: string;
-      stderr: string;
-    }>((resolve, reject) => {
-      child
-        .exec(cmd + " " + config.FPPCompilerParameters)
-        .then(resolve)
-        .catch(reject);
-    });
-    return re
-      .then((std) => {
-        const output = std.stdout + std.stderr;
-        return this.compilerConverter
-          .convert(config)
-          .then((representation) => {
-            return { output, representation };
-          })
-          .catch((err) => {
-            throw new Error("fail to convert representation file\nCause: "
-              + err);
-          });
-      })
-      .catch((err) => {
-        throw new Error("fail to invoke compiler\nCause: " + err);
-      });
+    const re = await child.exec(cmd + " " + config.FPPCompilerParameters);
+    const output = re.stdout + re.stderr;
+    const representation = await this.compilerConverter.convert(config);
+    return { output, representation };
   }
 }
