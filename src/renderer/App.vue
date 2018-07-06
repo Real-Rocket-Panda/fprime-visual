@@ -149,7 +149,7 @@ export default Vue.extend({
       const viewName = this.$route.params.viewName;
       if (viewName) {
         fprime.viewManager.refresh(viewName);
-        const render = fprime.viewManager.render(viewName)!;
+        const render = fprime.viewManager.render(viewName, true)!;
         CyManager.startUpdate(viewName, render.needLayout, render.descriptor);
         CyManager.endUpdate();
       }

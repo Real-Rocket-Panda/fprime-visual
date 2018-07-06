@@ -84,6 +84,17 @@ export interface ICytoscapeJSON {
 }
 
 /**
+ * The render object return to the render package. Except cytoscape json,
+ * this object provide further information like needLayout.
+ */
+export interface IRenderJSON {
+  needLayout: boolean;
+  descriptor: ICytoscapeJSON;
+  elesHasPosition: string[];
+  elesNoPosition: string[];
+}
+
+/**
  * The definition of the view descriptor.
  */
 export default class ViewDescriptor {
@@ -284,12 +295,11 @@ export default class ViewDescriptor {
    * Convert a view descriptor to the render JSON format. Right now, we use
    * cytoscape as our front-end renderer.
    */
-  public generateCytoscapeJSON(): {
-    needLayout: boolean,
-    descriptor: ICytoscapeJSON,
-  } {
+  public generateCytoscapeJSON(): IRenderJSON {
     const descriptor = this.descriptor;
     const graph = this.graph;
+    const elesHasPosition: string[] = [];
+    const elesNoPosition: string[] = [];
 
     // Copy the style from descriptor to cytoscape style filed
     const styles = Object.keys(descriptor)
@@ -322,11 +332,14 @@ export default class ViewDescriptor {
           } as any;
           const s = descriptor["#" + n.id];
           if (s && s.style.x && s.style.y) {
+            // The element has position information
             i.position = { x: parseFloat(s.style.x), y: parseFloat(s.style.y) };
+            elesHasPosition.push(n.id);
           } else {
             // If any of the node does not have the x/y info, we should set
             // needlayout to true to ask the UI render to layout the diagram.
             needLayout = true;
+            elesNoPosition.push(n.id);
           }
           return i;
         });
@@ -344,6 +357,8 @@ export default class ViewDescriptor {
 
     return {
       needLayout,
+      elesHasPosition,
+      elesNoPosition,
       descriptor: {
         style: styles,
         elements: { nodes, edges },
