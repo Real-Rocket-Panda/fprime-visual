@@ -141,19 +141,19 @@ export class CyUtil {
     const img = this.decideImgNum(edge, dir);
     switch (img) {
       case 1:
-        port.data("img", "\\static\\ports\\up.png");
+        port.data("img", "static/ports/up.png");
         break;
       case 2:
-        port.data("img", "\\static\\ports\\right.png");
+        port.data("img", "static/ports/right.png");
         break;
       case 3:
-        port.data("img", "\\static\\ports\\down.png");
+        port.data("img", "static/ports/down.png");
         break;
       case 4:
-        port.data("img", "\\static\\ports\\left.png");
+        port.data("img", "static/ports/left.png");
         break;
       default:
-        port.data("img", "\\static\\ports\\up.png");
+        port.data("img", "static/ports/up.png");
         break;
     }
   }

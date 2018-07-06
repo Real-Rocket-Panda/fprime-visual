@@ -465,7 +465,7 @@ describe("ViewDescriptor", () => {
             data: {
               id: "ins_1_p1",
               direction: "out",
-              img: "\\static\\ports\\up.png",
+              img: "static/ports/up.png",
               kind: "async",
             },
             classes: NodeType.Port + " fprime-port-async fprime-port-out",
@@ -485,7 +485,7 @@ describe("ViewDescriptor", () => {
             data: {
               id: "ins_2_p1",
               direction: "in",
-              img: "\\static\\ports\\up.png",
+              img: "static/ports/up.png",
               kind: "sync",
             },
             classes: NodeType.Port + " fprime-port-sync fprime-port-in",
@@ -505,7 +505,7 @@ describe("ViewDescriptor", () => {
             data: {
               id: "comp_1_p1",
               direction: "in",
-              img: "\\static\\ports\\up.png",
+              img: "static/ports/up.png",
               kind: "async",
             },
             classes: NodeType.Port + " fprime-port-async fprime-port-in",
@@ -515,7 +515,7 @@ describe("ViewDescriptor", () => {
             data: {
               id: "comp_1_p2",
               direction: "out",
-              img: "\\static\\ports\\up.png",
+              img: "static/ports/up.png",
               kind: "async",
             },
             classes: NodeType.Port + " fprime-port-async fprime-port-out",
@@ -699,7 +699,7 @@ describe("ViewDescriptor", () => {
             data: {
               id: "ins_1_p1",
               direction: "out",
-              img: "\\static\\ports\\up.png",
+              img: "static/ports/up.png",
               kind: "async",
             },
             classes: NodeType.Port + " fprime-port-async fprime-port-out",
@@ -719,7 +719,7 @@ describe("ViewDescriptor", () => {
             data: {
               id: "ins_2_p1",
               direction: "in",
-              img: "\\static\\ports\\up.png",
+              img: "static/ports/up.png",
               kind: "sync",
             },
             classes: NodeType.Port + " fprime-port-sync fprime-port-in",

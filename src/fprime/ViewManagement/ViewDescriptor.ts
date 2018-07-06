@@ -322,7 +322,7 @@ export default class ViewDescriptor {
             data: {
               id: n.id,
               img: (n.type === NodeType.Port) ?
-                "\\static\\ports\\up.png" : undefined,
+                "static/ports/up.png" : undefined,
               kind: (n.type === NodeType.Port) ?
                 n.properties.kind : undefined,
               direction: (n.type === NodeType.Port) ?
