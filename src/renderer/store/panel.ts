@@ -35,7 +35,7 @@ export default {
   },
 
   /**
-   * 
+   * Open the output panel
    */
   showOutput() {
     this.showPanel(PanelName.Output);
@@ -44,7 +44,7 @@ export default {
   },
 
   /**
-   * 
+   * Open the analysis panel
    */
   showAnalysis() {
     this.showPanel(PanelName.Analysis);

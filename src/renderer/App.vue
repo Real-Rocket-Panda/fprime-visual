@@ -29,7 +29,7 @@
 
         <v-divider vertical></v-divider>
         
-        <layout-selector></layout-selector>
+        <toolbar-selector :option-list="layoutAlgorithms"></toolbar-selector>
         <color-picker></color-picker>
         <v-btn small icon @click="refresh">
           <v-icon>refresh</v-icon>
@@ -38,6 +38,7 @@
         <v-divider vertical></v-divider>
 
         <!-- analysis button -->
+        <toolbar-selector :option-list="analyzers"></toolbar-selector>
         <v-btn small icon>
           <v-icon>insert_chart</v-icon>
         </v-btn>
@@ -69,7 +70,7 @@ import ViewTabs from "./components/ViewTabs.vue";
 import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
-import LayoutSelector from "./components/LayoutSelector.vue";
+import ToolbarSelector from "./components/ToolbarSelector.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
@@ -84,10 +85,14 @@ export default Vue.extend({
     MessageFooter,
     MessagePanel,
     ColorPicker,
-    LayoutSelector
+    ToolbarSelector
   },
   data() {
-    return { building: false };
+    return {
+      building: false,
+      layoutAlgorithms: fprime.viewManager.LayoutAlgorithms,
+      analyzers: fprime.viewManager.Analyzers,
+    };
   },
   mounted() {
     let resizing = false;
@@ -178,7 +183,7 @@ export default Vue.extend({
   min-width: 200px;
 }
 
-#view-list-nav > .navigation-drawer__border {
+#view-list-nav > .v-navigation-drawer__border {
   cursor: ew-resize;
   width: 2px;
   background-color: rgba(150, 150, 150, 0.12);

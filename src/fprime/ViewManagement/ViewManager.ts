@@ -2,7 +2,8 @@ import ViewDescriptor, { ICytoscapeJSON, IRenderJSON } from "./ViewDescriptor";
 import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import LayoutGenerator, { IAlgorithmList } from "./LayoutGenerator";
+import LayoutGenerator from "./LayoutGenerator";
+import AnalyzerManager from "../StyleManagement/AnalyzerManager";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -52,15 +53,31 @@ export default class ViewManager {
    * The layout gennerator where to manage the layout algorithm with
    * related Parameters.
    */
-  private layoutGennerator: LayoutGenerator = new LayoutGenerator();
+  private layoutGenerator: LayoutGenerator = new LayoutGenerator();
 
   /**
    * The list of the available auto layout algorithms in the config.
    */
-  private layoutAlgorithms: IAlgorithmList = { selected: "", algorithms: [] };
+  private layoutAlgorithms: { selected: string, selections: string[] } =
+    { selected: "", selections: [] };
 
   public get LayoutAlgorithms() {
     return this.layoutAlgorithms;
+  }
+
+  /**
+   * The analyzer manager to manage all the analyzers and their results.
+   */
+  private analyzerManager: AnalyzerManager = new AnalyzerManager();
+
+  /**
+   * The available model analyzers in the config.
+   */
+  private analyzers: { selected: string, selections: string[] } =
+    { selected: "", selections: [] };
+
+  public get Analyzers() {
+    return this.analyzers;
   }
 
   /**
@@ -101,14 +118,23 @@ export default class ViewManager {
       this.configManager.ProjectPath = dir;
       // Load the project config.
       this.configManager.loadConfig();
+
       // Initialize the layoutGenerator
-      const layouts = this.layoutGennerator.getAutoLayoutList(
+      const layouts = this.layoutGenerator.getAutoLayoutList(
         this.configManager.Config);
       this.layoutAlgorithms.selected = layouts.selected;
-      this.layoutAlgorithms.algorithms = layouts.algorithms;
+      this.layoutAlgorithms.selections = layouts.algorithms;
+
+      // TODO: Load the available model analyzers
+      const analyzers = this.analyzerManager.getAnalyzerList(
+        this.configManager.Config);
+      this.analyzers.selected = analyzers.length > 0 ? analyzers[0] : "";
+      this.analyzers.selections = analyzers;
+
       // Load the default style from the config
       this.defaultStyle = this.styleManager.getDefaultStyles(
         this.configManager.Config.DefaultStyleFilePath);
+
       // Load the FPP model
       const data = await this.modelManager.loadModel(this.configManager.Config);
       this.compilerOutput.content = data.output + "\n";
@@ -243,7 +269,7 @@ export default class ViewManager {
    * Return the current selected layout config
    */
   public getCurrentAutoLayoutConfig(): { [key: string]: any } {
-    return this.layoutGennerator.getAutoLayoutConfigByName(
+    return this.layoutGenerator.getAutoLayoutConfigByName(
       this.configManager.Config, this.layoutAlgorithms.selected,
     );
   }
@@ -252,7 +278,7 @@ export default class ViewManager {
   //  * return the default config for the auto-layout algorithm
   //  */
   // public getDefaultAutoLayoutConfig(): { [key: string]: any } {
-  //   return this.layoutGennerator.getDefaultAutoLayoutConfig(
+  //   return this.layoutGenerator.getDefaultAutoLayoutConfig(
   //     this.configManager.Config);
   // }
 
@@ -260,7 +286,7 @@ export default class ViewManager {
   //  * return the config for the auto-layout algorithm
   //  */
   // public getAutoLayoutConfigByName(name: string): { [key: string]: any } {
-  //   return this.layoutGennerator.getAutoLayoutConfigByName(
+  //   return this.layoutGenerator.getAutoLayoutConfigByName(
   //     this.configManager.Config, name,
   //   );
   // }

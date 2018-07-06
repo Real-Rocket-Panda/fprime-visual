@@ -1,8 +1,8 @@
 <template>
-  <v-flex md2 id="layout-selector">
+  <v-flex sm2 class="fprime-toolbar-selector">
     <v-overflow-btn
-      :items="layouts.algorithms"
-      v-model="layouts.selected"
+      :items="optionList.selections"
+      v-model="optionList.selected"
       hide-details
       hide-selected
       dense
@@ -12,38 +12,37 @@
 
 <script lang="ts">
 import Vue from "vue";
-import fprime from "fprime";
 
 export default Vue.extend({
-  data() {
-    return {
-      layouts: fprime.viewManager.LayoutAlgorithms,
-    };
-  },
+  props: ["optionList"]
 });
 </script>
 
 <style>
 #fprime-header-toolbar .v-select__slot {
   height: 40px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #fprime-header-toolbar label {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #fprime-header-toolbar .v-overflow-btn {
   height: 40px;
 }
 
-#layout-selector input {
+.fprime-toolbar-selector {
+  max-width: 175px !important;
+}
+
+.fprime-toolbar-selector input {
   height: 0;
   margin: 0;
   padding: 0;
 }
 
-#layout-selector .v-select__selection.v-select__selection--comma {
+.fprime-toolbar-selector .v-select__selection.v-select__selection--comma {
   white-space: nowrap;
   overflow: hidden;
 }
