@@ -38,9 +38,12 @@
         <v-divider vertical></v-divider>
 
         <!-- analysis button -->
-        <toolbar-selector :option-list="analyzers"></toolbar-selector>
+        <toolbar-selector
+          :option-list="analyzers"
+          :on-change="loadAnalysisInfo"
+        ></toolbar-selector>
         <v-dialog v-model="analyzing" persistent max-width="40">
-          <v-btn small icon @click="analysis" slot="activator">
+          <v-btn small icon @click="invokeAnalyzer" slot="activator">
             <v-icon>insert_chart</v-icon>
           </v-btn>
           <v-card width="40" height="40" :style="{padding: '4px 4px'}">
@@ -156,8 +159,10 @@ export default Vue.extend({
       await fprime.viewManager.rebuild()
       this.showOutputPanel();
     },
+    /**
+     * Force refresh the current view. All the unsaved changes would be lost.
+     */
     refresh() {
-      // Force update the current view
       const viewName = this.$route.params.viewName;
       if (viewName) {
         fprime.viewManager.refresh(viewName);
@@ -181,13 +186,22 @@ export default Vue.extend({
         panel.showOutput();
       }
     },
-    async analysis() {
+    async invokeAnalyzer() {
       this.analyzing = true;
-      await fprime.viewManager.getCurrentAnalysisResult();
+      await fprime.viewManager.invokeCurrentAnalyzer();
       this.analyzing = false;
       if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
         panel.showAnalysis();
       }
+      this.loadAnalysisInfo();
+    },
+    loadAnalysisInfo() {
+      const viewName = this.$route.params.viewName;
+      if (!viewName) {
+        return;
+      }
+      CyManager.startUpdate(viewName, false, CyManager.getDescriptor());
+      CyManager.endUpdate();
     }
   }
 });

@@ -4,6 +4,7 @@ import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
 import LayoutGenerator from "./LayoutGenerator";
 import AnalyzerManager from "../StyleManagement/AnalyzerManager";
+import { IStyle } from "../DataImport/StyleConverter";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -155,15 +156,11 @@ export default class ViewManager {
    * user changes the style file and want to reload the view without build the
    * entire project again.
    */
-  public refresh(viewName?: string) {
-    if (viewName) {
-      // Delete the in-memory style information, this would cause losing all
-      // the unsaved changes.
-      delete this.viewDescriptors[viewName];
-      delete this.cytoscapeJSONs[viewName];
-    } else {
-      this.cleanup();
-    }
+  public refresh(viewName: string) {
+    // Delete the in-memory style information, this would cause losing all
+    // the unsaved changes.
+    delete this.viewDescriptors[viewName];
+    delete this.cytoscapeJSONs[viewName];
     // Load the default style from the config
     this.styleManager.loadDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);
@@ -271,16 +268,25 @@ export default class ViewManager {
     );
   }
 
-  public async getCurrentAnalysisResult() {
+  /**
+   * Invoke the current selected model analyzer and read its output.
+   */
+  public async invokeCurrentAnalyzer() {
     try {
-      const re = await this.analyzerManager.getAnalysisResultFor(
+      const re = await this.analyzerManager.loadAnalysisInfo(
         this.analyzers.selected, this.configManager.Config);
       this.outputMessage.analysis = re.output + "\n";
-      return re.styles;
     } catch (e) {
       this.outputMessage.analysis = "fail to call the analyzer,\n" + e;
     }
-    return [];
+  }
+
+  /**
+   * Return the analysis info of the current selected mode analyzer.
+   */
+  public getCurrentAnalyzerResult(): IStyle[] {
+    return this.analyzerManager.getAnalysisResultFor(this.analyzers.selected,
+      this.configManager.Config);
   }
 
   /**

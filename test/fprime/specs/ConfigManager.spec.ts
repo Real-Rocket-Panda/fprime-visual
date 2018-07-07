@@ -43,6 +43,14 @@ const resolvedProjectJSON = {
       OutputFilePath: path.resolve(__project, "./acme_output/acme_result.css"),
       Type: "Rule Checker",
     },
+    {
+      Name: "MockAnalyzer",
+      Path: path.resolve(__project, "./mockChecker"),
+      Parameters: "",
+      OutputFilePath: path.resolve(__project,
+        "./mock_analyzer/mock_analysis.css"),
+      Type: "Fake analyzer",
+    },
   ],
   FPPCompilerPath: path.resolve(__project, "fast_compiler"),
   FPPCompilerParameters: `${path.resolve(__project)} ` +

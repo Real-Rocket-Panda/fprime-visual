@@ -6,6 +6,7 @@
       hide-details
       hide-selected
       dense
+      @change="onChangeOrNone"
     ></v-overflow-btn>
   </v-flex>
 </template>
@@ -14,7 +15,14 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  props: ["optionList"]
+  props: ["optionList", "onChange"],
+  methods: {
+    onChangeOrNone() {
+      if (this.onChange) {
+        this.onChange();
+      }
+    }
+  }
 });
 </script>
 

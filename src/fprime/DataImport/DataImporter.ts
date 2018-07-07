@@ -56,4 +56,16 @@ export default class DataImporter {
       fs.readFileSync(options.OutputFilePath, "utf-8"));
     return { output, styles };
   }
+
+  /**
+   * Load the existing analysis results from file in the config.
+   * @param options The analyzer config options
+   */
+  public loadAnalysisResultFromFile(options: any): IStyle[] {
+    if (fs.existsSync(options.OutputFilePath)) {
+      return this.styleConverter.parseStyleFile(
+        fs.readFileSync(options.OutputFilePath, "utf-8"));
+    }
+    return [];
+  }
 }
