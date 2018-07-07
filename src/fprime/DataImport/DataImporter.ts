@@ -7,17 +7,9 @@ import StyleConverter, { IStyle } from "./StyleConverter";
 
 declare var __static: string;
 
-export interface ICompilerResult {
-  output: string;
-  /**
-   * An xml object parsed from the representation xml.
-   */
-  representation: any;
-}
-
-export interface IAnalysisResult {
-  output: string;
-  styles: IStyle[];
+export interface IOutput {
+  appendOutput(v: string): void;
+  appendAnalysisOutput(v: string): void;
 }
 
 export default class DataImporter {
@@ -36,25 +28,38 @@ export default class DataImporter {
    * Invoke the compiler to get the std output and the representation file.
    * @param config The project configuration
    */
-  public async invokeCompiler(config: IConfig): Promise<ICompilerResult> {
-    const cmd = path.resolve(__static, config.FPPCompilerPath);
+  public async invokeCompiler(config: IConfig, output?: IOutput): Promise<any> {
+    let cmd = path.resolve(__static, config.FPPCompilerPath);
+    // The actual compiler is a java program, thus we should use 'java -jar'
+    // For convenience, we use scripts to simulate the behavior of a compiler.
+    if (cmd.endsWith(".jar")) {
+      cmd = "java -jar " + cmd;
+    }
+    // Execute compiler command
     const re = await child.exec(cmd + " " + config.FPPCompilerParameters);
-    const output = re.stdout + re.stderr;
+    if (output) {
+      output.appendOutput(re.stdout + re.stderr);
+      // Covert the output file to xml object
+      output.appendOutput("Covert representation xml...");
+    }
     const representation = await this.compilerConverter.convert(config);
-    return { output, representation };
+    return representation;
   }
 
   /**
    * Invoke the target analyzer and read the analysis result from file.
    * @param options The analyzer config options
    */
-  public async invokeAnalyzer(options: any): Promise<IAnalysisResult> {
+  public async invokeAnalyzer(options: any,
+                              output?: IOutput): Promise<IStyle[]> {
     const cmd = options.Path + " " + options.Parameters;
     const re = await child.exec(cmd);
-    const output = re.stdout + re.stderr;
+    if (output) {
+      output.appendAnalysisOutput(re.stdout + re.stderr);
+    }
     const styles = this.styleConverter.parseStyleFile(
       fs.readFileSync(options.OutputFilePath, "utf-8"));
-    return { output, styles };
+    return styles;
   }
 
   /**

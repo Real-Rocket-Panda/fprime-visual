@@ -92,7 +92,8 @@ describe("ViewManager build", () => {
   it("should print compile message", async () => {
     await viewManager.build(__project);
     expect(viewManager.OutputMessage.compile).to.equal(
-      "user specified compiler...\nView list generated...\n\n");
+      "user specified compiler...\n\nCovert representation xml...\n" +
+      "Generate view list...\n");
   });
 
   it("should print error message when rebuild a non-exist project",

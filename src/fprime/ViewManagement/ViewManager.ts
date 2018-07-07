@@ -106,6 +106,10 @@ export default class ViewManager {
     this.outputMessage.compile += v + "\n";
   }
 
+  public appendAnalysisOutput(v: string) {
+    this.outputMessage.analysis += v + "\n";
+  }
+
   /**
    * Build the current FPrime project and get the view list.
    * @param dir The folder path of a project.
@@ -136,11 +140,11 @@ export default class ViewManager {
         this.configManager.Config.DefaultStyleFilePath);
 
       // Load the FPP model
-      const data = await this.modelManager.loadModel(this.configManager.Config);
-      this.outputMessage.compile = data.output + "\n";
-      this.generateViewList(data.viewlist);
+      const viewlist = await this.modelManager.loadModel(
+        this.configManager.Config, this);
+      this.generateViewList(viewlist);
     } catch (err) {
-      this.outputMessage.compile = err + "\n";
+      this.appendOutput(err);
     }
   }
 
@@ -273,11 +277,10 @@ export default class ViewManager {
    */
   public async invokeCurrentAnalyzer() {
     try {
-      const re = await this.analyzerManager.loadAnalysisInfo(
-        this.analyzers.selected, this.configManager.Config);
-      this.outputMessage.analysis = re.output + "\n";
+      await this.analyzerManager.loadAnalysisInfo(this.analyzers.selected,
+        this.configManager.Config, this);
     } catch (e) {
-      this.outputMessage.analysis = "fail to call the analyzer,\n" + e;
+      this.appendAnalysisOutput("fail to call the analyzer,\n" + e);
     }
   }
 
@@ -298,6 +301,13 @@ export default class ViewManager {
     });
     Object.keys(this.cytoscapeJSONs).forEach((key) => {
       delete this.cytoscapeJSONs[key];
+    });
+    // Clean output messages
+    this.outputMessage.compile = "";
+    this.outputMessage.analysis = "";
+    // Clean view list
+    Object.keys(this.viewList).forEach((key) => {
+      this.viewList[key] = [];
     });
   }
 

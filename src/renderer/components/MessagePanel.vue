@@ -95,7 +95,7 @@ export default Vue.extend({
 
 .message-panel .v-tabs__content {
   transition: none;
-  margin: 8px;
+  padding: 8px;
   white-space: pre-wrap;
 }
 

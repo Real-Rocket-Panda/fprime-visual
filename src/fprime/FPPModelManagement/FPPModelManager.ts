@@ -1,5 +1,5 @@
 import IConfig from "../Common/Config";
-import DataImporter from "../DataImport/DataImporter";
+import DataImporter, { IOutput } from "../DataImport/DataImporter";
 
 /**
  * 
@@ -75,19 +75,16 @@ export default class FPPModelManager {
   /**
    *
    */
-  public async loadModel(config: IConfig): Promise<{
-    output: string;
-    viewlist: { [k: string]: string[] };
-  }> {
+  public async loadModel(
+      config: IConfig, output?: IOutput): Promise<{ [k: string]: string[] }> {
 
     // Reset all the model object lists
     this.reset();
 
     // Invoke the compiler
-    const re = await this.dataImporter.invokeCompiler(config);
+    const data = await this.dataImporter.invokeCompiler(config, output);
 
     // Load the model from xml object and return the view list
-    const data = re.representation;
     if (data == null || data.namespace == null) {
       throw new Error("fail to parse model data, model is null!");
     }
@@ -129,8 +126,10 @@ export default class FPPModelManager {
     });
 
     // Add output information
-    const output = re.output + "View list generated...\n";
-    return { output, viewlist };
+    if (output) {
+      output.appendOutput("Generate view list...");
+    }
+    return viewlist;
   }
 
   public query(viewName: string, viewType: string): any {

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import IConfig from "../Common/Config";
-import DataImporter, { IAnalysisResult } from "../DataImport/DataImporter";
+import DataImporter, { IOutput } from "../DataImport/DataImporter";
 import { IStyle } from "../DataImport/StyleConverter";
 
 export default class AnalyzerManager {
@@ -44,12 +44,11 @@ export default class AnalyzerManager {
    * @param config The project cnofig
    */
   public async loadAnalysisInfo(
-      name: string, config: IConfig): Promise<IAnalysisResult> {
+      name: string, config: IConfig, output: IOutput): Promise<void> {
     const options = config.Analyzers.find((i) => i.Name === name);
     if (options) {
-      const re = await this.dataImporter.invokeAnalyzer(options);
-      this.analysisResults[name] = re.styles;
-      return re;
+      const styles = await this.dataImporter.invokeAnalyzer(options, output);
+      this.analysisResults[name] = styles;
     }
     throw new Error("invalid analyzer name");
   }
