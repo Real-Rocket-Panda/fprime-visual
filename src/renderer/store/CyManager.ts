@@ -98,7 +98,7 @@ class CyManager {
 
     // Destroy tooltip instances
     if (this.tippyIns) {
-      this.tippyIns.forEach((t: any) =>  t.destroy());
+      this.tippyIns.forEach((t: any) => t.destroy());
       this.tippyIns = undefined;
     }
   }
@@ -321,7 +321,8 @@ class CyManager {
         const tippy = new Tippy(ref, { // tippy options:
           html: (() => {
             const content = document.createElement("div");
-            content.innerHTML = "Tippy content";
+            // content.innerHTML = node.data("properties");
+            content.innerHTML = this.constructHtml(node.data("properties"));
             return content;
           })(),
           trigger: "manual", // probably want manual mode
@@ -329,10 +330,21 @@ class CyManager {
         }).tooltips[0];
 
         node.on("mousemove", () => tippy.show());
-        node.on("mouseout", () => tippy.hide());
+        node.on("mouseout position", () => tippy.hide());
+        this.cy!.on("pan zoom", () => tippy.hide());
         return tippy;
       });
-    }
+  }
+
+
+  private constructHtml(data: any): string {
+    let res = "";
+    Object.keys(data).map((key) => {
+      res = res + ("<big><b>" + key + "</b>" + ":" + data[key] + "<br></big>");
+    });
+    return res;
+  }
 }
+
 
 export default new CyManager();
