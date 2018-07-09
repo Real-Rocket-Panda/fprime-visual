@@ -1,4 +1,4 @@
-import * as child from "node-exec-promise";
+import * as child from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import IConfig from "../Common/Config";
@@ -96,9 +96,16 @@ export default class DataImporter {
    */
   private execWithTimeout(cmd: string, timeout: number): Promise<IExecResult> {
     return new Promise<IExecResult>((resolve, reject) => {
-      child.exec(cmd).then(resolve).catch(reject);
+      const p = child.exec(cmd, (err, stdout, stderr) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ stdout, stderr });
+        }
+      });
       // Setup timeout
       setTimeout(() => {
+        p.kill();
         reject(new Error("The program ends with timeout"));
       }, timeout);
     });

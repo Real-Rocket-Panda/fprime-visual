@@ -82,7 +82,6 @@
     "cytoscape-edge-bend-editing": "^1.5.4",
     "jquery": "^3.3.1",
     "konva": "^1.6.3",
-    "node-exec-promise": "^1.0.2",
     "rp-automove": "^1.9.0",
     "rp-cytoscape-node-resize": "^3.1.2",
     "vue": "^2.5.16",
