@@ -3,7 +3,7 @@
     {
       "Name": "AcmeRuleChecker",
       "Path": "${System}/acme-checker.jar",
-      "Parameters": "",
+      "Parameters": "${Project} ${Project}/acme_output",
       "OutputFilePath": "./acme_output/acme_result.css",
       "Type": "Rule Checker"
     }

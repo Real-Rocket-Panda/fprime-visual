@@ -49,8 +49,9 @@ export default class AnalyzerManager {
     if (options) {
       const styles = await this.dataImporter.invokeAnalyzer(options, output);
       this.analysisResults[name] = styles;
+    } else {
+      throw new Error("invalid analyzer name");
     }
-    throw new Error("invalid analyzer name");
   }
 
   /**

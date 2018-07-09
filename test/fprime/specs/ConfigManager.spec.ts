@@ -11,7 +11,7 @@ const configJSON = {
     {
       Name: "AcmeRuleChecker",
       Path: "${System}/acme-checker.jar",
-      Parameters: "",
+      Parameters: "${Project} ${Project}/acme_output",
       OutputFilePath: "./acme_output/acme_result.css",
       Type: "Rule Checker",
     },
@@ -39,7 +39,8 @@ const resolvedProjectJSON = {
     {
       Name: "AcmeRuleChecker",
       Path: path.resolve(__static, "acme-checker.jar"),
-      Parameters: "",
+      Parameters: `${path.resolve(__project)} ` +
+      `${path.resolve(__project, "acme_output")}`,
       OutputFilePath: path.resolve(__project, "./acme_output/acme_result.css"),
       Type: "Rule Checker",
     },

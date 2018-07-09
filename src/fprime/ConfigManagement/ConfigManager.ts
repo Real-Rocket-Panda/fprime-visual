@@ -8,6 +8,7 @@ export default class ConfigManager {
 
   private readonly needResolve: string[] = [
     "Analyzers", "Analyzers.Path", "Analyzers.OutputFilePath",
+    "Analyzers.Parameters",
     "FPPCompilerPath", "FPPCompilerParameters", "FPPCompilerOutputPath",
     "DefaultStyleFilePath", "ViewStyleFileFolder",
   ];
@@ -73,7 +74,7 @@ export default class ConfigManager {
         }
       });
       // Resolve the path to absolute path
-      this.resolvePath(this.config);
+      this.config = this.resolvePath(this.config);
     } else {
       throw new Error("project path is invalid");
     }
@@ -85,20 +86,25 @@ export default class ConfigManager {
    * @param config The configuration json.
    */
   private resolvePath(obj: any, namespace: string = "") {
+    const copy: any = {};
     Object.keys(obj).forEach((key) => {
       if (this.needResolve.indexOf(namespace + key) === -1) {
+        copy[key] = obj[key];
         return;
       }
       if (typeof obj[key] === "string" && obj[key]) {
-        obj[key] = this.resolve(obj[key]);
+        copy[key] = this.resolve(obj[key]);
       } else if (typeof obj[key] === "object") {
         if (obj[key] instanceof Array) {
-          obj[key].forEach((i: any) => this.resolvePath(i, key + "."));
+          copy[key] = obj[key].map((i: any) => this.resolvePath(i, key + "."));
         } else {
-          this.resolvePath(obj[key], key + ".");
+          copy[key] = this.resolvePath(obj[key], key + ".");
         }
+      } else {
+        copy[key] = obj[key];
       }
     });
+    return copy;
   }
 
   private resolve(p: string): string {

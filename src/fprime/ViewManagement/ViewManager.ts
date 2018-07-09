@@ -132,6 +132,8 @@ export default class ViewManager {
       // TODO: Load the available model analyzers
       const analyzers = this.analyzerManager.getAnalyzerList(
         this.configManager.Config);
+      // Push a fake analyzer to allow user disable the analysis info.
+      analyzers.push("Disable");
       this.analyzers.selected = analyzers.length > 0 ? analyzers[0] : "";
       this.analyzers.selections = analyzers;
 
@@ -288,6 +290,9 @@ export default class ViewManager {
    * Return the analysis info of the current selected mode analyzer.
    */
   public getCurrentAnalyzerResult(): IStyle[] {
+    if (this.analyzers.selected === "Disable") {
+      return [];
+    }
     return this.analyzerManager.getAnalysisResultFor(this.analyzers.selected,
       this.configManager.Config);
   }

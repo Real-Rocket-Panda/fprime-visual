@@ -12,6 +12,11 @@ export interface IOutput {
   appendAnalysisOutput(v: string): void;
 }
 
+interface IExecResult {
+  stdout: string;
+  stderr: string;
+}
+
 export default class DataImporter {
   /**
    * The compiler converter that converts the representation file to xml object.
@@ -25,6 +30,11 @@ export default class DataImporter {
   private styleConverter: StyleConverter = new StyleConverter();
 
   /**
+   * The default timeout.
+   */
+  private timeout: number = 5000;
+
+  /**
    * Invoke the compiler to get the std output and the representation file.
    * @param config The project configuration
    */
@@ -35,10 +45,11 @@ export default class DataImporter {
     if (cmd.endsWith(".jar")) {
       cmd = "java -jar " + cmd;
     }
+    cmd = cmd + " " + config.FPPCompilerParameters;
     // Execute compiler command
-    const re = await child.exec(cmd + " " + config.FPPCompilerParameters);
+    const re = await this.execWithTimeout(cmd, this.timeout);
     if (output) {
-      output.appendOutput(re.stdout + re.stderr);
+      output.appendOutput("\n" + re.stdout + re.stderr);
       // Covert the output file to xml object
       output.appendOutput("Covert representation xml...");
     }
@@ -52,10 +63,14 @@ export default class DataImporter {
    */
   public async invokeAnalyzer(options: any,
                               output?: IOutput): Promise<IStyle[]> {
-    const cmd = options.Path + " " + options.Parameters;
-    const re = await child.exec(cmd);
+    let cmd = options.Path + " " + options.Parameters;
+    // If the model analyzer is a java program, use 'java -jar'
+    if (options.Path.endsWith(".jar")) {
+      cmd = "java -jar " + cmd;
+    }
+    const re = await this.execWithTimeout(cmd, this.timeout);
     if (output) {
-      output.appendAnalysisOutput(re.stdout + re.stderr);
+      output.appendAnalysisOutput("\n" + re.stdout + re.stderr);
     }
     const styles = this.styleConverter.parseStyleFile(
       fs.readFileSync(options.OutputFilePath, "utf-8"));
@@ -72,5 +87,20 @@ export default class DataImporter {
         fs.readFileSync(options.OutputFilePath, "utf-8"));
     }
     return [];
+  }
+
+  /**
+   * Execute a command line command with timeout
+   * @param cmd The command to execute
+   * @param timeout The timeout in milliseconds.
+   */
+  private execWithTimeout(cmd: string, timeout: number): Promise<IExecResult> {
+    return new Promise<IExecResult>((resolve, reject) => {
+      child.exec(cmd).then(resolve).catch(reject);
+      // Setup timeout
+      setTimeout(() => {
+        reject(new Error("The program ends with timeout"));
+      }, timeout);
+    });
   }
 }

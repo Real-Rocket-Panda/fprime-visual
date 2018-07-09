@@ -92,7 +92,7 @@ describe("ViewManager build", () => {
   it("should print compile message", async () => {
     await viewManager.build(__project);
     expect(viewManager.OutputMessage.compile).to.equal(
-      "user specified compiler...\n\nCovert representation xml...\n" +
+      "\nuser specified compiler...\n\nCovert representation xml...\n" +
       "Generate view list...\n");
   });
 
