@@ -149,15 +149,22 @@ export default Vue.extend({
       if (dirs) {
         this.building = true;
         await fprime.viewManager.build(dirs[0]);
-        // Close all the opening views
-        view.CloseAll();
-        this.$router.replace("/");
-        this.showOutputPanel();
+        // Force the reset lines to be asynchronous.
+        setTimeout(() => {
+          // Close all the opening views
+          view.CloseAll();
+          this.$router.replace("/");
+          this.showOutputPanel();
+        }, 0);
+        
       }
     },
     async rebuild() {
-      await fprime.viewManager.rebuild()
-      this.showOutputPanel();
+      await fprime.viewManager.rebuild();
+      // Force the reset lines to be asynchronous.
+      setTimeout(() => {
+        this.showOutputPanel();  
+      }, 0);
     },
     /**
      * Force refresh the current view. All the unsaved changes would be lost.
@@ -189,11 +196,14 @@ export default Vue.extend({
     async invokeAnalyzer() {
       this.analyzing = true;
       await fprime.viewManager.invokeCurrentAnalyzer();
-      this.analyzing = false;
-      if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
-        panel.showAnalysis();
-      }
-      this.loadAnalysisInfo();
+      // Force the reset lines to be asynchronous.
+      setTimeout(() => {
+        this.analyzing = false;
+        if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
+          panel.showAnalysis();
+        }
+        this.loadAnalysisInfo();
+      }, 0);
     },
     loadAnalysisInfo() {
       const viewName = this.$route.params.viewName;
