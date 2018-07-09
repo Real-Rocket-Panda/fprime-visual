@@ -1,6 +1,5 @@
 import IConfig from "../Common/Config";
-import DataImporter from "../DataImport/DataImporter";
-import { Promise } from "es6-promise";
+import DataImporter, { IOutput } from "../DataImport/DataImporter";
 
 /**
  * 
@@ -76,64 +75,61 @@ export default class FPPModelManager {
   /**
    *
    */
-  public loadModel(config: IConfig): Promise<{
-    output: string;
-    viewlist: { [k: string]: string[] };
-  }> {
+  public async loadModel(
+      config: IConfig, output?: IOutput): Promise<{ [k: string]: string[] }> {
 
     // Reset all the model object lists
     this.reset();
 
     // Invoke the compiler
-    const compilerResult = this.dataImporter.invokeCompiler(config);
+    const data = await this.dataImporter.invokeCompiler(config, output);
 
-    return compilerResult.then((re) => {
-      // Load the model from xml object and return the view list
-      const data = re.representation;
-      if (data == null || data.namespace == null) {
-        throw new Error("fail to parse model data, model is null!");
-      }
-      // Load the model data to FPP model manager
-      if (!data.namespace.system || data.namespace.system.length !== 1) {
-        throw new Error(
-          "fail to parse model data, the number of system section is invalid",
-        );
-      }
+    // Load the model from xml object and return the view list
+    if (data == null || data.namespace == null) {
+      throw new Error("fail to parse model data, model is null!");
+    }
+    // Load the model data to FPP model manager
+    if (!data.namespace.system || data.namespace.system.length !== 1) {
+      throw new Error(
+        "fail to parse model data, the number of system section is invalid",
+      );
+    }
 
-      this.components = this.components.concat(this.generateComponents(
-        data.namespace.component,
-      ));
+    this.components = this.components.concat(this.generateComponents(
+      data.namespace.component,
+    ));
 
-      this.instances = this.instances.concat(this.generateInstances(
-        data.namespace.system[0].instance,
-      ));
+    this.instances = this.instances.concat(this.generateInstances(
+      data.namespace.system[0].instance,
+    ));
 
-      this.topologies = this.topologies.concat(this.generateTopologies(
-        data.namespace.system[0].topology,
-      ));
+    this.topologies = this.topologies.concat(this.generateTopologies(
+      data.namespace.system[0].topology,
+    ));
 
-      // Return the view list of the model
-      const viewlist: { [k: string]: string[] } = {
-        topologies: [],
-        instances: [],
-        components: [],
-      };
-      this.topologies.forEach((e: IFPPTopology) => {
-        viewlist.topologies.push(e.name);
-      });
-
-      this.instances.forEach((e: IFPPInstance) => {
-        viewlist.instances.push(e.id);
-      });
-
-      this.components.forEach((e: IFPPComponent) => {
-        viewlist.components.push(e.name);
-      });
-
-      // Add output information
-      const output = re.output + "View list generated...\n";
-      return { output, viewlist };
+    // Return the view list of the model
+    const viewlist: { [k: string]: string[] } = {
+      topologies: [],
+      instances: [],
+      components: [],
+    };
+    this.topologies.forEach((e: IFPPTopology) => {
+      viewlist.topologies.push(e.name);
     });
+
+    this.instances.forEach((e: IFPPInstance) => {
+      viewlist.instances.push(e.id);
+    });
+
+    this.components.forEach((e: IFPPComponent) => {
+      viewlist.components.push(e.name);
+    });
+
+    // Add output information
+    if (output) {
+      output.appendOutput("Generate view list...");
+    }
+    return viewlist;
   }
 
   public query(viewName: string, viewType: string): any {

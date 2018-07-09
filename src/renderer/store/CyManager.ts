@@ -116,6 +116,7 @@ class CyManager {
     this.container!.style.visibility = "hidden";
     // Cleanup the system
     this.cleanup();
+    this.cy!.remove(this.cy!.elements());
     // Dump the new config data to cytoscape.
     this.cy!.json(config);
     // Resize the view port to get correct pan and zoom.
@@ -128,6 +129,7 @@ class CyManager {
           stop: () => {
             this.stickPort();
             this.movebackAllPort();
+            this.appendAnalysisStyle();
             this.addTooltips();
             // Show the viewport again
             this.container!.style.visibility = "visible";
@@ -149,6 +151,7 @@ class CyManager {
       } else {
         this.stickPort();
         this.movebackAllPort();
+        this.appendAnalysisStyle();
         this.addTooltips();
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
@@ -260,6 +263,18 @@ class CyManager {
         // Adjust port image after change port relative loc.
         this.cyutil!.adjustCompsAllPortImg(node, ports);
       });
+  }
+
+  /**
+   * Append the analysis style information to the elements. This should write
+   * to the node instance directly without changing the overall style. In other
+   * words, analysis style information should not be saved to view style.
+   */
+  public appendAnalysisStyle() {
+    const styles = fprime.viewManager.getCurrentAnalyzerResult();
+    styles.forEach((s) => {
+      this.cy!.$(s.selector).style(s.style);
+    });
   }
 
   private movebackAllPort(): void {

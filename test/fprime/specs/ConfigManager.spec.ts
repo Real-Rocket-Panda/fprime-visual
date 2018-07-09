@@ -10,16 +10,17 @@ const configJSON = {
   Analyzers: [
     {
       Name: "AcmeRuleChecker",
-      Path: path.resolve(__static, "acme-checker.jar"),
-      OutputFilePath: path.resolve(__static, "acme_output"),
-      Type: "",
+      Path: "${System}/acme-checker.jar",
+      Parameters: "${Project} ${Project}/acme_output",
+      OutputFilePath: "./acme_output/acme_result.css",
+      Type: "Rule Checker",
     },
   ],
-  FPPCompilerPath: path.resolve(__static, "fppcompiler"),
-  FPPCompilerParameters: "",
-  FPPCompilerOutputPath: path.resolve(__static, "fpp_output"),
-  DefaultStyleFilePath: "",
-  ViewStyleFileFolder: "",
+  FPPCompilerPath: "${System}/Parser.jar",
+  FPPCompilerParameters: "${Project} ${Project}/fpp_output",
+  FPPCompilerOutputPath: "./fpp_output",
+  DefaultStyleFilePath: "./style.css",
+  ViewStyleFileFolder: "./styles",
   AutoLayout: [
     {
       Name: "cose-bilkent",
@@ -33,20 +34,31 @@ const configJSON = {
   ],
 };
 
-const projectJSON = {
+const resolvedProjectJSON = {
   Analyzers: [
     {
       Name: "AcmeRuleChecker",
       Path: path.resolve(__static, "acme-checker.jar"),
-      OutputFilePath: path.resolve(__static, "acme_output"),
-      Type: "",
+      Parameters: `${path.resolve(__project)} ` +
+      `${path.resolve(__project, "acme_output")}`,
+      OutputFilePath: path.resolve(__project, "./acme_output/acme_result.css"),
+      Type: "Rule Checker",
+    },
+    {
+      Name: "MockAnalyzer",
+      Path: path.resolve(__project, "./mockChecker"),
+      Parameters: "",
+      OutputFilePath: path.resolve(__project,
+        "./mock_analyzer/mock_analysis.css"),
+      Type: "Fake analyzer",
     },
   ],
   FPPCompilerPath: path.resolve(__project, "fast_compiler"),
-  FPPCompilerParameters: "",
+  FPPCompilerParameters: `${path.resolve(__project)} ` +
+    `${path.resolve(__project, "fpp_output")}`,
   FPPCompilerOutputPath: path.resolve(__project, "model.xml"),
   DefaultStyleFilePath: path.resolve(__project, "mystyle.css"),
-  ViewStyleFileFolder: "",
+  ViewStyleFileFolder: path.resolve(__project, "styles"),
   AutoLayout: [
     {
       Name: "cose-bilkent",
@@ -67,24 +79,24 @@ describe("Config manager", () => {
     configManager = new ConfigManager();
   });
 
-  it("should return system config after initialized", () => {
+  it("should return unresovled system config after initialized", () => {
     expect(configManager.Config).to.deep.equal(configJSON);
   });
 
-  it("should return system config if the project path is not set", () => {
-    configManager.loadConfig();
-    expect(configManager.Config).to.deep.equal(configJSON);
+  it("should throw error if the project path is not set", () => {
+    expect(() => configManager.loadConfig())
+      .to.throw("project path is invalid");
   });
 
-  it("should return system config if the project config doesn't exist", () => {
+  it("should throw error if the project config doesn't exist", () => {
     configManager.ProjectPath = "./invalid/path";
-    configManager.loadConfig();
-    expect(configManager.Config).to.deep.equal(configJSON);
+    expect(() => configManager.loadConfig())
+      .to.throw("project path is invalid");
   });
 
   it("should return project config merged from system config", () => {
     configManager.ProjectPath = __project;
     configManager.loadConfig();
-    expect(configManager.Config).to.deep.equal(projectJSON);
+    expect(configManager.Config).to.deep.equal(resolvedProjectJSON);
   });
 });

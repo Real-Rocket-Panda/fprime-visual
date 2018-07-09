@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import * as fs from "fs";
-import * as path from "path";
 import ViewManager from "fprime/ViewManagement/ViewManager";
 import { ICytoscapeJSON } from "fprime/ViewManagement/ViewDescriptor";
 import { NodeType, EdgeType } from "fprime/ViewManagement/ViewDescriptor";
@@ -86,31 +85,22 @@ describe("ViewManager build", () => {
 
   it("should print error message when the project not exists", async () => {
     await viewManager.build("invalid_project");
-    expect(viewManager.CompilerOutput.content).to.equal(
-      "Error: fail to invoke compiler\n" +
-      "Cause: Error: fail to convert representation file\n" +
-      "Cause: Error: fail to read the representation file\n" +
-      "Cause: Error: ENOENT: no such file or directory, open '" +
-      path.resolve("./", "test/static/fpp_output") +
-      "'\n");
+    expect(viewManager.OutputMessage.compile)
+      .to.equal("Error: project path is invalid\n");
   });
 
   it("should print compile message", async () => {
     await viewManager.build(__project);
-    expect(viewManager.CompilerOutput.content).to.equal(
-      "user specified compiler...\nView list generated...\n\n");
+    expect(viewManager.OutputMessage.compile).to.equal(
+      "\nuser specified compiler...\n\nCovert representation xml...\n" +
+      "Generate view list...\n");
   });
 
   it("should print error message when rebuild a non-exist project",
      async () => {
     await viewManager.rebuild();
-    expect(viewManager.CompilerOutput.content).to.equal(
-      "Error: fail to invoke compiler\n" +
-      "Cause: Error: fail to convert representation file\n" +
-      "Cause: Error: fail to read the representation file\n" +
-      "Cause: Error: ENOENT: no such file or directory, open '" +
-      path.resolve("./", "test/static/fpp_output") +
-      "'\n");
+    expect(viewManager.OutputMessage.compile)
+      .to.equal("Error: project path is invalid\n");
   });
 });
 

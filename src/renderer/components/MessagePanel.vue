@@ -2,7 +2,8 @@
   <div
     class="message-panel"
     :class="{ 'message-panel-active': show }"
-    :style="{ bottom: offset + 'px' }"
+    :style="{ bottom: offset + 'px', width: panelWidth + 'px' }"
+    v-resize="onResize"
   >
     <v-tabs :height="25" v-model="curtab">
       <v-tab
@@ -21,11 +22,12 @@
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Analysis</span>
       </v-tab>
+      <v-tab></v-tab>
       <v-tab-item :key="output">
         <p>{{ compilerOutput }}</p>
       </v-tab-item>
       <v-tab-item :key="analysis">
-        <p>This is the analysis panel</p>
+        <p>{{ analysisOutput }}</p>
       </v-tab-item>
     </v-tabs>
   </div>
@@ -44,14 +46,23 @@ export default Vue.extend({
     },
     analysisPanel() {
       this.state.curPanel = PanelName.Analysis;
+    },
+    onResize() {
+      this.panelWidth = this.$el.parentElement!.clientWidth;
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.onResize();
+    })
   },
   data() {
     return {
       state: panel.state,
-      curtab: 1,
+      curtab: 2,
       output: PanelName.Output,
       analysis: PanelName.Analysis,
+      panelWidth: 0,
     };
   },
   computed: {
@@ -59,7 +70,10 @@ export default Vue.extend({
       return this.state.show;
     },
     compilerOutput(): string {
-      return this.state.compilerOutput.content;
+      return this.state.outputMessage.compile;
+    },
+    analysisOutput(): string {
+      return this.state.outputMessage.analysis;
     }
   }
 });
@@ -69,7 +83,6 @@ export default Vue.extend({
 .message-panel {
   display: none;
   height: 250px;
-  width: 100%;
   position: fixed;
   box-shadow: 0px -0.5px 1px #bdbdbd;
   background-color: white;
@@ -82,7 +95,7 @@ export default Vue.extend({
 
 .message-panel .v-tabs__content {
   transition: none;
-  margin: 8px;
+  padding: 8px;
   white-space: pre-wrap;
 }
 

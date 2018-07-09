@@ -5,7 +5,7 @@ import ViewDescriptor, { IEdge } from "fprime/ViewManagement/ViewDescriptor";
 import { IGraph, INode } from "fprime/ViewManagement/ViewDescriptor";
 import { NodeType, EdgeType } from "fprime/ViewManagement/ViewDescriptor";
 import { ICytoscapeJSON } from "fprime/ViewManagement/ViewDescriptor";
-import { IStyle } from "fprime/StyleManagement/StyleManager";
+import { IStyle } from "fprime/DataImport/StyleConverter";
 
 const ins1: IFPPInstance = {
   id: "ins_1",

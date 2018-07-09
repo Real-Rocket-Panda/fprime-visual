@@ -29,7 +29,7 @@
 
         <v-divider vertical></v-divider>
         
-        <layout-selector></layout-selector>
+        <toolbar-selector :option-list="layoutAlgorithms"></toolbar-selector>
         <color-picker></color-picker>
         <v-btn small icon @click="refresh">
           <v-icon>refresh</v-icon>
@@ -38,9 +38,21 @@
         <v-divider vertical></v-divider>
 
         <!-- analysis button -->
-        <v-btn small icon>
-          <v-icon>insert_chart</v-icon>
-        </v-btn>
+        <toolbar-selector
+          :option-list="analyzers"
+          :on-change="loadAnalysisInfo"
+        ></toolbar-selector>
+        <v-dialog v-model="analyzing" persistent max-width="40">
+          <v-btn small icon @click="invokeAnalyzer" slot="activator">
+            <v-icon>insert_chart</v-icon>
+          </v-btn>
+          <v-card width="40" height="40" :style="{padding: '4px 4px'}">
+            <v-progress-circular
+              indeterminate
+              color="primary">
+            </v-progress-circular>
+          </v-card>
+        </v-dialog>
 
       </v-toolbar>
       
@@ -69,7 +81,7 @@ import ViewTabs from "./components/ViewTabs.vue";
 import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
-import LayoutSelector from "./components/LayoutSelector.vue";
+import ToolbarSelector from "./components/ToolbarSelector.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
@@ -84,10 +96,15 @@ export default Vue.extend({
     MessageFooter,
     MessagePanel,
     ColorPicker,
-    LayoutSelector
+    ToolbarSelector
   },
   data() {
-    return { building: false };
+    return {
+      building: false,
+      analyzing: false,
+      layoutAlgorithms: fprime.viewManager.LayoutAlgorithms,
+      analyzers: fprime.viewManager.Analyzers,
+    };
   },
   mounted() {
     let resizing = false;
@@ -124,28 +141,35 @@ export default Vue.extend({
     });
   },
   methods: {
-    openProject() {
+    async openProject() {
       const dirs = remote.dialog.showOpenDialog({
         title: "Open a project",
         properties: ["openDirectory"]
       });
       if (dirs) {
         this.building = true;
-        fprime.viewManager.build(dirs[0]).finally(() => {
+        await fprime.viewManager.build(dirs[0]);
+        // Force the reset lines to be asynchronous.
+        setTimeout(() => {
           // Close all the opening views
           view.CloseAll();
           this.$router.replace("/");
           this.showOutputPanel();
-        });
+        }, 0);
+        
       }
     },
-    rebuild() {
-      fprime.viewManager.rebuild().finally(() => {
-        this.showOutputPanel();
-      });
+    async rebuild() {
+      await fprime.viewManager.rebuild();
+      // Force the reset lines to be asynchronous.
+      setTimeout(() => {
+        this.showOutputPanel();  
+      }, 0);
     },
+    /**
+     * Force refresh the current view. All the unsaved changes would be lost.
+     */
     refresh() {
-      // Force update the current view
       const viewName = this.$route.params.viewName;
       if (viewName) {
         fprime.viewManager.refresh(viewName);
@@ -168,6 +192,26 @@ export default Vue.extend({
       if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
         panel.showOutput();
       }
+    },
+    async invokeAnalyzer() {
+      this.analyzing = true;
+      await fprime.viewManager.invokeCurrentAnalyzer();
+      // Force the reset lines to be asynchronous.
+      setTimeout(() => {
+        this.analyzing = false;
+        if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
+          panel.showAnalysis();
+        }
+        this.loadAnalysisInfo();
+      }, 0);
+    },
+    loadAnalysisInfo() {
+      const viewName = this.$route.params.viewName;
+      if (!viewName) {
+        return;
+      }
+      CyManager.startUpdate(viewName, false, CyManager.getDescriptor());
+      CyManager.endUpdate();
     }
   }
 });
@@ -180,7 +224,7 @@ export default Vue.extend({
   min-width: 200px;
 }
 
-#view-list-nav > .navigation-drawer__border {
+#view-list-nav > .v-navigation-drawer__border {
   cursor: ew-resize;
   width: 2px;
   background-color: rgba(150, 150, 150, 0.12);

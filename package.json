@@ -83,7 +83,6 @@
     "cytoscape-popper": "^1.0.1",
     "jquery": "^3.3.1",
     "konva": "^1.6.3",
-    "node-exec-promise": "^1.0.2",
     "rp-automove": "^1.9.0",
     "rp-cytoscape-node-resize": "^3.1.2",
     "tippy.js": "^2.5.3",
