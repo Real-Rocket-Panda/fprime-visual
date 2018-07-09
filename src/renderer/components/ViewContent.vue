@@ -26,7 +26,7 @@ export default Vue.extend({
       // This part need refinement.
       this.parentHeight = window.innerHeight - 40 - 24 - this.offset;
     },
-    updateCytoscapre() {
+    updateCytoscape() {
       const render = fprime.viewManager.render(this.viewName)!;
       CyManager.startUpdate(this.viewName, render.needLayout,
         render.descriptor);
@@ -35,7 +35,7 @@ export default Vue.extend({
   mounted() {
     this.viewName = this.$route.params.viewName;
     CyManager.init(document.getElementById("cytoscape")!);
-    this.updateCytoscapre();
+    this.updateCytoscape();
   },
   beforeDestroy() {
     // Save the current cytoscape json
@@ -53,7 +53,7 @@ export default Vue.extend({
         CyManager.getDescriptor(),
       );
       this.viewName = to.params.viewName;
-      this.updateCytoscapre();
+      this.updateCytoscape();
     }
   }
 });

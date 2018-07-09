@@ -7,11 +7,14 @@ import jquery from "jquery";
 import automove from "rp-automove";
 import { CyUtil } from "@/store/CyUtil";
 import fprime from "fprime";
+import Tippy from "tippy.js";
+import popper from "cytoscape-popper";
 
 cytoscape.use(coseBilkent);
 cytoscape.use(automove);
 nodeResize(cytoscape, jquery, konva);
 cytoscape.use(dagre);
+cytoscape.use(popper);
 
 const boundingBoxOpt = {
   includeOverlays: false,
@@ -53,6 +56,12 @@ class CyManager {
   private automoveRule?: any[];
 
   /**
+   * The tooltip instances.
+   * Clean up the the tooltip instances to release memory.
+   */
+  private tippyIns?: any[];
+
+  /**
    * A function of all the operation of rendering a new view.
    */
   private batch: any;
@@ -86,6 +95,12 @@ class CyManager {
       this.automoveRule!.forEach((r) => r.destroy());
       this.automoveRule = undefined;
     }
+
+    // Destroy tooltip instances
+    if (this.tippyIns) {
+      this.tippyIns.forEach((t: any) => t.destroy());
+      this.tippyIns = undefined;
+    }
   }
 
   /**
@@ -113,6 +128,7 @@ class CyManager {
           stop: () => {
             this.stickPort();
             this.movebackAllPort();
+            this.addTooltips();
             // Show the viewport again
             this.container!.style.visibility = "visible";
           },
@@ -133,6 +149,7 @@ class CyManager {
       } else {
         this.stickPort();
         this.movebackAllPort();
+        this.addTooltips();
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
         // Show the viewport again
@@ -291,6 +308,43 @@ class CyManager {
       });
     });
   }
+
+  /**
+   *  Bind tooltip with each of the node instances.
+   *  Including both ports and components.
+   *  Show when mouse move onto the node, hide when move out.
+   */
+  private addTooltips(): void {
+    this.tippyIns =
+      this.cy!.nodes().map((node, i, nodes) => {
+        const ref = (node as any).popperRef();
+        const tippy = new Tippy(ref, { // tippy options:
+          html: (() => {
+            const content = document.createElement("div");
+            // content.innerHTML = node.data("properties");
+            content.innerHTML = this.constructHtml(node.data("properties"));
+            return content;
+          })(),
+          trigger: "manual", // probably want manual mode
+          sticky: false,
+        }).tooltips[0];
+
+        node.on("mousemove", () => tippy.show());
+        node.on("mouseout position", () => tippy.hide());
+        this.cy!.on("pan zoom", () => tippy.hide());
+        return tippy;
+      });
+  }
+
+
+  private constructHtml(data: any): string {
+    let res = "";
+    Object.keys(data).map((key) => {
+      res = res + ("<big><b>" + key + "</b>" + ":" + data[key] + "<br></big>");
+    });
+    return res;
+  }
 }
+
 
 export default new CyManager();

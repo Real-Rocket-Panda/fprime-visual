@@ -327,6 +327,7 @@ export default class ViewDescriptor {
                 n.properties.kind : undefined,
               direction: (n.type === NodeType.Port) ?
                 n.properties.direction : undefined,
+              properties: n.properties,
             },
             classes: this.generateNodeClasses(n),
           } as any;
