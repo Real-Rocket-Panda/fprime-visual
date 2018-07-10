@@ -1,4 +1,4 @@
-import cytoscape, { EventObject } from "cytoscape";
+import cytoscape, { EventObject, BoundingBox12, BoundingBoxWH } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -9,6 +9,7 @@ import { CyUtil } from "@/store/CyUtil";
 import fprime from "fprime";
 import Tippy from "tippy.js";
 import popper from "cytoscape-popper";
+import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
 
 cytoscape.use(coseBilkent);
 cytoscape.use(automove);
@@ -110,7 +111,7 @@ class CyManager {
    * @param needLayout Whether the view needs layout
    * @param config The config for cytoscape.
    */
-  public startUpdate(viewName: string, needLayout: boolean, config: any) {
+  public startUpdate(viewName: string, render: IRenderJSON) {
     this.viewName = viewName;
     // Hide the viewport for usability concern
     this.container!.style.visibility = "hidden";
@@ -118,19 +119,16 @@ class CyManager {
     this.cleanup();
     this.cy!.remove(this.cy!.elements());
     // Dump the new config data to cytoscape.
-    this.cy!.json(config);
+    this.cy!.json(render.descriptor);
     // Resize the view port to get correct pan and zoom.
     this.cy!.resize();
     this.batch = () => {
-      if (needLayout) {
+      if (render.needLayout) {
         const layoutConfig = fprime.viewManager.getCurrentAutoLayoutConfig();
         let layoutOption = {
           name: layoutConfig.Name,
           stop: () => {
-            this.stickPort();
-            this.movebackAllPort();
-            this.appendAnalysisStyle();
-            this.addTooltips();
+            this.commonFuncEntries();
             // Show the viewport again
             this.container!.style.visibility = "visible";
           },
@@ -138,21 +136,40 @@ class CyManager {
         layoutOption = Object.assign(layoutOption,
           layoutConfig.Parameters);
 
-        let layout: any = this.cy!.layout(layoutOption);
-        // If the layout is invalid, it should be undefined.
-        if (layout) {
-          layout.run();
-          layout = undefined;
+        if (render.elesHasPosition.length === 0 ||
+          render.elesNoPosition.length === 0) {
+          let layout: any = this.cy!.layout(layoutOption);
+          // If the layout is invalid, it should be undefined.
+          if (layout) {
+            layout.run();
+            layout = undefined;
+          } else {
+            fprime.viewManager.appendOutput(
+              `Error: the layout configuration ` +
+              `'${layoutConfig.Name}' is invalid.`);
+          }
         } else {
-          fprime.viewManager.appendOutput(
-            `Error: the layout configuration ` +
-            `'${layoutConfig.Name}' is invalid.`);
+          let nodes = "#" + render.elesHasPosition.join(",#");
+          const bb = this.cy!.nodes(nodes).boundingBox(boundingBoxOpt);
+          const newbb = { x1: 0, y1: 0, x2: 0, y2: 0 };
+          if ((bb as any).w > (bb as any).h) {
+            newbb.x1 = (bb as any).x1;
+            newbb.x2 = (bb as any).x2;
+            newbb.y1 = (bb as any).y2;
+            newbb.y2 = (bb as any).y2 * 2;
+          } else {
+            newbb.x1 = (bb as any).x2;
+            newbb.x2 = (bb as any).x2 * 2;
+            newbb.y1 = (bb as any).y1;
+            newbb.y2 = (bb as any).y2;
+          }
+
+          layoutOption = Object.assign({ boundingBox: newbb }, layoutOption);
+          nodes = "#" + render.elesNoPosition.join(",#");
+          this.cy!.nodes(nodes).layout(layoutOption).run();
         }
       } else {
-        this.stickPort();
-        this.movebackAllPort();
-        this.appendAnalysisStyle();
-        this.addTooltips();
+        this.commonFuncEntries();
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
         // Show the viewport again
@@ -248,7 +265,7 @@ class CyManager {
     });
     (this.cy! as any).on(
       "noderesize.resizeend",
-      (_evt: EventObject, _type: any, node: any) => {
+      (evt: EventObject, type: any, node: any) => {
         // Set the size style for this node
         (this.cy!.style() as any)
           .selector("#" + node.id())
@@ -271,17 +288,34 @@ class CyManager {
    * words, analysis style information should not be saved to view style.
    */
   public appendAnalysisStyle() {
-    const styles = fprime.viewManager.getCurrentAnalyzerResult();
-    styles.forEach((s) => {
-      this.cy!.$(s.selector).style(s.style);
+    this.cy!.batch(() => {
+      const styles = fprime.viewManager.getCurrentAnalyzerResult();
+      styles.forEach((s) => {
+        this.cy!.$(s.selector).style(s.style);
+      });
     });
   }
+
+
+  /**
+   *  Entry of the common functions.
+   *  Being called by CyManager when initiate the graph.
+   */
+
+  private commonFuncEntries(): void {
+    this.stickPort();
+    this.movebackAllPort();
+    this.appendAnalysisStyle();
+    this.addTooltips();
+    this.cy!.fit();
+  }
+
 
   private movebackAllPort(): void {
     const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
     Object.keys(simpleGraph).forEach((c) => {
-      const comp = this.cy!.$(c);
-      const ports = this.cy!.$(simpleGraph[c].join(","));
+      const comp = this.cy!.nodes(c);
+      const ports = this.cy!.nodes(simpleGraph[c].join(","));
       this.cyutil!.portMoveBackComp(comp, ports);
       // Adjust port image after change port relative loc.
       this.cyutil!.adjustCompsAllPortImg(comp, ports);
@@ -304,9 +338,7 @@ class CyManager {
         this.cyutil!.positionInBox(
           portIns.position(),
           this.cyutil!.generateBox(
-            compIns.boundingBox(
-              (boundingBoxOpt as any),
-            ) as cytoscape.BoundingBox12,
+            (compIns as any).boundingBox(boundingBoxOpt),
             portIns.width(),
             portIns.height(),
           ),
@@ -314,9 +346,7 @@ class CyManager {
 
         this.cyutil!.positionOutBox(
           portIns.position(),
-          compIns.boundingBox(
-            (boundingBoxOpt as any),
-          ) as cytoscape.BoundingBox12);
+          (compIns as any).boundingBox(boundingBoxOpt));
 
         // Adjust port image
         this.cyutil!.adjustPortImg(compIns, portIns);
