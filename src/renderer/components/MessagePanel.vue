@@ -22,7 +22,7 @@
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Analysis</span>
       </v-tab>
-      <v-tab></v-tab>
+      <v-tab :style="{ display: 'none' }"></v-tab>
       <v-tab-item :key="output">
         <p>{{ compilerOutput }}</p>
       </v-tab-item>

@@ -4,9 +4,8 @@
       :items="optionList.selections"
       v-model="optionList.selected"
       hide-details
-      hide-selected
       dense
-      @change="onChangeOrNone"
+      @input="onChangeOrNone"
     ></v-overflow-btn>
   </v-flex>
 </template>
