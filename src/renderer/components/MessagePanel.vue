@@ -96,11 +96,12 @@ export default Vue.extend({
 .message-panel .v-tabs__content {
   transition: none;
   padding: 8px;
+  padding-top: 0px;
   white-space: pre-wrap;
 }
 
 .message-panel .v-tabs__content p {
-  overflow: scroll;
+  overflow: auto;
   max-height: 220px;
 }
 </style>
