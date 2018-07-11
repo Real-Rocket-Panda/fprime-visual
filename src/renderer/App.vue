@@ -210,13 +210,12 @@ export default Vue.extend({
       if (!viewName) {
         return;
       }
-      const fakeRender = {
+      CyManager.startUpdate(viewName, {
         needLayout: false,
         descriptor: CyManager.getDescriptor(),
-        elesHasPosition: [],        
-        elesNoPosition: [],        
-      }
-      CyManager.startUpdate(viewName, fakeRender);
+        elesHasPosition: [],
+        elesNoPosition: [],
+      });
       CyManager.endUpdate();
     }
   }

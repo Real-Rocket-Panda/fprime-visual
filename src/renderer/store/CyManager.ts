@@ -1,4 +1,4 @@
-import cytoscape, { EventObject, BoundingBox12, BoundingBoxWH } from "cytoscape";
+import cytoscape, { EventObject } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -129,6 +129,7 @@ class CyManager {
           name: layoutConfig.Name,
           stop: () => {
             this.commonFuncEntries();
+            this.cy!.fit();
             // Show the viewport again
             this.container!.style.visibility = "visible";
           },
@@ -307,7 +308,6 @@ class CyManager {
     this.movebackAllPort();
     this.appendAnalysisStyle();
     this.addTooltips();
-    this.cy!.fit();
   }
 
 
