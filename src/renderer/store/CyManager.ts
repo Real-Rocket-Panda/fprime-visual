@@ -129,7 +129,7 @@ class CyManager {
           name: layoutConfig.Name,
           stop: () => {
             this.commonFuncEntries();
-            this.cy!.fit();
+            this.cy!.fit(undefined, 10);
             // Show the viewport again
             this.container!.style.visibility = "visible";
           },
