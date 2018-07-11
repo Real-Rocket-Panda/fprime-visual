@@ -174,7 +174,7 @@ export default Vue.extend({
       if (viewName) {
         fprime.viewManager.refresh(viewName);
         const render = fprime.viewManager.render(viewName, true)!;
-        CyManager.startUpdate(viewName, render.needLayout, render.descriptor);
+        CyManager.startUpdate(viewName, render);
         CyManager.endUpdate();
       }
     },
@@ -210,7 +210,12 @@ export default Vue.extend({
       if (!viewName) {
         return;
       }
-      CyManager.startUpdate(viewName, false, CyManager.getDescriptor());
+      CyManager.startUpdate(viewName, {
+        needLayout: false,
+        descriptor: CyManager.getDescriptor(),
+        elesHasPosition: [],
+        elesNoPosition: [],
+      });
       CyManager.endUpdate();
     }
   }
