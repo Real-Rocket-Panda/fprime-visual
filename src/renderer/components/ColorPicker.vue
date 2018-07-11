@@ -25,17 +25,24 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * If user selects some elements, then click to open the picker, choose
+     * a color, and click the button again to close and apply the color.
+     */
     changeColor() {
-      // If some elements are selected, then clicking on the button will set
-      // the color of elemetns to the current color of picker.
-      const eles = CyManager.getGrabbed();
-      if (this.show == false && eles.length > 0) {
-        CyManager.setColor(eles, this.colors.hex);
-      } else {
-        // Otherwise, open the picker
-        this.show = !this.show;
+      // The picker is open, apply the color
+      if (this.show === true) {
+        CyManager.setColor(CyManager.getGrabbed(), this.colors.hex);
       }
-      
+      // Picker is closed, select a color
+      else {
+        const eles = CyManager.getGrabbed();
+        if (eles.length > 0) {
+          this.colors = eles.style("background-color");
+        }
+      }
+      // Switch the panel
+      this.show = !this.show;
     },
   }
 });

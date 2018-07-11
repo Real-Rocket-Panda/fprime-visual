@@ -21,7 +21,7 @@
       Analysis
     </v-btn>
     <v-spacer></v-spacer>
-    <span class="mr-2 caption">&copy; 2017 Rocket Panda</span>
+    <span class="mr-2 caption">&copy; 2018 Rocket Panda</span>
   </v-footer>
 </template>
 

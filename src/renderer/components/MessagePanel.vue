@@ -22,7 +22,7 @@
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Analysis</span>
       </v-tab>
-      <v-tab></v-tab>
+      <v-tab :style="{ display: 'none' }"></v-tab>
       <v-tab-item :key="output">
         <p>{{ compilerOutput }}</p>
       </v-tab-item>
@@ -96,11 +96,12 @@ export default Vue.extend({
 .message-panel .v-tabs__content {
   transition: none;
   padding: 8px;
+  padding-top: 0px;
   white-space: pre-wrap;
 }
 
 .message-panel .v-tabs__content p {
-  overflow: scroll;
+  overflow: auto;
   max-height: 220px;
 }
 </style>
