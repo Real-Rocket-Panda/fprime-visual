@@ -37,8 +37,8 @@ export class CyUtil {
         // get the posotion of intersection between bounding box and the edge
         intersection = this.getEdgeBoxIntesection(
           // Should reverse the direction
-          edge.targetEndpoint(),
-          edge.sourceEndpoint(),
+          edge.target().position(),
+          edge.source().position(),
           (comp as any).boundingBox(boundingBoxOpt));
       } else {
         // get the edge from component to port
@@ -46,8 +46,8 @@ export class CyUtil {
         const edge: any = this.cy.edges(id);
         // get the posotion of intersection between bounding box and the edge
         intersection = this.getEdgeBoxIntesection(
-          edge.sourceEndpoint(),
-          edge.targetEndpoint(),
+          edge.source().position(),
+          edge.target().position(),
           (comp as any).boundingBox(boundingBoxOpt));
       }
       // resposition the port
