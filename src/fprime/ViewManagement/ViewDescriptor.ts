@@ -328,6 +328,7 @@ export default class ViewDescriptor {
               direction: (n.type === NodeType.Port) ?
                 n.properties.direction : undefined,
               properties: n.properties,
+              label: this.generateNodeLable(n),
             },
             classes: this.generateNodeClasses(n),
           } as any;
@@ -399,6 +400,10 @@ export default class ViewDescriptor {
     return graph;
   }
 
+  /**
+   * Generate the classes fields in cytoscape json of each node.
+   * @param node The INode in view descriptor
+   */
   private generateNodeClasses(node: INode): string {
     const prop = node.properties;
     switch (node.type) {
@@ -424,6 +429,27 @@ export default class ViewDescriptor {
           prop.type ? `fprime-component-${prop.type}` : "",
         ].filter((i) => i !== "").join(" ");
       }
+
+      default:
+        return "";
+    }
+  }
+
+  /**
+   * Generate the label of a node.
+   * @param node The INode in view descriptor
+   */
+  private generateNodeLable(node: INode): string {
+    const prop = node.properties;
+    switch (node.type) {
+      case NodeType.Instance:
+        return `${node.id}: ${prop.type}`;
+
+      case NodeType.Port:
+        return `${prop.name}: ${prop.type}`;
+
+      case NodeType.component:
+        return prop.type;
 
       default:
         return "";
