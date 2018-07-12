@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<namespace name="Ref">
+  <component kind="active" name="PingReceiver" namespace="Ref">
+    <port direction="in" kind="async" max_number="1" min_number="0" name="PingIn" number="1" type="Svc.Ping"/>
+    <port direction="out" max_number="1" min_number="0" name="PingOut" number="1" type="Svc.Ping"/>
+  </component>
+  <component kind="queued" name="SignalGen" namespace="Ref">
+    <port direction="out" max_number="1" min_number="0" name="timeCaller" number="1" role="TimeGet" type="Fw.Time"/>
+    <port direction="out" max_number="1" min_number="0" name="cmdRegOut" number="1" role="CmdRegistration" type="Fw.CmdReg"/>
+    <port direction="in" max_number="1" min_number="0" name="cmdIn" number="1" role="Cmd" type="Fw.Cmd"/>
+    <port direction="in" kind="sync" max_number="1" min_number="0" name="schedIn" number="1" type="Svc.Sched"/>
+    <port direction="out" max_number="1" min_number="0" name="logTextOut" number="1" role="LogTextEvent" type="Fw.LogText"/>
+    <port direction="out" max_number="1" min_number="0" name="logOut" number="1" role="LogEvent" type="Fw.Log"/>
+    <port direction="out" max_number="1" min_number="0" name="cmdResponseOut" number="1" role="CmdResponse" type="Fw.CmdResponse"/>
+    <port direction="out" max_number="1" min_number="0" name="tlmOut" number="1" role="Telemetry" type="Fw.Tlm"/>
+  </component>
+   <component kind="active" name="ActiveLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="LogRecv" type="Fw.Log"/>
+    <port direction="out" max_number="1" min_number="0" name="PktSend" type="Fw.Com"/>
+    <port direction="out" max_number="1" min_number="0" name="FatalAnnounce" type="Svc.FatalEvent"/>
+    <port direction="in" kind="async" max_number="1" min_number="0" name="pingIn" type="Svc.Ping"/>
+    <port direction="out" max_number="1" min_number="0" name="pingOut" type="Svc.Ping"/>
+    <dict name="events">
+      <dict id="0" name="event"/>
+    </dict>
+    <port direction="out" max_number="1" min_number="0" name="LogText" role="LogTextEvent" type="Fw.LogText"/>
+    <port direction="out" max_number="1" min_number="0" name="Log" role="LogEvent" type="Fw.Log"/>
+  </component>
+  <component kind="active" name="CommandDispatcher" namespace="Svc">
+    <port direction="out" max_number="10" min_number="1" name="compCmdSend" type="Fw.Cmd"/>
+    <port direction="in" kind="guarded" max_number="10" min_number="1" name="compCmdReg" type="Fw.CmdReg"/>
+    <port direction="in" kind="async" max_number="10" min_number="1" name="compCmdStat" type="Fw.CmdResponse"/>
+    <port direction="out" max_number="10" min_number="1" name="seqCmdStatus" type="Fw.CmdResponse"/>
+    <port direction="in" kind="async" max_number="10" min_number="1" name="seqCmdBuff" type="Fw.Com"/>
+    <port direction="out" max_number="1" min_number="0" name="pingOut" number="1" type="Svc.Ping"/>
+  </component>
+  <component kind="passive" name="PassiveTextLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="TextLogger" type="Fw.LogText"/>
+  </component>
+  <component kind="passive" name="Time" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="timeGetPort" type="Fw.Time"/>
+  </component>
+  <component kind="active" name="TlmChan" namespace="Svc">
+    <port direction="in" kind="guarded" max_number="10" min_number="1" name="TlmRecv" type="Fw.Tlm"/>
+    <port direction="in" kind="guarded" max_number="1" min_number="0" name="TlmGet" type="Fw.Tlm"/>
+    <port direction="in" kind="async" max_number="1" min_number="0" name="Run" type="Svc.Sched"/>
+  </component>
+  <system name="sys">
+    <instance base_id="181" base_id_window="20" name="SG1" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="221" base_id_window="20" name="SG2" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="201" base_id_window="20" name="SG3" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="321" base_id_window="20" name="SG4" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="521" base_id_window="20" name="textLogger" namespace="Ref" type="Svc.PassiveTextLogger"/>
+    <topology name="REFLogger">
+      <connection name="connection1">
+        <source index="0" instance="SG1" port="logTextOut"/>
+        <target index="0" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection2">
+        <source index="0" instance="SG2" port="logTextOut"/>
+        <target index="1" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection3">
+        <source index="0" instance="SG3" port="logTextOut"/>
+        <target index="2" instance="textLogger" port="TextLogger"/>
+      </connection>
+      
+    </topology>
+  </system>
+</namespace>

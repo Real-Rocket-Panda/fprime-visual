@@ -16,20 +16,56 @@ export default class CompilerConverter {
   public convert(config: IConfig): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       try {
-        const xmlFile = fs.readFileSync(
+        fs.readdirSync(__static).forEach((file) => {
+          console.log(file);
+        });
+        const files = this.findFilesInDir(
           path.resolve(__static, config.FPPCompilerOutputPath),
-          "utf-8",
+          ".xml",
         );
-        xml.parseString(xmlFile, (err: any, result: any) => {
+
+        let content: string = "";
+        files.forEach((file) => {
+          const xmlFile = fs.readFileSync(file, "utf-8");
+          content += xmlFile;
+        });
+        xml.parseString(content, (err: any, result: any) => {
           if (err) {
             reject(new Error("invalid xml file,\n" + err));
           } else {
             resolve(result);
           }
         });
+
+        /*
+        const xmlFile = fs.readFileSync(
+          path.resolve(__static, config.FPPCompilerOutputPath),
+          "utf-8",
+        );
+        */
       } catch (e) {
         throw new Error("fail to read representation files,\n" + e);
       }
     });
+  }
+
+  private findFilesInDir(startPath: string, filter: string): string[] {
+
+    let results: string[] = [];
+
+    if (!fs.existsSync(startPath)) {
+        throw new Error("The \"" + startPath + "\"path doesn't exist.");
+    }
+
+    const files = fs.readdirSync(startPath);
+    files.forEach((file) => {
+        const stat = fs.lstatSync(file);
+        if (stat.isDirectory()) {
+            results = results.concat(this.findFilesInDir(file, filter));
+        } else if (file.indexOf(filter) >= 0) {
+            results.push(file);
+        }
+    });
+    return results;
   }
 }
