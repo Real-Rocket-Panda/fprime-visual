@@ -396,6 +396,7 @@ export default class ViewDescriptor {
           graph[from].push(to);
         }
       });
+    console.log(graph);
     return graph;
   }
 
