@@ -223,9 +223,11 @@ class CyManager {
    */
   public setColor(eles: any, color: string): void {
     eles.forEach((el: any) => {
-      (this.cy!.style() as any)
-        .selector("#" + el.id())
-        .style({ "background-color": color });
+      if (!el.hasClass("fprime-port")) {
+        (this.cy!.style() as any)
+          .selector("#" + el.id())
+          .style({ "background-color": color });
+      }
     });
     (this.cy!.style() as any).update();
   }
