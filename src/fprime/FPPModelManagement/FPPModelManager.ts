@@ -224,7 +224,7 @@ export default class FPPModelManager {
       });
 
       res.push({
-        name: ns + "." + ele.$.name,
+        name: ns + "_" + ele.$.name,
         namespace: ele.$.namespace,
         ports: ps,
       });
@@ -263,7 +263,7 @@ export default class FPPModelManager {
       const namespace = type[0];
       const name = type[1];
       this.components.forEach((c: IFPPComponent) => {
-        if (c.name === ns + "." + name && c.namespace === namespace) {
+        if (c.name === ns + "_" + name && c.namespace === namespace) {
           c.ports.forEach((p: IFPPPort) => {
             ps[p.name] = p;
           });
@@ -271,7 +271,7 @@ export default class FPPModelManager {
       });
 
       res.push({
-        id:  ns + "." + ele.$.name,
+        id:  ns + "_" + ele.$.name,
         model_id: ele.$.base_id,
         ports: ps,
         properties: props,
@@ -291,9 +291,9 @@ export default class FPPModelManager {
       const cons: IFPPConnection[] = [];
       ele.connection.forEach((con: any) => {
         const source = this.instances.filter(
-          (i) => i.id === ns + "." + con.source[0].$.instance)[0];
+          (i) => i.id === ns + "_" + con.source[0].$.instance)[0];
         const target = this.instances.filter(
-          (i) => i.id === ns + "." + con.target[0].$.instance)[0];
+          (i) => i.id === ns + "_" + con.target[0].$.instance)[0];
 
 
         cons.push({
@@ -309,7 +309,7 @@ export default class FPPModelManager {
       });
 
       res.push({
-        name: ns + "." + ele.$.name,
+        name: ns + "_" + ele.$.name,
         connections: cons,
       });
     });
@@ -328,7 +328,7 @@ export default class FPPModelManager {
     const name: string = prop[1];
     const namespace: string = prop[0];
     const comp = this.components.filter(
-      (c) => c.name === ns + "." + name && c.namespace === namespace,
+      (c) => c.name === ns + "_" + name && c.namespace === namespace,
     )[0];
 
     return comp.ports;
