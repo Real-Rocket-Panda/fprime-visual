@@ -16,33 +16,42 @@ export default class CompilerConverter {
   public convert(config: IConfig): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       try {
-        fs.readdirSync(__static).forEach((file) => {
-          console.log(file);
-        });
         const files = this.findFilesInDir(
           path.resolve(__static, config.FPPCompilerOutputPath),
           ".xml",
         );
 
-        let content: string = "";
-        files.forEach((file) => {
-          const xmlFile = fs.readFileSync(file, "utf-8");
-          content += xmlFile;
-        });
-        xml.parseString(content, (err: any, result: any) => {
-          if (err) {
-            reject(new Error("invalid xml file,\n" + err));
-          } else {
-            resolve(result);
+        if (files === null || files.length === 0) {
+          throw new Error("Can't find any models files.");
+        }
+
+        const res: any[] = [];
+        let xmlFile = fs.readFileSync(files[0], "utf-8");
+        return this.parseXML(xmlFile).then((obj) => {
+          res.push(obj);
+          for (let i = 1; i < files.length - 1; i++) {
+            xmlFile = fs.readFileSync(files[i], "utf-8");
+            this.parseXML(files[i]).then((obj1) => {
+              res.push(obj1);
+            }).catch((err) => {
+              reject(err);
+            });
           }
+          if (files.length === 1) {
+            resolve(res);
+          } else {
+            xmlFile = fs.readFileSync(files[files.length - 1], "utf-8");
+            this.parseXML(xmlFile).then((obj2) => {
+              res.push(obj2);
+              resolve(res);
+            }).catch((err) => {
+              reject(err);
+            });
+          }
+        }).catch((err) => {
+          reject(err);
         });
 
-        /*
-        const xmlFile = fs.readFileSync(
-          path.resolve(__static, config.FPPCompilerOutputPath),
-          "utf-8",
-        );
-        */
       } catch (e) {
         throw new Error("fail to read representation files,\n" + e);
       }
@@ -59,13 +68,28 @@ export default class CompilerConverter {
 
     const files = fs.readdirSync(startPath);
     files.forEach((file) => {
-        const stat = fs.lstatSync(file);
+        const p = path.resolve(startPath, file);
+        const stat = fs.lstatSync(p);
         if (stat.isDirectory()) {
-            results = results.concat(this.findFilesInDir(file, filter));
+            results = results.concat(
+              this.findFilesInDir(p, filter));
         } else if (file.indexOf(filter) >= 0) {
-            results.push(file);
+            results.push(p);
         }
     });
     return results;
+  }
+
+  private parseXML(content: string): Promise<any> {
+    return new Promise<any> ((resolve, reject) => {
+        const parser = new xml.Parser();
+        parser.parseString(content, (err: any, result: any) => {
+          if (err) {
+            reject(new Error("invalid xml file,\n" + err));
+          } else {
+            resolve(result);
+          }
+        });
+    });
   }
 }

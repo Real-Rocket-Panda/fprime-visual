@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
-<namespace name="Ref">
+<namespace name="Ref2">
   <component kind="active" name="PingReceiver" namespace="Ref">
     <port direction="in" kind="async" max_number="1" min_number="0" name="PingIn" number="1" type="Svc.Ping"/>
     <port direction="out" max_number="1" min_number="0" name="PingOut" number="1" type="Svc.Ping"/>
