@@ -24,7 +24,6 @@ const boundingBoxOpt = {
   includeNodes: true,
 };
 
-
 class CyManager {
 
   /**
@@ -68,8 +67,6 @@ class CyManager {
    */
   private batch: any;
 
-  private selector: any;
-
   /**
    * Initialize the cytoscape container and cyutil.
    * @param container The container HTML element <div id="cytoscape"></div>
@@ -78,7 +75,6 @@ class CyManager {
     this.container = container;
     this.cy = cytoscape({ container });
     this.cyutil = new CyUtil(this.cy);
-    this.selector = this.cy!.$;
     // Setup the resize function
     this.resize();
   }
