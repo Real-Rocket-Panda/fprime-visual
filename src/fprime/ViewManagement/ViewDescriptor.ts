@@ -329,6 +329,8 @@ export default class ViewDescriptor {
                 n.properties.direction : undefined,
               properties: n.properties,
               label: this.generateNodeLable(n),
+              label_hloc: "center",
+              label_vloc: "center",
             },
             classes: this.generateNodeClasses(n),
           } as any;

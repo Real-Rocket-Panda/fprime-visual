@@ -126,11 +126,16 @@ export class CyUtil {
     return { x1, x2, y1, y2 };
   }
 
-  public adjustCompsAllPortImg(
+
+
+  public adjustCompAllPortsLook(
     comp: NodeSingular,
     ports: cytoscape.NodeCollection,
   ): void {
-    ports.forEach((p) => { this.adjustPortImg(comp, p); });
+    ports.forEach((p) => {
+      this.adjustPortImg(comp, p);
+      this.adjustPortLabel(comp, p);
+     });
   }
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
@@ -159,6 +164,33 @@ export class CyUtil {
   }
 
 
+  public adjustPortLabel(comp: NodeSingular, port: NodeSingular): void {
+    const bb = (comp as any).boundingBox(boundingBoxOpt);
+    const pos = port.position();
+    switch (this.decideEdge(bb, pos)) {
+      case 1: // up
+        port.data("label_vloc", "bottom");
+        port.data("label_hloc", "center");
+        break;
+      case 2: // right
+        port.data("label_vloc", "top");
+        port.data("label_hloc", "center");
+        break;
+      case 3: // down
+        port.data("label_vloc", "top");
+        port.data("label_hloc", "center");
+        break;
+      case 4: // left
+        port.data("label_vloc", "top");
+        port.data("label_hloc", "center");
+        break;
+      default:
+        port.data("label_vloc", "center");
+        port.data("label_hloc", "center");
+        break;
+    }
+  }
+
   private distributePositions(
     bb: BoundingBox12,
     horizontal: boolean,
@@ -184,13 +216,13 @@ export class CyUtil {
   private decideEdge(bb: BoundingBox12, pos: Position): number {
     const float = 0.0001;
     if (pos.y <= bb.y1 + float) {
-      return 1;
+      return 1;  // up
     } else if (pos.x <= bb.x1 + float) {
-      return 4;
+      return 4; // right
     } else if (pos.x >= bb.x2 - float) {
-      return 2;
+      return 2; // down
     } else if (pos.y >= bb.y2 - float) {
-      return 3;
+      return 3; // top
     }
     return 0;
   }
