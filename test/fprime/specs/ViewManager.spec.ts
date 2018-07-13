@@ -5,7 +5,7 @@ import { ICytoscapeJSON } from "fprime/ViewManagement/ViewDescriptor";
 import { NodeType, EdgeType } from "fprime/ViewManagement/ViewDescriptor";
 
 const __project = "./test/Ref";
-const viewName = "REFLogger";
+const viewName = "Ref.REFLogger";
 
 const json: ICytoscapeJSON = {
   style: [
@@ -189,13 +189,16 @@ describe("ViewManager getSimpleGraph", () => {
     await viewManager.build(__project);
     viewManager.render(viewName);
     expect(viewManager.getSimpleGraphFor(viewName)).to.eql({
-      "#SG1": ["#SG1_logTextOut", "#SG1_logOut"],
-      "#SG2": ["#SG2_logTextOut", "#SG2_logOut"],
-      "#SG3": ["#SG3_logTextOut", "#SG3_logOut"],
-      "#SG4": ["#SG4_logTextOut", "#SG4_logOut"],
-      "#SG5": ["#SG5_logTextOut", "#SG5_logOut"],
-      "#eventLogger": ["#eventLogger_LogRecv", "#eventLogger_LogText"],
-      "#textLogger": ["#textLogger_TextLogger"],
+      "#Ref_SG1": ["#Ref_SG1_logTextOut", "#Ref_SG1_logOut"],
+      "#Ref_SG2": ["#Ref_SG2_logTextOut", "#Ref_SG2_logOut"],
+      "#Ref_SG3": ["#Ref_SG3_logTextOut", "#Ref_SG3_logOut"],
+      "#Ref_SG4": ["#Ref_SG4_logTextOut", "#Ref_SG4_logOut"],
+      "#Ref_SG5": ["#Ref_SG5_logTextOut", "#Ref_SG5_logOut"],
+      "#Ref_eventLogger": [
+        "#Ref_eventLogger_LogRecv",
+        "#Ref_eventLogger_LogText",
+      ],
+      "#Ref_textLogger": ["#Ref_textLogger_TextLogger"],
     });
   });
 });
@@ -210,7 +213,7 @@ describe("ViewManager saveStyle", () => {
     await viewManager.build(__project);
     viewManager.render(viewName);
     viewManager.saveViewDescriptorFor(viewName, json);
-    expect(fs.existsSync("./test/Ref/styles/REFLogger_style.css"))
+    expect(fs.existsSync("./test/Ref/styles/Ref.REFLogger_style.css"))
       .to.equal(true);
   });
 });
