@@ -5,42 +5,45 @@ edge {
     width: 2;
 }
 .fprime-instance {
-    width: 150;
-    height: 200;
-    background-color: rgb(252, 242, 199);
+    shape: rectangle;    
+    width: 400;
+    height: 600;
     content: data(label);
-    text-halign: center;
+    font-size : 17;
+    text-halign: data(label_hloc);
+    text-valign: data(label_vloc);
     text-opacity: 1.0;
-    text-valign: top;
-    text-margin-y: 50;
-    shape: rectangle;
+    text-margin-y: 0;
+    background-color: rgb(252, 242, 199);
     border-width: 2;
-    border-color: #c0c0c0
+    border-color: #c0c0c0;
 }
 .fprime-component {
-    width: 100;
-    height: 140;
-    background-color: rgb(216, 204, 186);
-    content: data(label);
-    text-halign: center;
-    text-opacity: 0.5;
-    text-valign: center;
     shape: rectangle;
+    width: 400;
+    height: 600;
+    content: data(label);
+    font-size : 18;
+    text-opacity: 0.5;
+    text-halign: data(label_hloc);
+    text-valign: data(label_vloc);
+    text-margin-y: 0;
+    background-color: rgb(216, 204, 186);
     border-width: 2;
-    border-color: #c0c0c0
+    border-color: #c0c0c0;
 }
 .fprime-port {
-    width: 30;
-    height: 30;
+    shape: rectangle;
+    width: 50;
+    height: 50;
+    label: data(label);
+    text-opacity: 0.5;
+    text-halign: data(label_hloc);
+    text-valign: data(label_vloc);
     background-color: rgb(205, 217, 205);
     background-image: data(img) ;
     background-width: 70%;
     background-height: 70%;
-    label: data(label);
-    text-halign: center;
-    text-opacity: 0.5;
-    text-valign: top;
-    shape: rectangle;
     border-width: 2;
     border-color: rgb(158, 173, 145)
 }

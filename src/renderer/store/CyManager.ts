@@ -280,8 +280,8 @@ class CyManager {
         const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
         const ports = this.cy!.$(simpleGraph["#" + node.id()].join(","));
         this.cyutil!.portMoveBackComp(node, ports);
-        // Adjust port image after change port relative loc.
-        this.cyutil!.adjustCompsAllPortImg(node, ports);
+        // Adjust port image and label location after change port relative loc.
+        this.cyutil!.adjustCompAllPortsLook(node, ports);
       });
   }
 
@@ -320,7 +320,7 @@ class CyManager {
       const ports = this.cy!.nodes(simpleGraph[c].join(","));
       this.cyutil!.portMoveBackComp(comp, ports);
       // Adjust port image after change port relative loc.
-      this.cyutil!.adjustCompsAllPortImg(comp, ports);
+      this.cyutil!.adjustCompAllPortsLook(comp, ports);
     });
   }
 
@@ -350,8 +350,9 @@ class CyManager {
           portIns.position(),
           (compIns as any).boundingBox(boundingBoxOpt));
 
-        // Adjust port image
+        // Adjust port image and label location
         this.cyutil!.adjustPortImg(compIns, portIns);
+        this.cyutil!.adjustPortLabel(compIns, portIns);
       });
     });
   }
