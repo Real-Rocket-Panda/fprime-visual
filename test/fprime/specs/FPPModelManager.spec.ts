@@ -2,16 +2,16 @@ import { expect } from "chai";
 import FPPModelManager from "fprime/FPPModelManagement/FPPModelManager";
 import IConfig from "fprime/Common/Config";
 
-const viewName1 = "REFLogger";
-const viewName2 = "SG5";
-const viewName3 = "SignalGen";
+const viewName1 = "Ref.REFLogger";
+const viewName2 = "Ref.SG5";
+const viewName3 = "Ref.SignalGen";
 
 describe("FppModelManager Parsing", () => {
   let modelManager: FPPModelManager;
   beforeEach(() => {
     modelManager = new FPPModelManager();
   });
-
+/*
   it(
     "should print error message when there are multiple system in the model"
     , async () => {
@@ -27,14 +27,14 @@ describe("FppModelManager Parsing", () => {
         );
       });
   });
-
+*/
   it(
     "should print error message when the component is illegal"
     , async () => {
       await modelManager.loadModel(
         {
           FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "./model_illegal_instance1.xml",
+          FPPCompilerOutputPath: "illegal_model_instance1/",
         } as IConfig,
       ).catch((err) => {
         expect(err.message).to.equal(
@@ -49,7 +49,7 @@ describe("FppModelManager Parsing", () => {
       await modelManager.loadModel(
         {
           FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "./model_illegal_instance2.xml",
+          FPPCompilerOutputPath: "illegal_model_instance2/",
         } as IConfig,
       ).catch((err) => {
         expect(err.message).to.equal(
@@ -71,7 +71,7 @@ describe("FppModelManager Query", () => {
       await modelManager.loadModel(
         {
           FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "./model.xml",
+          FPPCompilerOutputPath: "valid_model/",
         } as IConfig,
       );
       const view = modelManager.query(viewName1, "Function View");
@@ -85,7 +85,7 @@ describe("FppModelManager Query", () => {
       await modelManager.loadModel(
         {
           FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "./model.xml",
+          FPPCompilerOutputPath: "valid_model/",
         } as IConfig,
       );
       const view = modelManager.query(viewName2, "InstanceCentric View");
@@ -99,10 +99,29 @@ describe("FppModelManager Query", () => {
       await modelManager.loadModel(
         {
           FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "./model.xml",
+          FPPCompilerOutputPath: "valid_model/",
         } as IConfig,
       );
       const view = modelManager.query(viewName3, "Component View");
       expect(view.components.length).to.be.equal(1);
+  });
+
+  it(
+    "should query out all the models in the given folder"
+    , async () => {
+      await modelManager.loadModel(
+        {
+          FPPCompilerPath: "./fppcompiler",
+          FPPCompilerOutputPath: "multi_model_files/",
+        } as IConfig,
+      );
+      const view = modelManager.query(viewName3, "Component View");
+      expect(view.components.length).to.be.equal(1);
+      const view1 = modelManager.query(viewName2, "InstanceCentric View");
+      expect(view1.instances.length).to.be.equal(8);
+      expect(view1.connections.length).to.be.equal(7);
+      const view2 = modelManager.query(viewName1, "Function View");
+      expect(view2.instances.length).to.be.equal(22);
+      expect(view2.connections.length).to.be.equal(11);
   });
 });

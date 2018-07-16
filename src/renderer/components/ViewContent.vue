@@ -28,8 +28,8 @@ export default Vue.extend({
     },
     updateCytoscape() {
       const render = fprime.viewManager.render(this.viewName)!;
-      CyManager.startUpdate(this.viewName, render.needLayout,
-        render.descriptor);
+      if(render!=null)
+        CyManager.startUpdate(this.viewName, render);
     }
   },
   mounted() {

@@ -1,7 +1,7 @@
 import { BoundingBox12, Position, NodeSingular } from "cytoscape";
 const boundingBoxOpt = {
   includeOverlays: false,
-  includeEdges: false,
+  includeEdges: true,
   includeLabels: false,
 };
 export class CyUtil {
@@ -37,18 +37,18 @@ export class CyUtil {
         // get the posotion of intersection between bounding box and the edge
         intersection = this.getEdgeBoxIntesection(
           // Should reverse the direction
-          edge.targetEndpoint(),
-          edge.sourceEndpoint(),
-          (comp as any).boundingBox({ includeOverlays: false }));
+          edge.target().position(),
+          edge.source().position(),
+          (comp as any).boundingBox(boundingBoxOpt));
       } else {
         // get the edge from component to port
         const id: string = "#" + comp.id() + "-" + port.id();
         const edge: any = this.cy.edges(id);
         // get the posotion of intersection between bounding box and the edge
         intersection = this.getEdgeBoxIntesection(
-          edge.sourceEndpoint(),
-          edge.targetEndpoint(),
-          (comp as any).boundingBox({ includeOverlays: false }));
+          edge.source().position(),
+          edge.target().position(),
+          (comp as any).boundingBox(boundingBoxOpt));
       }
       // resposition the port
       port.position(intersection);

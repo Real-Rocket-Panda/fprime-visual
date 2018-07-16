@@ -56,7 +56,7 @@ const resolvedProjectJSON = {
   FPPCompilerPath: path.resolve(__project, "fast_compiler"),
   FPPCompilerParameters: `${path.resolve(__project)} ` +
     `${path.resolve(__project, "fpp_output")}`,
-  FPPCompilerOutputPath: path.resolve(__project, "model.xml"),
+  FPPCompilerOutputPath: path.resolve(__project),
   DefaultStyleFilePath: path.resolve(__project, "mystyle.css"),
   ViewStyleFileFolder: path.resolve(__project, "styles"),
   AutoLayout: [

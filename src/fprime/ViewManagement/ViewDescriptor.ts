@@ -94,6 +94,10 @@ export interface IRenderJSON {
   elesNoPosition: string[];
 }
 
+function escapeDot(s: string): string {
+  return s.replace(/\./g, "_");
+}
+
 /**
  * The definition of the view descriptor.
  */
@@ -109,9 +113,13 @@ export default class ViewDescriptor {
     // For all the instances in a model
     model.instances.forEach((i) => {
       // Covert all the instances to a node in the graph
-      view.graph.nodes[i.id] = {
-        id: i.id,
-        modelID: i.model_id,  // Get instance id in the model file
+      // The mapping relation from IFPPInstance to INode is:
+      //  id <- name by changing . to _
+      //  modelID <- name
+      const insID = escapeDot(i.name);
+      view.graph.nodes[insID] = {
+        id: insID,
+        modelID: i.name,
         type: NodeType.Instance,
         properties: i.properties,
       };
@@ -119,10 +127,11 @@ export default class ViewDescriptor {
       // Covert all the ports to a node in the graph
       // The name of the port has the format: <instance id>_<port id>
       Object.keys(i.ports).forEach((p) => {
-        const pname = i.id + "_" + i.ports[p].name;
-        view.graph.nodes[pname] = {
-          id: pname,
-          modelID: "",
+        const portID = `${insID}_${i.ports[p].name}`;
+        view.graph.nodes[portID] = {
+          id: portID,
+          // TODO: the model id for the instance ports.
+          modelID: i.ports[p].name,
           type: NodeType.Port,
           properties: i.ports[p].properties,
         };
@@ -131,23 +140,23 @@ export default class ViewDescriptor {
         // The edge has the format: <instance id>-<instance id>_<port id>
         if (i.ports[p].properties.direction === "in") {
           // in port, from port to instance
-          const vedge = pname + "-" + i.id;
+          const vedge = `${portID}-${insID}`;
           view.graph.edges[vedge] = {
             id: vedge,
             modelID: "",
             type: EdgeType.Instance2Port,
-            from: view.graph.nodes[pname],
-            to: view.graph.nodes[i.id],
+            from: view.graph.nodes[portID],
+            to: view.graph.nodes[insID],
           };
         } else {
           // out port, from instance to port
-          const vedge = i.id + "-" + pname;
+          const vedge = `${insID}-${portID}`;
           view.graph.edges[vedge] = {
             id: vedge,
             modelID: "",
             type: EdgeType.Instance2Port,
-            from: view.graph.nodes[i.id],
-            to: view.graph.nodes[pname],
+            from: view.graph.nodes[insID],
+            to: view.graph.nodes[portID],
           };
         }
       });
@@ -155,20 +164,21 @@ export default class ViewDescriptor {
 
     model.components.forEach((i) => {
       // Covert all the instances to a node in the graph
-      view.graph.nodes[i.name] = {
-        id: i.name,
-        modelID: "",
+      const compID = escapeDot(i.name);
+      view.graph.nodes[compID] = {
+        id: compID,
+        modelID: i.name,
         type: NodeType.component,
-        properties: { type: i.namespace + "." + i.name },
+        properties: {},
       };
 
       // Covert all the ports to a node in the graph
       // The name of the port has the format: <instance id>_<port id>
       i.ports.forEach((p) => {
-        const pname = i.name + "_" + p.name;
-        view.graph.nodes[pname] = {
-          id: pname,
-          modelID: "",
+        const portID = `${compID}_${p.name}`;
+        view.graph.nodes[portID] = {
+          id: portID,
+          modelID: p.name,
           type: NodeType.Port,
           properties: p.properties,
         };
@@ -176,22 +186,22 @@ export default class ViewDescriptor {
         // Add a virtual edge from instance to the port.
         // The edge has the format: <instance id>-<instance id>_<port id>
         if (p.properties.direction === "in") {
-          const vedge = pname + "-" + i.name;
+          const vedge = `${portID}-${compID}`;
           view.graph.edges[vedge] = {
             id: vedge,
             modelID: "",
             type: EdgeType.Component2Port,
-            from: view.graph.nodes[pname],
-            to: view.graph.nodes[i.name],
+            from: view.graph.nodes[portID],
+            to: view.graph.nodes[compID],
           };
         } else {
-          const vedge = i.name + "-" + pname;
+          const vedge = `${compID}-${portID}`;
           view.graph.edges[vedge] = {
             id: vedge,
             modelID: "",
             type: EdgeType.Component2Port,
-            from: view.graph.nodes[i.name],
-            to: view.graph.nodes[pname],
+            from: view.graph.nodes[compID],
+            to: view.graph.nodes[portID],
           };
         }
       });
@@ -201,9 +211,9 @@ export default class ViewDescriptor {
     // The edge has the format: <from instance id>_<from port id>-
     //  <to instance id>_<to instance id>
     model.connections.forEach((t) => {
-      const from = `${t.from.inst.id}_${t.from.port.name}`;
-      const to = `${t.to.inst.id}_${t.to.port.name}`;
-      const edge = from + "-" + to;
+      const from = `${escapeDot(t.from.inst.name)}_${t.from.port.name}`;
+      const to = `${escapeDot(t.to.inst.name)}_${t.to.port.name}`;
+      const edge = `${from}-${to}`;
       view.graph.edges[edge] = {
         id: edge,
         modelID: "",
@@ -328,6 +338,7 @@ export default class ViewDescriptor {
               direction: (n.type === NodeType.Port) ?
                 n.properties.direction : undefined,
               properties: n.properties,
+              label: this.generateNodeLable(n),
             },
             classes: this.generateNodeClasses(n),
           } as any;
@@ -400,20 +411,24 @@ export default class ViewDescriptor {
     return graph;
   }
 
+  /**
+   * Generate the classes fields in cytoscape json of each node.
+   * @param node The INode in view descriptor
+   */
   private generateNodeClasses(node: INode): string {
     const prop = node.properties;
     switch (node.type) {
       case NodeType.Instance: {
         return [
           node.type,
-          prop.type ? `fprime-component-${prop.type}` : "",
+          prop.type ? `fprime-component-${escapeDot(prop.type)}` : "",
         ].filter((i) => i !== "").join(" ");
       }
 
       case NodeType.Port: {
         return [
           node.type,
-          prop.type ? `fprime-port-${prop.type}` : "",
+          prop.type ? `fprime-port-${escapeDot(prop.type)}` : "",
           prop.kind ? `fprime-port-${prop.kind}` : "",
           prop.direction ? `fprime-port-${prop.direction}` : "",
         ].filter((i) => i !== "").join(" ");
@@ -422,9 +437,29 @@ export default class ViewDescriptor {
       case NodeType.component: {
         return [
           node.type,
-          prop.type ? `fprime-component-${prop.type}` : "",
+          prop.type ? `fprime-component-${node.id}` : "",
         ].filter((i) => i !== "").join(" ");
       }
+
+      default:
+        return "";
+    }
+  }
+
+  /**
+   * Generate the label of a node.
+   * @param node The INode in view descriptor
+   */
+  private generateNodeLable(node: INode): string {
+    switch (node.type) {
+      case NodeType.Instance:
+        return node.modelID;
+
+      case NodeType.Port:
+        return node.modelID;
+
+      case NodeType.component:
+        return node.modelID;
 
       default:
         return "";
