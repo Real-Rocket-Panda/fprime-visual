@@ -58,6 +58,9 @@ export default class ConfigManager {
    * the system config.
    */
   public loadConfig() {
+    if (!this.projectPath || !fs.existsSync(this.projectPath)) {
+      throw new Error("invalid project path");
+    }
     // Set to system default first
     this.config = Object.assign({}, this.systemConfig);
     // By default it search config with name config.json
@@ -73,11 +76,9 @@ export default class ConfigManager {
           (this.config as any)[key] = pjConfig[key];
         }
       });
-      // Resolve the path to absolute path
-      this.config = this.resolvePath(this.config);
-    } else {
-      throw new Error("project path is invalid");
     }
+    // Resolve the path to absolute path
+    this.config = this.resolvePath(this.config);
   }
 
   /**

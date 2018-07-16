@@ -5,10 +5,10 @@ import StyleManager from "fprime/StyleManagement/StyleManager";
 import ConfigManager from "fprime/ConfigManagement/ConfigManager";
 import { IStyle } from "fprime/DataImport/StyleConverter";
 
-const __projectDefaultStyle = "./test/Ref/mystyle.css";
-const __project = "./test/Ref";
-const __projectDefaultStyleDir = "./test/Ref/styles";
-const __projectStyleDir = "./test/Ref/mystyles";
+const __projectDefaultStyle = "./test/Ref1/mystyle.css";
+const __project = "./test/Ref1";
+const __projectDefaultStyleDir = "./test/Ref1/styles";
+const __projectStyleDir = "./test/Ref1/mystyles";
 
 const systemStyle: IStyle[] = [
   {

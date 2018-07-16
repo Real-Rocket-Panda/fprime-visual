@@ -3,8 +3,6 @@ import * as fs from "fs";
 import * as path from "path";
 import IConfig from "../Common/Config";
 
-declare var __static: string;
-
 export default class CompilerConverter {
   /**
    * Convert the compiler output, the representation xml file into an xml
@@ -13,49 +11,18 @@ export default class CompilerConverter {
    * @returns A promise of the xml object parsed from the representation xml
    * file.
    */
-  public convert(config: IConfig): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      try {
-        const files = this.findFilesInDir(
-          path.resolve(__static, config.FPPCompilerOutputPath),
-          ".xml",
-        );
-
-        if (files === null || files.length === 0) {
-          throw new Error("Can't find any models files.");
-        }
-
-        const res: any[] = [];
-        let xmlFile = fs.readFileSync(files[0], "utf-8");
-        return this.parseXML(xmlFile).then((obj) => {
-          res.push(obj);
-          for (let i = 1; i < files.length - 1; i++) {
-            xmlFile = fs.readFileSync(files[i], "utf-8");
-            this.parseXML(files[i]).then((obj1) => {
-              res.push(obj1);
-            }).catch((err) => {
-              reject(err);
-            });
-          }
-          if (files.length === 1) {
-            resolve(res);
-          } else {
-            xmlFile = fs.readFileSync(files[files.length - 1], "utf-8");
-            this.parseXML(xmlFile).then((obj2) => {
-              res.push(obj2);
-              resolve(res);
-            }).catch((err) => {
-              reject(err);
-            });
-          }
-        }).catch((err) => {
-          reject(err);
-        });
-
-      } catch (e) {
-        throw new Error("fail to read representation files,\n" + e);
-      }
-    });
+  public async convert(config: IConfig): Promise<any> {
+    const files = this.findFilesInDir(config.FPPCompilerOutputPath, ".xml");
+    if (files === null || files.length === 0) {
+      throw new Error("Can't find any models files.");
+    }
+    const res: any[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      const obj = await this.parseXML(fs.readFileSync(f, "utf-8"));
+      res.push(obj);
+    }
+    return res;
   }
 
   private findFilesInDir(startPath: string, filter: string): string[] {

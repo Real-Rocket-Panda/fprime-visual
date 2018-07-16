@@ -2,13 +2,13 @@
   "Analyzers": [
     {
       "Name": "AcmeRuleChecker",
-      "Path": "${System}/acme-checker.jar",
+      "Path": "${System}/mockChecker",
       "Parameters": "${Project} ${Project}/acme_output",
       "OutputFilePath": "./acme_output/acme_result.css",
       "Type": "Rule Checker"
     }
   ],
-  "FPPCompilerPath": "${System}/Parser.jar",
+  "FPPCompilerPath": "${System}/fppcompiler",
   "FPPCompilerParameters": "${Project} ${Project}/fpp_output",
   "FPPCompilerOutputPath": "./fpp_output",
   "DefaultStyleFilePath": "./style.css",

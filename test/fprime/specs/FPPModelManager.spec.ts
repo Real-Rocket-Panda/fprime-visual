@@ -1,7 +1,11 @@
+import * as path from "path";
 import { expect } from "chai";
 import FPPModelManager from "fprime/FPPModelManagement/FPPModelManager";
 import IConfig from "fprime/Common/Config";
 
+declare var __static: string;
+
+const __project = "./test/Ref2";
 const viewName1 = "Ref.REFLogger";
 const viewName2 = "Ref.SG5";
 const viewName3 = "Ref.SignalGen";
@@ -33,8 +37,9 @@ describe("FppModelManager Parsing", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "illegal_model_instance1/",
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "illegal_model_instance1/"),
         } as IConfig,
       ).catch((err) => {
         expect(err.message).to.equal(
@@ -48,8 +53,9 @@ describe("FppModelManager Parsing", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "illegal_model_instance2/",
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "illegal_model_instance2/"),
         } as IConfig,
       ).catch((err) => {
         expect(err.message).to.equal(
@@ -70,8 +76,9 @@ describe("FppModelManager Query", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "valid_model/",
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "valid_model/"),
         } as IConfig,
       );
       const view = modelManager.query(viewName1, "Function View");
@@ -84,8 +91,9 @@ describe("FppModelManager Query", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "valid_model/",
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "valid_model/"),
         } as IConfig,
       );
       const view = modelManager.query(viewName2, "InstanceCentric View");
@@ -98,8 +106,9 @@ describe("FppModelManager Query", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "valid_model/",
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "valid_model/"),
         } as IConfig,
       );
       const view = modelManager.query(viewName3, "Component View");
@@ -111,8 +120,9 @@ describe("FppModelManager Query", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: "./fppcompiler",
-          FPPCompilerOutputPath: "multi_model_files/",
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "multi_model_files/"),
         } as IConfig,
       );
       const view = modelManager.query(viewName3, "Component View");
