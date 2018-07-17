@@ -38,7 +38,8 @@ describe("FppModelManager Parsing", () => {
     , async () => {
       await modelManager.loadModel(
         {
-          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerPath:
+            path.resolve(__project, "path with blank/fppcompiler"),
           FPPCompilerOutputPath: path.resolve(__project,
             "path with blank/"),
         } as IConfig,

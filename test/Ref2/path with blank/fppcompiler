@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo "system default compiler..."

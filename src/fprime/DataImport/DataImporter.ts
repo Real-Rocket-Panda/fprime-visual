@@ -39,9 +39,11 @@ export default class DataImporter {
     let cmd = config.FPPCompilerPath;
     // The actual compiler is a java program, thus we should use 'java -jar'
     // For convenience, we use scripts to simulate the behavior of a compiler.
+    cmd = cmd.replace(/\s+/g, "\\ ");
     if (cmd.endsWith(".jar")) {
-      cmd = "java -jar " + cmd;
+       cmd = "java -jar " + cmd;
     }
+    
     cmd = cmd + " " + config.FPPCompilerParameters;
     // Create the output path before executing the compiler
     if (!fs.existsSync(config.FPPCompilerOutputPath)) {
