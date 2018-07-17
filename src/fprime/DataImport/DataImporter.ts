@@ -43,7 +43,7 @@ export default class DataImporter {
     if (cmd.endsWith(".jar")) {
        cmd = "java -jar " + cmd;
     }
-    
+
     cmd = cmd + " " + config.FPPCompilerParameters;
     // Create the output path before executing the compiler
     if (!fs.existsSync(config.FPPCompilerOutputPath)) {
