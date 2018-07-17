@@ -1,11 +1,8 @@
 import * as child from "child_process";
 import * as fs from "fs";
-import * as path from "path";
 import IConfig from "../Common/Config";
 import CompilerConverter from "./CompilerConverter";
 import StyleConverter, { IStyle } from "./StyleConverter";
-
-declare var __static: string;
 
 export interface IOutput {
   appendOutput(v: string): void;
@@ -39,13 +36,19 @@ export default class DataImporter {
    * @param config The project configuration
    */
   public async invokeCompiler(config: IConfig, output?: IOutput): Promise<any> {
-    let cmd = path.resolve(__static, config.FPPCompilerPath);
+    let cmd = config.FPPCompilerPath;
     // The actual compiler is a java program, thus we should use 'java -jar'
     // For convenience, we use scripts to simulate the behavior of a compiler.
+    cmd = cmd.replace(/\s+/g, "\\ ");
     if (cmd.endsWith(".jar")) {
-      cmd = "java -jar " + cmd;
+       cmd = "java -jar " + cmd;
     }
+
     cmd = cmd + " " + config.FPPCompilerParameters;
+    // Create the output path before executing the compiler
+    if (!fs.existsSync(config.FPPCompilerOutputPath)) {
+      fs.mkdirSync(config.FPPCompilerOutputPath);
+    }
     // Execute compiler command
     const re = await this.execWithTimeout(cmd, this.timeout);
     if (output) {
