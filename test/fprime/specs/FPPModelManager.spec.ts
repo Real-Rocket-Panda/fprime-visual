@@ -34,6 +34,21 @@ describe("FppModelManager Parsing", () => {
   });
 */
   it(
+    "should load the model when the path contains blank"
+    , async () => {
+      await modelManager.loadModel(
+        {
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "path with blank/"),
+        } as IConfig,
+      );
+      const view = modelManager.query(viewName1, "Function View");
+      expect(view.instances.length).to.be.equal(22);
+      expect(view.connections.length).to.be.equal(11);
+  });
+
+  it(
     "should print error message when the component is illegal"
     , async () => {
       await modelManager.loadModel(
@@ -140,7 +155,7 @@ describe("FppModelManager Query", () => {
         } as IConfig,
       );
       const view = modelManager.query(viewName3, "Component View");
-      expect(view.components.length).to.be.equal(1);
+      expect(view.components.length).to.be.equal(2);
       const view1 = modelManager.query(viewName2, "InstanceCentric View");
       expect(view1.instances.length).to.be.equal(8);
       expect(view1.connections.length).to.be.equal(7);

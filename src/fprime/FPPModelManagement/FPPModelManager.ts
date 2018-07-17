@@ -91,7 +91,6 @@ export default class FPPModelManager {
 
     data.forEach((i: any) => {
       this.components = this.components.concat(this.generateComponents(
-        i.namespace.$.name,
         i.namespace.component,
       ));
     });
@@ -215,7 +214,7 @@ export default class FPPModelManager {
     this.components = [];
   }
 
-  private generateComponents(ns: string, components: any[]): IFPPComponent[] {
+  private generateComponents(components: any[]): IFPPComponent[] {
     const res: IFPPComponent[] = [];
 
     if (components == null || components.length === 0) {
@@ -232,12 +231,12 @@ export default class FPPModelManager {
 
         p.properties = port.$;
         ps.push(p);
-      })
-      const ns2 = ele.$.namespace;
+      });
+      const ns = ele.$.namespace;
 
       res.push({
-        name: ns2 + "." + ele.$.name,
-        namespace: ns2,
+        name: ns + "." + ele.$.name,
+        namespace: ns,
         ports: ps,
       });
     });
@@ -313,11 +312,11 @@ export default class FPPModelManager {
         cons.push({
           from: {
             inst: source,
-            port: this.getPortByInstance(ns, source, con.source[0].$.port),
+            port: this.getPortByInstance(source, con.source[0].$.port),
           },
           to: {
             inst: target,
-            port: this.getPortByInstance(ns, target, con.target[0].$.port),
+            port: this.getPortByInstance(target, con.target[0].$.port),
           },
         });
       });
@@ -332,12 +331,12 @@ export default class FPPModelManager {
   }
 
   private getPortByInstance(
-    ns: string, ins: IFPPInstance, portName: string): IFPPPort {
-    return this.getPortsByInstance(ns, ins)
+    ins: IFPPInstance, portName: string): IFPPPort {
+    return this.getPortsByInstance(ins)
     .filter((p) => p.name === portName)[0];
   }
 
-  private getPortsByInstance(ns: string, ins: IFPPInstance): IFPPPort[] {
+  private getPortsByInstance(ins: IFPPInstance): IFPPPort[] {
     const prop: string[] = ins.properties.type.split(".");
     const name: string = prop[1];
     const namespace: string = prop[0];
