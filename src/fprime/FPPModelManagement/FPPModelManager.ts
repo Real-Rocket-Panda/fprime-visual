@@ -88,13 +88,17 @@ export default class FPPModelManager {
     if (data == null || data.length === 0) {
       throw new Error("fail to parse model data, model is null!");
     }
+    console.log(data);
 
     data.forEach((i: any) => {
       this.components = this.components.concat(this.generateComponents(
         i.namespace.$.name,
         i.namespace.component,
       ));
+    });
 
+
+    data.forEach((i: any) => {
       if (i.namespace.system == null || i.namespace.system.length === 0) {
         return;
       }
@@ -103,13 +107,18 @@ export default class FPPModelManager {
         i.namespace.$.name,
         i.namespace.system[0].instance,
       ));
+    });
+
+    data.forEach((i: any) => {
+      if (i.namespace.system == null || i.namespace.system.length === 0) {
+        return;
+      }
 
       this.topologies = this.topologies.concat(this.generateTopologies(
         i.namespace.$.name,
         i.namespace.system[0].topology,
       ));
     });
-
 
     // Return the view list of the model
     const viewlist: { [k: string]: string[] } = {
@@ -153,7 +162,7 @@ export default class FPPModelManager {
         });
 
         ins = this.filterUnusedPorts(ins, cons);
-        // console.log(ins);
+        console.log(ins);
         return {
           instances: ins,
           connections: cons,
@@ -225,11 +234,12 @@ export default class FPPModelManager {
 
         p.properties = port.$;
         ps.push(p);
-      });
+      })
+      const ns2 = ele.$.namespace;
 
       res.push({
-        name: ns + "." + ele.$.name,
-        namespace: ele.$.namespace,
+        name: ns2 + "." + ele.$.name,
+        namespace: ns2,
         ports: ps,
       });
     });
@@ -264,10 +274,12 @@ export default class FPPModelManager {
         throw new Error("Invalid type format for [" + type + "]");
       }
 
-      const namespace = type[0];
-      const name = type[1];
+      // const namespace = type[0];
+      // const name = type[1];
+      const namespace = ele.$.namespace;
+      const name = ele.$.name;
       this.components.forEach((c: IFPPComponent) => {
-        if (c.name === ns + "." + name && c.namespace === namespace) {
+        if (c.name === namespace + "." + name && c.namespace === namespace) {
           c.ports.forEach((p: IFPPPort) => {
             ps[p.name] = p;
           });
@@ -332,9 +344,8 @@ export default class FPPModelManager {
     const name: string = prop[1];
     const namespace: string = prop[0];
     const comp = this.components.filter(
-      (c) => c.name === ns + "." + name && c.namespace === namespace,
+      (c) => c.name === namespace + "." + name && c.namespace === namespace,
     )[0];
-
     return comp.ports;
   }
 
