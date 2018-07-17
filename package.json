@@ -1,9 +1,9 @@
 {
   "name": "fprime-visual",
-  "version": "0.0.3",
-  "author": "",
-  "description": "An electron-vue project",
-  "license": null,
+  "version": "0.0.4",
+  "author": "Rocket Panda",
+  "description": "A tool to visualize FPrime models",
+  "license": "",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
