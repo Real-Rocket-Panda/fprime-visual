@@ -1,6 +1,6 @@
 {
   "name": "fprime-visual",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "author": "Rocket Panda",
   "description": "A tool to visualize FPrime models",
   "license": "",
@@ -41,7 +41,7 @@
   },
   "build": {
     "productName": "fprime-visual",
-    "appId": "org.simulatedgreg.electron-vue",
+    "appId": "edu.cmu.isr",
     "directories": {
       "output": "build"
     },
@@ -71,7 +71,8 @@
     },
     "linux": {
       "icon": "build/icons"
-    }
+    },
+    "asar": false
   },
   "dependencies": {
     "acorn": "^5.6.2",
