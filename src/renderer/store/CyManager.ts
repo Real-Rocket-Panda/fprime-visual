@@ -268,7 +268,7 @@ class CyManager {
     });
     (this.cy! as any).on(
       "noderesize.resizeend",
-      (evt: EventObject, type: any, node: any) => {
+      (_evt: EventObject, _type: any, node: any) => {
         // Set the size style for this node
         (this.cy!.style() as any)
           .selector("#" + node.id())
@@ -364,7 +364,7 @@ class CyManager {
    */
   private addTooltips(): void {
     this.tippyIns =
-      this.cy!.nodes().map((node, i, nodes) => {
+      this.cy!.nodes().map((node, _i, _nodes) => {
         const ref = (node as any).popperRef();
         const tippy = new Tippy(ref, { // tippy options:
           html: (() => {
