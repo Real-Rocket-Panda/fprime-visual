@@ -88,7 +88,6 @@ export default class FPPModelManager {
     if (data == null || data.length === 0) {
       throw new Error("fail to parse model data, model is null!");
     }
-    console.log(data);
 
     data.forEach((i: any) => {
       this.components = this.components.concat(this.generateComponents(
@@ -162,7 +161,6 @@ export default class FPPModelManager {
         });
 
         ins = this.filterUnusedPorts(ins, cons);
-        console.log(ins);
         return {
           instances: ins,
           connections: cons,
