@@ -273,9 +273,7 @@ export default class FPPModelManager {
 
       const namespace = type[0];
       const name = type[1];
-      console.log(namespace + "." + name);
       this.components.forEach((c: IFPPComponent) => {
-        console.log(c);
         if (c.name === namespace + "." + name && c.namespace === namespace) {
           c.ports.forEach((p: IFPPPort) => {
             ps[p.name] = p;
@@ -350,7 +348,6 @@ export default class FPPModelManager {
     ins: IFPPInstance[], cons: IFPPConnection[],
   ): IFPPInstance[] {
     ins.forEach((i) => {
-      console.log(i);
       const ps: { [k: string]: IFPPPort } = {};
       Object.keys(i.ports).forEach((key) => {
         const p = i.ports[key];
