@@ -1,8 +1,10 @@
-import ViewDescriptor, { ICytoscapeJSON } from "./ViewDescriptor";
-import StyleManager, { IStyle } from "../StyleManagement/StyleManager";
+import ViewDescriptor, { ICytoscapeJSON, IRenderJSON } from "./ViewDescriptor";
+import StyleManager from "../StyleManagement/StyleManager";
 import FPPModelManager from "../FPPModelManagement/FPPModelManager";
 import ConfigManager from "../ConfigManagement/ConfigManager";
-import LayoutGenerator, { IAlgorithmList } from "./LayoutGenerator";
+import LayoutGenerator from "./LayoutGenerator";
+import AnalyzerManager from "../StyleManagement/AnalyzerManager";
+import { IStyle } from "../DataImport/StyleConverter";
 
 export interface IViewList {
   [type: string]: IViewListItem[];
@@ -41,7 +43,6 @@ export default class ViewManager {
    * and load the default appearance.
    */
   private styleManager: StyleManager = new StyleManager();
-  private defaultStyle?: IStyle[];
 
   /**
    * The model manager where to get the model data of the current project.
@@ -52,15 +53,31 @@ export default class ViewManager {
    * The layout gennerator where to manage the layout algorithm with
    * related Parameters.
    */
-  private layoutGennerator: LayoutGenerator = new LayoutGenerator();
+  private layoutGenerator: LayoutGenerator = new LayoutGenerator();
 
   /**
    * The list of the available auto layout algorithms in the config.
    */
-  private layoutAlgorithms: IAlgorithmList = { selected: "", algorithms: [] };
+  private layoutAlgorithms: { selected: string, selections: string[] } =
+    { selected: "", selections: [] };
 
   public get LayoutAlgorithms() {
     return this.layoutAlgorithms;
+  }
+
+  /**
+   * The analyzer manager to manage all the analyzers and their results.
+   */
+  private analyzerManager: AnalyzerManager = new AnalyzerManager();
+
+  /**
+   * The available model analyzers in the config.
+   */
+  private analyzers: { selected: string, selections: string[] } =
+    { selected: "", selections: [] };
+
+  public get Analyzers() {
+    return this.analyzers;
   }
 
   /**
@@ -79,53 +96,64 @@ export default class ViewManager {
   /**
    * The output message to show on the output panel.
    */
-  private compilerOutput = { content: "" };
+  private outputMessage = { compile: "", analysis: "" };
 
-  public get CompilerOutput() {
-    return this.compilerOutput;
+  public get OutputMessage() {
+    return this.outputMessage;
   }
 
   public appendOutput(v: string) {
-    this.compilerOutput.content += v + "\n";
+    this.outputMessage.compile += v + "\n";
+  }
+
+  public appendAnalysisOutput(v: string) {
+    this.outputMessage.analysis += v + "\n";
   }
 
   /**
    * Build the current FPrime project and get the view list.
    * @param dir The folder path of a project.
    */
-  public build(dir: string) {
-    // Cleanup the views
-    this.cleanup();
-    // Set the project path
-    this.configManager.ProjectPath = dir;
-    // Load the project config.
-    this.configManager.loadConfig();
-    // Initialize the layoutGenerator
-    const layouts = this.layoutGennerator.getAutoLayoutList(
-      this.configManager.Config);
-    this.layoutAlgorithms.selected = layouts.selected;
-    this.layoutAlgorithms.algorithms = layouts.algorithms;
-    // Load the default style from the config
-    this.defaultStyle = this.styleManager.getDefaultStyles(
-      this.configManager.Config.DefaultStyleFilePath);
-    // Load the FPP model
-    return this.modelManager
-      .loadModel(this.configManager.Config)
-      .then((data) => {
-        this.compilerOutput.content = data.output + "\n";
-        this.generateViewList(data.viewlist);
-      })
-      .catch((err) => {
-        this.compilerOutput.content = err + "\n";
-      });
+  public async build(dir: string) {
+    try {
+      // Cleanup the views
+      this.cleanup();
+      // Set the project path
+      this.configManager.ProjectPath = dir;
+      // Load the project config.
+      this.configManager.loadConfig();
+
+      // Initialize the layoutGenerator
+      const layouts = this.layoutGenerator.getAutoLayoutList(
+        this.configManager.Config);
+      this.layoutAlgorithms.selected = layouts.selected;
+      this.layoutAlgorithms.selections = layouts.algorithms;
+
+      // TODO: Load the available model analyzers
+      const analyzers = this.analyzerManager.getAnalyzerList(
+        this.configManager.Config);
+      // Push a fake analyzer to allow user disable the analysis info.
+      analyzers.push("Disable");
+      this.analyzers.selected = analyzers.length > 0 ? analyzers[0] : "";
+      this.analyzers.selections = analyzers;
+
+      // Load the default style from the config
+      this.styleManager.loadDefaultStyles(
+        this.configManager.Config.DefaultStyleFilePath);
+
+      // Load the FPP model
+      const viewlist = await this.modelManager.loadModel(
+        this.configManager.Config, this);
+      this.generateViewList(viewlist);
+    } catch (err) {
+      this.appendOutput(err);
+    }
   }
 
   /**
    * Rebuild the project with the current path.
    */
   public rebuild() {
-    // Clean up
-    this.cleanup();
     return this.build(this.configManager.ProjectPath);
   }
 
@@ -134,17 +162,13 @@ export default class ViewManager {
    * user changes the style file and want to reload the view without build the
    * entire project again.
    */
-  public refresh(viewName?: string) {
-    if (viewName) {
-      delete this.viewDescriptors[viewName];
-      delete this.cytoscapeJSONs[viewName];
-      // Remove the existing style file for the view.
-      this.styleManager.deleteStyleFor(viewName, this.configManager);
-    } else {
-      this.cleanup();
-    }
+  public refresh(viewName: string) {
+    // Delete the in-memory style information, this would cause losing all
+    // the unsaved changes.
+    delete this.viewDescriptors[viewName];
+    delete this.cytoscapeJSONs[viewName];
     // Load the default style from the config
-    this.defaultStyle = this.styleManager.getDefaultStyles(
+    this.styleManager.loadDefaultStyles(
       this.configManager.Config.DefaultStyleFilePath);
   }
 
@@ -157,10 +181,8 @@ export default class ViewManager {
    * @returns The render JSON object for rendering, the current system uses
    * cytoscape as the front-end rendering library.
    */
-  public render(viewName: string): {
-    needLayout: boolean,
-    descriptor: ICytoscapeJSON,
-  } | null {
+  public render(viewName: string,
+                forceLayout: boolean = false): IRenderJSON | null {
     // Check if the name is in the view list
     const views =
       Object.keys(this.viewList)
@@ -173,9 +195,13 @@ export default class ViewManager {
     }
     // Find the Cytoscape JSON if already exists.
     if (this.cytoscapeJSONs[viewName]) {
-      // TODO: should not use JSON.parse to do deep clone.
       return {
-        needLayout: false,
+        needLayout: forceLayout,
+        elesHasPosition: this.cytoscapeJSONs[viewName]
+          .elements.nodes.map((i) => i.data.id),
+        // If the cytoscape JSON exists, it is returned by render layer,
+        // thus all the nodes should have postion.
+        elesNoPosition: [],
         descriptor: this.cytoscapeJSONs[viewName],
       };
     }
@@ -184,7 +210,10 @@ export default class ViewManager {
     const viewDescriptor = this.generateViewDescriptorFor(viewName);
     this.viewDescriptors[viewName] = viewDescriptor;
     // Convert the view descriptor to the render JSON (cytoscape format)
-    return this.generateRenderJSONFrom(viewDescriptor);
+    const json = this.generateRenderJSONFrom(viewDescriptor);
+    // Set the forceLayout layout flag
+    json.needLayout = json.needLayout || forceLayout;
+    return json;
   }
 
   /**
@@ -240,27 +269,33 @@ export default class ViewManager {
    * Return the current selected layout config
    */
   public getCurrentAutoLayoutConfig(): { [key: string]: any } {
-    return this.layoutGennerator.getAutoLayoutConfigByName(
+    return this.layoutGenerator.getAutoLayoutConfigByName(
       this.configManager.Config, this.layoutAlgorithms.selected,
     );
   }
 
-  // /**
-  //  * return the default config for the auto-layout algorithm
-  //  */
-  // public getDefaultAutoLayoutConfig(): { [key: string]: any } {
-  //   return this.layoutGennerator.getDefaultAutoLayoutConfig(
-  //     this.configManager.Config);
-  // }
+  /**
+   * Invoke the current selected model analyzer and read its output.
+   */
+  public async invokeCurrentAnalyzer() {
+    try {
+      await this.analyzerManager.loadAnalysisInfo(this.analyzers.selected,
+        this.configManager.Config, this);
+    } catch (e) {
+      this.appendAnalysisOutput("fail to call the analyzer,\n" + e);
+    }
+  }
 
-  // /**
-  //  * return the config for the auto-layout algorithm
-  //  */
-  // public getAutoLayoutConfigByName(name: string): { [key: string]: any } {
-  //   return this.layoutGennerator.getAutoLayoutConfigByName(
-  //     this.configManager.Config, name,
-  //   );
-  // }
+  /**
+   * Return the analysis info of the current selected mode analyzer.
+   */
+  public getCurrentAnalyzerResult(): IStyle[] {
+    if (this.analyzers.selected === "Disable") {
+      return [];
+    }
+    return this.analyzerManager.getAnalysisResultFor(this.analyzers.selected,
+      this.configManager.Config);
+  }
 
   /**
    * Clean up the memeory
@@ -271,6 +306,13 @@ export default class ViewManager {
     });
     Object.keys(this.cytoscapeJSONs).forEach((key) => {
       delete this.cytoscapeJSONs[key];
+    });
+    // Clean output messages
+    this.outputMessage.compile = "";
+    this.outputMessage.analysis = "";
+    // Clean view list
+    Object.keys(this.viewList).forEach((key) => {
+      this.viewList[key] = [];
     });
   }
 
@@ -319,16 +361,11 @@ export default class ViewManager {
    * cytoscape as our front-end renderer.
    * @param viewDescriptor The view descriptor to convert.
    */
-  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): {
-    needLayout: boolean,
-    descriptor: ICytoscapeJSON,
-  } {
+  private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): IRenderJSON {
     const json = viewDescriptor.generateCytoscapeJSON();
     // Merge the default styles with all the other styles.
-    if (this.defaultStyle) {
-      json.descriptor.style = this.styleManager.mergeStyle(
-        this.defaultStyle, json.descriptor.style);
-    }
+    json.descriptor.style = this.styleManager.mergeStyle(
+      this.styleManager.DefaultStyle, json.descriptor.style);
     return json;
   }
 

@@ -1,6 +1,5 @@
 import IConfig from "../Common/Config";
-import DataImporter from "../DataImport/DataImporter";
-import { Promise } from "es6-promise";
+import DataImporter, { IOutput } from "../DataImport/DataImporter";
 
 /**
  * 
@@ -32,8 +31,8 @@ export interface IFPPComponent {
  * 
  */
 export interface IFPPInstance {
-  id: string;
-  model_id: string;
+  name: string;
+  base_id: string;
   ports: { [p: string]: IFPPPort };
   properties: { [p: string]: string };
 }
@@ -76,64 +75,73 @@ export default class FPPModelManager {
   /**
    *
    */
-  public loadModel(config: IConfig): Promise<{
-    output: string;
-    viewlist: { [k: string]: string[] };
-  }> {
+  public async loadModel(
+      config: IConfig, output?: IOutput): Promise<{ [k: string]: string[] }> {
 
     // Reset all the model object lists
     this.reset();
 
     // Invoke the compiler
-    const compilerResult = this.dataImporter.invokeCompiler(config);
+    const data = await this.dataImporter.invokeCompiler(config, output);
 
-    return compilerResult.then((re) => {
-      // Load the model from xml object and return the view list
-      const data = re.representation;
-      if (data == null || data.namespace == null) {
-        throw new Error("fail to parse model data, model is null!");
-      }
-      // Load the model data to FPP model manager
-      if (!data.namespace.system || data.namespace.system.length !== 1) {
-        throw new Error(
-          "fail to parse model data, the number of system section is invalid",
-        );
-      }
+    // Load the model from xml object and return the view list
+    if (data == null || data.length === 0) {
+      throw new Error("fail to parse model data, model is null!");
+    }
 
+    data.forEach((i: any) => {
       this.components = this.components.concat(this.generateComponents(
-        data.namespace.component,
+        i.namespace.component,
       ));
+    });
+
+
+    data.forEach((i: any) => {
+      if (i.namespace.system == null || i.namespace.system.length === 0) {
+        return;
+      }
 
       this.instances = this.instances.concat(this.generateInstances(
-        data.namespace.system[0].instance,
+        i.namespace.$.name,
+        i.namespace.system[0].instance,
       ));
+    });
+
+    data.forEach((i: any) => {
+      if (i.namespace.system == null || i.namespace.system.length === 0) {
+        return;
+      }
 
       this.topologies = this.topologies.concat(this.generateTopologies(
-        data.namespace.system[0].topology,
+        i.namespace.$.name,
+        i.namespace.system[0].topology,
       ));
-
-      // Return the view list of the model
-      const viewlist: { [k: string]: string[] } = {
-        topologies: [],
-        instances: [],
-        components: [],
-      };
-      this.topologies.forEach((e: IFPPTopology) => {
-        viewlist.topologies.push(e.name);
-      });
-
-      this.instances.forEach((e: IFPPInstance) => {
-        viewlist.instances.push(e.id);
-      });
-
-      this.components.forEach((e: IFPPComponent) => {
-        viewlist.components.push(e.name);
-      });
-
-      // Add output information
-      const output = re.output + "View list generated...\n";
-      return { output, viewlist };
     });
+
+    // Return the view list of the model
+    const viewlist: { [k: string]: string[] } = {
+      topologies: [],
+      instances: [],
+      components: [],
+    };
+    this.topologies.forEach((e: IFPPTopology) => {
+      viewlist.topologies.push(e.name);
+    });
+
+    this.instances.forEach((e: IFPPInstance) => {
+      viewlist.instances.push(e.name);
+    });
+
+    this.components.forEach((e: IFPPComponent) => {
+      viewlist.components.push(e.name);
+    });
+
+
+    // Add output information
+    if (output) {
+      output.appendOutput("Generate view list...");
+    }
+    return viewlist;
   }
 
   public query(viewName: string, viewType: string): any {
@@ -152,7 +160,6 @@ export default class FPPModelManager {
         });
 
         ins = this.filterUnusedPorts(ins, cons);
-        // console.log(ins);
         return {
           instances: ins,
           connections: cons,
@@ -173,7 +180,7 @@ export default class FPPModelManager {
       case ViewType.InstanceCentric: {
         let ins: IFPPInstance[] = [];
         const cons: IFPPConnection[] = [];
-        const root = this.instances.filter((i) => i.id === viewName)[0];
+        const root = this.instances.filter((i) => i.name === viewName)[0];
 
         this.topologies.forEach((t) => {
           t.connections.forEach((c) => {
@@ -210,7 +217,7 @@ export default class FPPModelManager {
   private generateComponents(components: any[]): IFPPComponent[] {
     const res: IFPPComponent[] = [];
 
-    if (components === null) {
+    if (components == null || components.length === 0) {
       return res;
     }
 
@@ -225,10 +232,11 @@ export default class FPPModelManager {
         p.properties = port.$;
         ps.push(p);
       });
+      const ns = ele.$.namespace;
 
       res.push({
-        name: ele.$.name,
-        namespace: ele.$.namespace,
+        name: ns + "." + ele.$.name,
+        namespace: ns,
         ports: ps,
       });
     });
@@ -236,10 +244,10 @@ export default class FPPModelManager {
     return res;
   }
 
-  private generateInstances(instances: any[]): IFPPInstance[] {
+  private generateInstances(ns: string, instances: any[]): IFPPInstance[] {
     const res: IFPPInstance[] = [];
 
-    if (instances === null) {
+    if (instances == null || instances.length === 0) {
       return res;
     }
 
@@ -266,7 +274,7 @@ export default class FPPModelManager {
       const namespace = type[0];
       const name = type[1];
       this.components.forEach((c: IFPPComponent) => {
-        if (c.name === name && c.namespace === namespace) {
+        if (c.name === namespace + "." + name && c.namespace === namespace) {
           c.ports.forEach((p: IFPPPort) => {
             ps[p.name] = p;
           });
@@ -274,8 +282,8 @@ export default class FPPModelManager {
       });
 
       res.push({
-        id: ele.$.name,
-        model_id: ele.$.base_id,
+        name:  ns + "." + ele.$.name,
+        base_id: ele.$.base_id,
         ports: ps,
         properties: props,
       });
@@ -284,10 +292,9 @@ export default class FPPModelManager {
     return res;
   }
 
-  private generateTopologies(topologies: any[]): IFPPTopology[] {
+  private generateTopologies(ns: string, topologies: any[]): IFPPTopology[] {
     const res: IFPPTopology[] = [];
-
-    if (topologies === null) {
+    if (topologies == null) {
       return res;
     }
 
@@ -295,9 +302,9 @@ export default class FPPModelManager {
       const cons: IFPPConnection[] = [];
       ele.connection.forEach((con: any) => {
         const source = this.instances.filter(
-          (i) => i.id === con.source[0].$.instance)[0];
+          (i) => i.name === ns + "." + con.source[0].$.instance)[0];
         const target = this.instances.filter(
-          (i) => i.id === con.target[0].$.instance)[0];
+          (i) => i.name === ns + "." + con.target[0].$.instance)[0];
 
 
         cons.push({
@@ -313,7 +320,7 @@ export default class FPPModelManager {
       });
 
       res.push({
-        name: ele.$.name,
+        name: ns + "." + ele.$.name,
         connections: cons,
       });
     });
@@ -321,8 +328,10 @@ export default class FPPModelManager {
     return res;
   }
 
-  private getPortByInstance(ins: IFPPInstance, portName: string): IFPPPort {
-    return this.getPortsByInstance(ins).filter((p) => p.name === portName)[0];
+  private getPortByInstance(
+    ins: IFPPInstance, portName: string): IFPPPort {
+    return this.getPortsByInstance(ins)
+    .filter((p) => p.name === portName)[0];
   }
 
   private getPortsByInstance(ins: IFPPInstance): IFPPPort[] {
@@ -330,9 +339,8 @@ export default class FPPModelManager {
     const name: string = prop[1];
     const namespace: string = prop[0];
     const comp = this.components.filter(
-      (c) => c.name === name && c.namespace === namespace,
+      (c) => c.name === namespace + "." + name && c.namespace === namespace,
     )[0];
-
     return comp.ports;
   }
 

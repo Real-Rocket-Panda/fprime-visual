@@ -1,7 +1,7 @@
 import { BoundingBox12, Position, NodeSingular } from "cytoscape";
 const boundingBoxOpt = {
   includeOverlays: false,
-  includeEdges: false,
+  includeEdges: true,
   includeLabels: false,
 };
 export class CyUtil {
@@ -37,18 +37,18 @@ export class CyUtil {
         // get the posotion of intersection between bounding box and the edge
         intersection = this.getEdgeBoxIntesection(
           // Should reverse the direction
-          edge.targetEndpoint(),
-          edge.sourceEndpoint(),
-          (comp as any).boundingBox({ includeOverlays: false }));
+          edge.target().position(),
+          edge.source().position(),
+          (comp as any).boundingBox(boundingBoxOpt));
       } else {
         // get the edge from component to port
         const id: string = "#" + comp.id() + "-" + port.id();
         const edge: any = this.cy.edges(id);
         // get the posotion of intersection between bounding box and the edge
         intersection = this.getEdgeBoxIntesection(
-          edge.sourceEndpoint(),
-          edge.targetEndpoint(),
-          (comp as any).boundingBox({ includeOverlays: false }));
+          edge.source().position(),
+          edge.target().position(),
+          (comp as any).boundingBox(boundingBoxOpt));
       }
       // resposition the port
       port.position(intersection);
@@ -126,11 +126,16 @@ export class CyUtil {
     return { x1, x2, y1, y2 };
   }
 
-  public adjustCompsAllPortImg(
+
+
+  public adjustCompAllPortsLook(
     comp: NodeSingular,
     ports: cytoscape.NodeCollection,
   ): void {
-    ports.forEach((p) => { this.adjustPortImg(comp, p); });
+    ports.forEach((p) => {
+      this.adjustPortImg(comp, p);
+      this.adjustPortLabel(comp, p);
+     });
   }
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
@@ -141,23 +146,50 @@ export class CyUtil {
     const img = this.decideImgNum(edge, dir);
     switch (img) {
       case 1:
-        port.data("img", "\\static\\ports\\up.png");
+        port.data("img", "static/ports/up.png");
         break;
       case 2:
-        port.data("img", "\\static\\ports\\right.png");
+        port.data("img", "static/ports/right.png");
         break;
       case 3:
-        port.data("img", "\\static\\ports\\down.png");
+        port.data("img", "static/ports/down.png");
         break;
       case 4:
-        port.data("img", "\\static\\ports\\left.png");
+        port.data("img", "static/ports/left.png");
         break;
       default:
-        port.data("img", "\\static\\ports\\up.png");
+        port.data("img", "static/ports/up.png");
         break;
     }
   }
 
+
+  public adjustPortLabel(comp: NodeSingular, port: NodeSingular): void {
+    const bb = (comp as any).boundingBox(boundingBoxOpt);
+    const pos = port.position();
+    switch (this.decideEdge(bb, pos)) {
+      case 1: // up
+        port.data("label_vloc", "bottom");
+        port.data("label_hloc", "center");
+        break;
+      case 2: // right
+        port.data("label_vloc", "top");
+        port.data("label_hloc", "center");
+        break;
+      case 3: // down
+        port.data("label_vloc", "top");
+        port.data("label_hloc", "center");
+        break;
+      case 4: // left
+        port.data("label_vloc", "top");
+        port.data("label_hloc", "center");
+        break;
+      default:
+        port.data("label_vloc", "center");
+        port.data("label_hloc", "center");
+        break;
+    }
+  }
 
   private distributePositions(
     bb: BoundingBox12,
@@ -184,13 +216,13 @@ export class CyUtil {
   private decideEdge(bb: BoundingBox12, pos: Position): number {
     const float = 0.0001;
     if (pos.y <= bb.y1 + float) {
-      return 1;
+      return 1;  // up
     } else if (pos.x <= bb.x1 + float) {
-      return 4;
+      return 4; // right
     } else if (pos.x >= bb.x2 - float) {
-      return 2;
+      return 2; // down
     } else if (pos.y >= bb.y2 - float) {
-      return 3;
+      return 3; // top
     }
     return 0;
   }

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<namespace name="Ref">
+  <component kind="active" name="PingReceiver" namespace="Ref">
+    <port direction="in" kind="async" max_number="1" min_number="0" name="PingIn" number="1" type="Svc.Ping"/>
+    <port direction="out" max_number="1" min_number="0" name="PingOut" number="1" type="Svc.Ping"/>
+  </component>
+  <component kind="queued" name="SignalGen" namespace="Ref">
+    <port direction="out" max_number="1" min_number="0" name="timeCaller" number="1" role="TimeGet" type="Fw.Time"/>
+    <port direction="out" max_number="1" min_number="0" name="cmdRegOut" number="1" role="CmdRegistration" type="Fw.CmdReg"/>
+    <port direction="in" max_number="1" min_number="0" name="cmdIn" number="1" role="Cmd" type="Fw.Cmd"/>
+    <port direction="in" kind="sync" max_number="1" min_number="0" name="schedIn" number="1" type="Svc.Sched"/>
+    <port direction="out" max_number="1" min_number="0" name="logTextOut" number="1" role="LogTextEvent" type="Fw.LogText"/>
+    <port direction="out" max_number="1" min_number="0" name="logOut" number="1" role="LogEvent" type="Fw.Log"/>
+    <port direction="out" max_number="1" min_number="0" name="cmdResponseOut" number="1" role="CmdResponse" type="Fw.CmdResponse"/>
+    <port direction="out" max_number="1" min_number="0" name="tlmOut" number="1" role="Telemetry" type="Fw.Tlm"/>
+  </component>
+   <component kind="active" name="ActiveLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="LogRecv" type="Fw.Log"/>
+    <port direction="out" max_number="1" min_number="0" name="PktSend" type="Fw.Com"/>
+    <port direction="out" max_number="1" min_number="0" name="FatalAnnounce" type="Svc.FatalEvent"/>
+    <port direction="in" kind="async" max_number="1" min_number="0" name="pingIn" type="Svc.Ping"/>
+    <port direction="out" max_number="1" min_number="0" name="pingOut" type="Svc.Ping"/>
+    <dict name="events">
+      <dict id="0" name="event"/>
+    </dict>
+    <port direction="out" max_number="1" min_number="0" name="LogText" role="LogTextEvent" type="Fw.LogText"/>
+    <port direction="out" max_number="1" min_number="0" name="Log" role="LogEvent" type="Fw.Log"/>
+  </component>
+  <component kind="active" name="CommandDispatcher" namespace="Svc">
+    <port direction="out" max_number="10" min_number="1" name="compCmdSend" type="Fw.Cmd"/>
+    <port direction="in" kind="guarded" max_number="10" min_number="1" name="compCmdReg" type="Fw.CmdReg"/>
+    <port direction="in" kind="async" max_number="10" min_number="1" name="compCmdStat" type="Fw.CmdResponse"/>
+    <port direction="out" max_number="10" min_number="1" name="seqCmdStatus" type="Fw.CmdResponse"/>
+    <port direction="in" kind="async" max_number="10" min_number="1" name="seqCmdBuff" type="Fw.Com"/>
+    <port direction="out" max_number="1" min_number="0" name="pingOut" number="1" type="Svc.Ping"/>
+  </component>
+  <component kind="passive" name="PassiveTextLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="TextLogger" type="Fw.LogText"/>
+  </component>
+  <component kind="passive" name="Time" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="timeGetPort" type="Fw.Time"/>
+  </component>
+  <component kind="active" name="TlmChan" namespace="Svc">
+    <port direction="in" kind="guarded" max_number="10" min_number="1" name="TlmRecv" type="Fw.Tlm"/>
+    <port direction="in" kind="guarded" max_number="1" min_number="0" name="TlmGet" type="Fw.Tlm"/>
+    <port direction="in" kind="async" max_number="1" min_number="0" name="Run" type="Svc.Sched"/>
+  </component>
+  <system name="sys">
+    <instance base_id="181" base_id_window="20" name="SG1" namespace="Ref" type="RefSignalGen"/>
+    <instance base_id="221" base_id_window="20" name="SG2" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="201" base_id_window="20" name="SG3" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="321" base_id_window="20" name="SG4" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="281" base_id_window="20" name="SG5" namespace="Ref" type="Ref.SignalGen"/>
+    <instance base_id="521" base_id_window="20" name="textLogger" namespace="Ref" type="Svc.PassiveTextLogger"/>
+    <instance base_id="421" base_id_window="20" name="eventLogger" namespace="Ref" type="Svc.ActiveLogger"/>
+    <instance base_id="61" base_id_window="20" name="chanTlm" namespace="Ref" type="Svc.TlmChan"/>
+    <instance base_id="441" base_id_window="20" name="linuxTime" namespace="Ref" type="Svc.Time"/>
+    <instance base_id="121" base_id_window="20" name="cmdDisp" namespace="Ref" type="Svc.CommandDispatcher"/>
+    <topology name="REFLogger">
+      <connection name="connection1">
+        <source index="0" instance="SG1" port="logTextOut"/>
+        <target index="0" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection2">
+        <source index="0" instance="SG2" port="logTextOut"/>
+        <target index="1" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection3">
+        <source index="0" instance="SG3" port="logTextOut"/>
+        <target index="2" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection4">
+        <source index="0" instance="SG4" port="logTextOut"/>
+        <target index="3" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection5">
+        <source index="0" instance="SG5" port="logTextOut"/>
+        <target index="4" instance="textLogger" port="TextLogger"/>
+      </connection>
+      <connection name="connection6">
+        <source index="0" instance="SG1" port="logOut"/>
+        <target index="0" instance="eventLogger" port="LogRecv"/>
+      </connection>
+      <connection name="connection7">
+        <source index="0" instance="SG2" port="logOut"/>
+        <target index="1" instance="eventLogger" port="LogRecv"/>
+      </connection>
+      <connection name="connection8">
+        <source index="0" instance="SG3" port="logOut"/>
+        <target index="2" instance="eventLogger" port="LogRecv"/>
+      </connection>
+      <connection name="connection9">
+        <source index="0" instance="SG4" port="logOut"/>
+        <target index="3" instance="eventLogger" port="LogRecv"/>
+      </connection>
+      <connection name="connection10">
+        <source index="0" instance="SG5" port="logOut"/>
+        <target index="4" instance="eventLogger" port="LogRecv"/>
+      </connection>
+      <connection name="connection11">
+        <source index="0" instance="eventLogger" port="LogText"/>
+        <target index="5" instance="textLogger" port="TextLogger"/>
+      </connection>
+    </topology>
+    <topology name="REFTelemetry">
+      <connection name="connection12">
+        <source index="0" instance="SG1" port="tlmOut"/>
+        <target index="0" instance="chanTlm" port="TlmRecv"/>
+      </connection>
+      <connection name="connection13">
+        <source index="0" instance="SG2" port="tlmOut"/>
+        <target index="1" instance="chanTlm" port="TlmRecv"/>
+      </connection>
+      <connection name="connection14">
+        <source index="0" instance="SG3" port="tlmOut"/>
+        <target index="2" instance="chanTlm" port="TlmRecv"/>
+      </connection>
+      <connection name="connection15">
+        <source index="0" instance="SG4" port="tlmOut"/>
+        <target index="3" instance="chanTlm" port="TlmRecv"/>
+      </connection>
+      <connection name="connection16">
+        <source index="0" instance="SG5" port="tlmOut"/>
+        <target index="4" instance="chanTlm" port="TlmRecv"/>
+      </connection>
+    </topology>
+    <topology name="REFTime">
+      <connection name="connection17">
+        <source index="0" instance="SG1" port="timeCaller"/>
+        <target index="0" instance="linuxTime" port="timeGetPort"/>
+      </connection>
+      <connection name="connection18">
+        <source index="0" instance="SG2" port="timeCaller"/>
+        <target index="1" instance="linuxTime" port="timeGetPort"/>
+      </connection>
+      <connection name="connection19">
+        <source index="0" instance="SG3" port="timeCaller"/>
+        <target index="2" instance="linuxTime" port="timeGetPort"/>
+      </connection>
+      <connection name="connection20">
+        <source index="0" instance="SG4" port="timeCaller"/>
+        <target index="3" instance="linuxTime" port="timeGetPort"/>
+      </connection>
+      <connection name="connection21">
+        <source index="0" instance="SG5" port="timeCaller"/>
+        <target index="4" instance="linuxTime" port="timeGetPort"/>
+      </connection>
+    </topology>
+    <topology name="REFCommanding">
+      <connection name="connection22">
+        <source index="0" instance="SG1" port="cmdRegOut"/>
+        <target index="0" instance="cmdDisp" port="compCmdReg"/>
+      </connection>
+      <connection name="connection23">
+        <source index="0" instance="SG2" port="cmdRegOut"/>
+        <target index="1" instance="cmdDisp" port="compCmdReg"/>
+      </connection>
+      <connection name="connection24">
+        <source index="0" instance="SG3" port="cmdRegOut"/>
+        <target index="2" instance="cmdDisp" port="compCmdReg"/>
+      </connection>
+      <connection name="connection25">
+        <source index="0" instance="SG4" port="cmdRegOut"/>
+        <target index="3" instance="cmdDisp" port="compCmdReg"/>
+      </connection>
+      <connection name="connection26">
+        <source index="0" instance="SG5" port="cmdRegOut"/>
+        <target index="4" instance="cmdDisp" port="compCmdReg"/>
+      </connection>
+      <connection name="connection27">
+        <source index="0" instance="SG1" port="cmdResponseOut"/>
+        <target index="0" instance="cmdDisp" port="compCmdStat"/>
+      </connection>
+      <connection name="connection28">
+        <source index="0" instance="SG2" port="cmdResponseOut"/>
+        <target index="1" instance="cmdDisp" port="compCmdStat"/>
+      </connection>
+      <connection name="connection29">
+        <source index="0" instance="SG3" port="cmdResponseOut"/>
+        <target index="2" instance="cmdDisp" port="compCmdStat"/>
+      </connection>
+      <connection name="connection30">
+        <source index="0" instance="SG4" port="cmdResponseOut"/>
+        <target index="3" instance="cmdDisp" port="compCmdStat"/>
+      </connection>
+      <connection name="connection31">
+        <source index="0" instance="SG5" port="cmdResponseOut"/>
+        <target index="4" instance="cmdDisp" port="compCmdStat"/>
+      </connection>
+      <connection name="connection32">
+        <source index="0" instance="cmdDisp" port="compCmdSend"/>
+        <target index="0" instance="SG1" port="cmdIn"/>
+      </connection>
+      <connection name="connection33">
+        <source index="1" instance="cmdDisp" port="compCmdSend"/>
+        <target index="0" instance="SG2" port="cmdIn"/>
+      </connection>
+      <connection name="connection34">
+        <source index="2" instance="cmdDisp" port="compCmdSend"/>
+        <target index="0" instance="SG3" port="cmdIn"/>
+      </connection>
+      <connection name="connection35">
+        <source index="3" instance="cmdDisp" port="compCmdSend"/>
+        <target index="0" instance="SG4" port="cmdIn"/>
+      </connection>
+      <connection name="connection36">
+        <source index="4" instance="cmdDisp" port="compCmdSend"/>
+        <target index="0" instance="SG5" port="cmdIn"/>
+      </connection>
+    </topology>
+  </system>
+</namespace>

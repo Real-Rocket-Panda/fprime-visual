@@ -1,14 +1,9 @@
-import * as css from "css";
 import * as fs from "fs";
 import * as path from "path";
 import ConfigManager from "../ConfigManagement/ConfigManager";
+import StyleConverter, { IStyle } from "../DataImport/StyleConverter";
 
 declare var __static: string;
-
-export interface IStyle {
-  selector: string;
-  style: { [key: string]: any };
-}
 
 export default class StyleManager {
   /**
@@ -17,22 +12,35 @@ export default class StyleManager {
   private systemStylePath = path.resolve(__static, "default.css");
 
   /**
+   * The converter that converts the style file to IStyle objects.
+   */
+  private styleConverter: StyleConverter = new StyleConverter();
+
+  /**
+   * The default styles for the current project
+   */
+  private defaultStyle: IStyle[] = [];
+
+  public get DefaultStyle() {
+    return this.defaultStyle;
+  }
+
+  /**
    * Load the project level style file from the path and merge it with the
    * system level default default style.
    * @param file The absolute path for the project style file.
    */
-  public getDefaultStyles(file?: string): IStyle[] {
-    const systemCSS = css.parse(fs.readFileSync(
-      this.systemStylePath, "utf-8"));
-    const systemStyle = this.getStyleFromCSS(systemCSS);
+  public loadDefaultStyles(file?: string): void {
+    const systemStyle = this.styleConverter.parseStyleFile(
+      fs.readFileSync(this.systemStylePath, "utf-8"));
     // Read the project style file if any
-    let projectCSS = null;
+    let projectStyle: IStyle[] = [];
     if (file && fs.existsSync(file)) {
-      projectCSS = css.parse(fs.readFileSync(file, "utf-8"));
+      projectStyle = this.styleConverter.parseStyleFile(
+        fs.readFileSync(file, "utf-8"));
     }
-    const projectStyle = projectCSS ? this.getStyleFromCSS(projectCSS) : [];
     // Merge the projectStyle to the systemStyle
-    return this.mergeStyle(systemStyle, projectStyle);
+    this.defaultStyle = this.mergeStyle(systemStyle, projectStyle);
   }
 
   /**
@@ -45,21 +53,8 @@ export default class StyleManager {
   public saveStyleFor(viewName: string, descriptor: IStyle[],
                       config: ConfigManager) {
     const filepath = this.generateFilePathForView(viewName, config);
-    const rules = descriptor.map((s) => {
-      return {
-        type: "rule",
-        selectors: s.selector.split(" "),
-        declarations: Object.keys(s.style).map((key) => {
-          return {
-            type: "declaration",
-            property: key,
-            value: s.style[key],
-          };
-        }),
-      };
-    });
-    const ast = { type: "stylesheet", stylesheet: { rules } };
-    fs.writeFileSync(filepath, css.stringify(ast), "utf-8");
+    const value = this.styleConverter.stringify(descriptor);
+    fs.writeFileSync(filepath, value, "utf-8");
   }
 
   /**
@@ -73,8 +68,8 @@ export default class StyleManager {
     if (!fs.existsSync(filepath)) {
       return [];
     }
-    const ast = css.parse(fs.readFileSync(filepath, "utf-8"));
-    return this.getStyleFromCSS(ast);
+    return this.styleConverter.parseStyleFile(
+      fs.readFileSync(filepath, "utf-8"));
   }
 
   /**
@@ -112,23 +107,6 @@ export default class StyleManager {
       }
     });
     return x;
-  }
-
-  /**
-   * Get an array of IStyle from the given css ast.
-   * @param ast The ast of the css file.
-   */
-  private getStyleFromCSS(ast: any): IStyle[] {
-    return ast.stylesheet.rules.map((ele: any) => {
-      const styles: { [key: string]: string } = {};
-      ele.declarations.forEach((style: any) => {
-        styles[style.property] = style.value;
-      });
-      return {
-        selector: ele.selectors.join(),
-        style: styles,
-      };
-    });
   }
 
   private generateFilePathForView(viewName: string, config: ConfigManager) {

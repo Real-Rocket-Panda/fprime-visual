@@ -4,22 +4,24 @@ import ConfigManager from "fprime/ConfigManagement/ConfigManager";
 
 declare var __static: string;
 
-const __project = "./test/Ref";
+const __project = "./test/Ref1";
+const __invalid = "./invalid/path";
 
-const configJSON = {
+const unresolvedConfigJSON = {
   Analyzers: [
     {
       Name: "AcmeRuleChecker",
-      Path: path.resolve(__static, "acme-checker.jar"),
-      OutputFilePath: path.resolve(__static, "acme_output"),
-      Type: "",
+      Path: "${System}/mockChecker",
+      Parameters: "${Project} ${Project}/acme_output",
+      OutputFilePath: "./acme_output/acme_result.css",
+      Type: "Rule Checker",
     },
   ],
-  FPPCompilerPath: path.resolve(__static, "fppcompiler"),
-  FPPCompilerParameters: "",
-  FPPCompilerOutputPath: path.resolve(__static, "fpp_output"),
-  DefaultStyleFilePath: "",
-  ViewStyleFileFolder: "",
+  FPPCompilerPath: "${System}/fppcompiler",
+  FPPCompilerParameters: "${Project} ${Project}/fpp_output",
+  FPPCompilerOutputPath: "./fpp_output",
+  DefaultStyleFilePath: "./style.css",
+  ViewStyleFileFolder: "./styles",
   AutoLayout: [
     {
       Name: "cose-bilkent",
@@ -33,20 +35,23 @@ const configJSON = {
   ],
 };
 
-const projectJSON = {
+const resolvedProjectJSON = {
   Analyzers: [
     {
       Name: "AcmeRuleChecker",
-      Path: path.resolve(__static, "acme-checker.jar"),
-      OutputFilePath: path.resolve(__static, "acme_output"),
-      Type: "",
+      Path:  path.resolve(__static, "mockChecker"),
+      Parameters: `${path.resolve(__project)} ` +
+        `${path.resolve(__project, "acme_output")}`,
+      OutputFilePath: path.resolve(__project, "./acme_output/acme_result.css"),
+      Type: "Rule Checker",
     },
   ],
-  FPPCompilerPath: path.resolve(__project, "fast_compiler"),
-  FPPCompilerParameters: "",
-  FPPCompilerOutputPath: path.resolve(__project, "model.xml"),
-  DefaultStyleFilePath: path.resolve(__project, "mystyle.css"),
-  ViewStyleFileFolder: "",
+  FPPCompilerPath: path.resolve(__static, "fppcompiler"),
+  FPPCompilerParameters: `${path.resolve(__project)} ` +
+    `${path.resolve(__project, "fpp_output")}`,
+  FPPCompilerOutputPath: path.resolve(__project, "./fpp_output"),
+  DefaultStyleFilePath: path.resolve(__project, "./mystyle.css"),
+  ViewStyleFileFolder: path.resolve(__project, "./styles"),
   AutoLayout: [
     {
       Name: "cose-bilkent",
@@ -68,23 +73,21 @@ describe("Config manager", () => {
   });
 
   it("should return system config after initialized", () => {
-    expect(configManager.Config).to.deep.equal(configJSON);
+    expect(configManager.Config).to.deep.equal(unresolvedConfigJSON);
   });
 
-  it("should return system config if the project path is not set", () => {
-    configManager.loadConfig();
-    expect(configManager.Config).to.deep.equal(configJSON);
+  it("should throw error if the project path is not set", () => {
+    expect(() => configManager.loadConfig()).to.throw("invalid project path");
   });
 
-  it("should return system config if the project config doesn't exist", () => {
-    configManager.ProjectPath = "./invalid/path";
-    configManager.loadConfig();
-    expect(configManager.Config).to.deep.equal(configJSON);
+  it("should return error if the project config doesn't exist", () => {
+    configManager.ProjectPath = __invalid;
+    expect(() => configManager.loadConfig()).to.throw("invalid project path");
   });
 
   it("should return project config merged from system config", () => {
     configManager.ProjectPath = __project;
     configManager.loadConfig();
-    expect(configManager.Config).to.deep.equal(projectJSON);
+    expect(configManager.Config).to.deep.equal(resolvedProjectJSON);
   });
 });

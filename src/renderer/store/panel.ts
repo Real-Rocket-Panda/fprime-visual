@@ -18,7 +18,7 @@ export default {
     /**
      * The output information of the compile process
      */
-    compilerOutput: fprime.viewManager.CompilerOutput,
+    outputMessage: fprime.viewManager.OutputMessage,
   },
 
   /**
@@ -35,7 +35,7 @@ export default {
   },
 
   /**
-   * 
+   * Open the output panel
    */
   showOutput() {
     this.showPanel(PanelName.Output);
@@ -44,7 +44,7 @@ export default {
   },
 
   /**
-   * 
+   * Open the analysis panel
    */
   showAnalysis() {
     this.showPanel(PanelName.Analysis);

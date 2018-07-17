@@ -6,10 +6,12 @@
         :style="{zIndex: 1000}" id="fprime-header-toolbar"
       >
         <v-toolbar-title class="mr-3">FPrime Visual</v-toolbar-title>
+
         <!-- open button -->
         <v-btn small icon @click="openProject">
           <v-icon>folder_open</v-icon>
         </v-btn>
+
         <!-- build button -->
         <v-dialog v-model="building" persistent max-width="40">
           <v-btn small icon @click="rebuild" slot="activator">
@@ -22,15 +24,13 @@
             </v-progress-circular>
           </v-card>
         </v-dialog>
+
         <!-- save button -->
         <v-btn small icon @click="saveView">
           <v-icon>save</v-icon>
         </v-btn>
 
-        <v-divider vertical></v-divider>
-        
-        <layout-selector></layout-selector>
-        <color-picker></color-picker>
+        <!-- refresh button -->
         <v-btn small icon @click="refresh">
           <v-icon>refresh</v-icon>
         </v-btn>
@@ -38,9 +38,32 @@
         <v-divider vertical></v-divider>
 
         <!-- analysis button -->
-        <v-btn small icon>
-          <v-icon>insert_chart</v-icon>
-        </v-btn>
+        <v-dialog v-model="analyzing" persistent max-width="40">
+          <v-btn small icon @click="invokeAnalyzer" slot="activator">
+            <v-icon>insert_chart</v-icon>
+          </v-btn>
+          <v-card width="40" height="40" :style="{padding: '4px 4px'}">
+            <v-progress-circular
+              indeterminate
+              color="primary">
+            </v-progress-circular>
+          </v-card>
+        </v-dialog>
+        <toolbar-selector
+          :option-list="analyzers"
+          :on-change="loadAnalysisInfo"
+        ></toolbar-selector>
+
+        <v-divider vertical></v-divider>
+        
+        <toolbar-selector
+          :option-list="layoutAlgorithms"
+          :on-change="changeLayout"
+        ></toolbar-selector>
+
+        <!-- color picker -->
+        <color-picker></color-picker>
+
 
       </v-toolbar>
       
@@ -69,7 +92,7 @@ import ViewTabs from "./components/ViewTabs.vue";
 import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
-import LayoutSelector from "./components/LayoutSelector.vue";
+import ToolbarSelector from "./components/ToolbarSelector.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
@@ -84,11 +107,20 @@ export default Vue.extend({
     MessageFooter,
     MessagePanel,
     ColorPicker,
-    LayoutSelector
+    ToolbarSelector
   },
   data() {
-    return { building: false };
+    return {
+      building: false,
+      analyzing: false,
+      layoutAlgorithms: fprime.viewManager.LayoutAlgorithms,
+      analyzers: fprime.viewManager.Analyzers,
+    };
   },
+  /**
+   * In mounted, add event listener to enable changing the size of the side
+   * drawer.
+   */
   mounted() {
     let resizing = false;
     let counter = 0;
@@ -124,36 +156,55 @@ export default Vue.extend({
     });
   },
   methods: {
-    openProject() {
+    /**
+     * openProject should open a dialog to allow user select a project folder.
+     */
+    async openProject() {
       const dirs = remote.dialog.showOpenDialog({
         title: "Open a project",
         properties: ["openDirectory"]
       });
       if (dirs) {
         this.building = true;
-        fprime.viewManager.build(dirs[0]).finally(() => {
+        await fprime.viewManager.build(dirs[0]);
+        // Force the reset lines to be asynchronous.
+        setTimeout(() => {
           // Close all the opening views
           view.CloseAll();
           this.$router.replace("/");
           this.showOutputPanel();
-        });
+        }, 100);
       }
     },
-    rebuild() {
-      fprime.viewManager.rebuild().finally(() => {
-        this.showOutputPanel();
-      });
+    /**
+     * Rebuild the project simply call the build function with the same
+     * project path.
+     */
+    async rebuild() {
+      await fprime.viewManager.rebuild();
+      // Force the reset lines to be asynchronous.
+      setTimeout(() => {
+        this.showOutputPanel();  
+      }, 100);
     },
+    /**
+     * Refresh would delete the cached view descriptor, reload the default
+     * style file, and reload the view from file if any. This would cause
+     * losing all the unsaved changes. It is useful when the user changes the
+     * style from file and want to reload the view.
+     */
     refresh() {
-      // Force update the current view
       const viewName = this.$route.params.viewName;
       if (viewName) {
         fprime.viewManager.refresh(viewName);
         const render = fprime.viewManager.render(viewName)!;
-        CyManager.startUpdate(viewName, render.needLayout, render.descriptor);
+        CyManager.startUpdate(viewName, render);
         CyManager.endUpdate();
       }
     },
+    /**
+     * Save the view to file
+     */
     saveView() {
       // TODO: seems not good :(
       fprime.viewManager.saveViewDescriptorFor(
@@ -161,6 +212,10 @@ export default Vue.extend({
         CyManager.getDescriptor()
       );
     },
+    /**
+     * When building the project, the output panel should be open after the
+     * compilation is completed.
+     */
     showOutputPanel() {
       // Hide the progress animation
       this.building = false;
@@ -168,7 +223,55 @@ export default Vue.extend({
       if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
         panel.showOutput();
       }
-    }
+    },
+    /**
+     * Invoke the current selected compiler, and load its analysis result.
+     */
+    async invokeAnalyzer() {
+      this.analyzing = true;
+      await fprime.viewManager.invokeCurrentAnalyzer();
+      // Force the reset lines to be asynchronous.
+      setTimeout(() => {
+        this.analyzing = false;
+        if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
+          panel.showAnalysis();
+        }
+        this.loadAnalysisInfo();
+      }, 100);
+    },
+    /**
+     * Load the current selected analyzer's result.
+     */
+    loadAnalysisInfo() {
+      const viewName = this.$route.params.viewName;
+      if (!viewName) {
+        return;
+      }
+      CyManager.startUpdate(viewName, {
+        needLayout: false,
+        descriptor: CyManager.getDescriptor(),
+        elesHasPosition: [],
+        elesNoPosition: [],
+      });
+      CyManager.endUpdate();
+    },
+    /**
+     * Apply the current selected layout algorithm to the current view. This
+     * would reset the positions of all the elements.
+     */
+    changeLayout() {
+      const viewName = this.$route.params.viewName;
+      if (!viewName) {
+        return;
+      }
+      CyManager.startUpdate(viewName, {
+        needLayout: true,
+        descriptor: CyManager.getDescriptor(),
+        elesHasPosition: [],
+        elesNoPosition: [],
+      });
+      CyManager.endUpdate();
+    },
   }
 });
 </script>
@@ -180,7 +283,7 @@ export default Vue.extend({
   min-width: 200px;
 }
 
-#view-list-nav > .navigation-drawer__border {
+#view-list-nav > .v-navigation-drawer__border {
   cursor: ew-resize;
   width: 2px;
   background-color: rgba(150, 150, 150, 0.12);

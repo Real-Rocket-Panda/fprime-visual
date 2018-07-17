@@ -1,13 +1,14 @@
 import { expect } from "chai";
 import * as fs from "fs";
 import * as path from "path";
-import StyleManager, { IStyle } from "fprime/StyleManagement/StyleManager";
+import StyleManager from "fprime/StyleManagement/StyleManager";
 import ConfigManager from "fprime/ConfigManagement/ConfigManager";
+import { IStyle } from "fprime/DataImport/StyleConverter";
 
-const __projectDefaultStyle = "./test/Ref/mystyle.css";
-const __project = "./test/Ref";
-const __projectDefaultStyleDir = "./test/Ref/styles";
-const __projectStyleDir = "./test/Ref/mystyles";
+const __projectDefaultStyle = "./test/Ref1/mystyle.css";
+const __project = "./test/Ref1";
+const __projectDefaultStyleDir = "./test/Ref1/styles";
+const __projectStyleDir = "./test/Ref1/mystyles";
 
 const systemStyle: IStyle[] = [
   {
@@ -112,18 +113,19 @@ describe("StyleManager", () => {
   describe("getDefaultStyles", () => {
     it("should return system style if the project style path is not set",
        () => {
-      expect(styleManager.getDefaultStyles()).to.deep.equal(systemStyle);
+      styleManager.loadDefaultStyles();
+      expect(styleManager.DefaultStyle).to.deep.equal(systemStyle);
     });
 
     it("should return system style if the project style path doesn't exist",
        () => {
-      expect(styleManager.getDefaultStyles("./invalid/path"))
-        .to.deep.equal(systemStyle);
+      styleManager.loadDefaultStyles("./invalid/path");
+      expect(styleManager.DefaultStyle).to.deep.equal(systemStyle);
     });
 
     it("should return project style merged from system style", () => {
-      expect(styleManager.getDefaultStyles(__projectDefaultStyle))
-        .to.deep.equal(projectStyle);
+      styleManager.loadDefaultStyles(__projectDefaultStyle);
+      expect(styleManager.DefaultStyle).to.deep.equal(projectStyle);
     });
   });
 

@@ -15,7 +15,8 @@
     "no-var-requires": false,
     "prefer-for-of": false,
     "ordered-imports": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "variable-name": ["allow-leading-underscore"]
   },
   "jsRules": {
     "max-line-length": {
