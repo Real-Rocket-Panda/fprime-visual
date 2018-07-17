@@ -2,6 +2,7 @@ import * as path from "path";
 import { expect } from "chai";
 import FPPModelManager from "fprime/FPPModelManagement/FPPModelManager";
 import IConfig from "fprime/Common/Config";
+import { fail } from "assert";
 
 declare var __static: string;
 
@@ -61,6 +62,19 @@ describe("FppModelManager Parsing", () => {
         expect(err.message).to.equal(
           "Cannot read property 'split' of undefined",
         );
+      });
+  });
+  it(
+    "should query the model without system and instance sections"
+    , async () => {
+      await modelManager.loadModel(
+        {
+          FPPCompilerPath: path.resolve(__static, "./fppcompiler"),
+          FPPCompilerOutputPath: path.resolve(__project,
+            "model_without_system_section/"),
+        } as IConfig,
+      ).catch((err) => {
+        fail(err);
       });
   });
 });
@@ -134,4 +148,5 @@ describe("FppModelManager Query", () => {
       expect(view2.instances.length).to.be.equal(22);
       expect(view2.connections.length).to.be.equal(11);
   });
+
 });

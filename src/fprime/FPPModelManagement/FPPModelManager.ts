@@ -88,11 +88,16 @@ export default class FPPModelManager {
     if (data == null || data.length === 0) {
       throw new Error("fail to parse model data, model is null!");
     }
+
     data.forEach((i: any) => {
       this.components = this.components.concat(this.generateComponents(
         i.namespace.$.name,
         i.namespace.component,
       ));
+
+      if (i.namespace.system == null || i.namespace.system.length === 0) {
+        return;
+      }
 
       this.instances = this.instances.concat(this.generateInstances(
         i.namespace.$.name,
@@ -206,7 +211,7 @@ export default class FPPModelManager {
   private generateComponents(ns: string, components: any[]): IFPPComponent[] {
     const res: IFPPComponent[] = [];
 
-    if (components === null) {
+    if (components == null || components.length === 0) {
       return res;
     }
 
@@ -235,7 +240,7 @@ export default class FPPModelManager {
   private generateInstances(ns: string, instances: any[]): IFPPInstance[] {
     const res: IFPPInstance[] = [];
 
-    if (instances === null) {
+    if (instances == null || instances.length === 0) {
       return res;
     }
 
@@ -282,7 +287,7 @@ export default class FPPModelManager {
 
   private generateTopologies(ns: string, topologies: any[]): IFPPTopology[] {
     const res: IFPPTopology[] = [];
-    if (topologies === null) {
+    if (topologies == null) {
       return res;
     }
 
