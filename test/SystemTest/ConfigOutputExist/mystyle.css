@@ -1,0 +1,16 @@
+.fprime-instance {
+    width: 280;
+    height: 280;
+    text-opacity: 1;
+}
+.fprime-component {
+    width: 280;
+    height: 280;
+    text-opacity: 1;
+}
+.fprime-port {
+    width: 20;
+    height: 20;
+    text-opacity: 1;
+    z-index: 100;
+}

@@ -1,0 +1,1 @@
+echo "mock model checker..."

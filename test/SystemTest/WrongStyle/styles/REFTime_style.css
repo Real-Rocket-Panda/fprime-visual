@@ -1,0 +1,113 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: as4sd0asdfs0px;
+  height: vs4asf522fad0px;
+  label: data(label);
+  font-size: 28asdcvpx;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#SG1 {
+  x: 1271.2547285159449;
+  y: 1326.7987292183118;
+}
+
+#SG1_timeCaller {
+  x: 1271.2547285159449;
+  y: 1099.7987292183118;
+}
+
+#linuxTime {
+  x: 631.1211680441376;
+  y: 1056.3702199289296;
+}
+
+#linuxTime_timeGetPort {
+  x: 833.1211680441376;
+  y: 1056.3702199289296;
+}
+
+#SG2 {
+  x: 775.6903169302267;
+  y: 257.35173686602275;
+}
+
+#SG2_timeCaller {
+  x: 775.6903169302267;
+  y: 484.35173686602275;
+}
+
+#SG3 {
+  x: 217;
+  y: 553.6359631945028;
+}
+
+#SG3_timeCaller {
+  x: 419;
+  y: 553.6359631945028;
+}
+
+#SG4 {
+  x: 1274.1781831045435;
+  y: 242;
+}
+
+#SG4_timeCaller {
+  x: 1274.1781831045435;
+  y: 469;
+}
+
+#SG5 {
+  x: 1764.010186494353;
+  y: 859.8951984821363;
+}
+
+#SG5_timeCaller {
+  x: 1562.010186494353;
+  y: 859.8951984821363;
+}
