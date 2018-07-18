@@ -7,9 +7,9 @@ edge {
 .fprime-instance {
     shape: rectangle;    
     width: 400;
-    height: 600;
+    height: 450;
     content: data(label);
-    font-size : 17;
+    font-size : 28;
     text-halign: data(label_hloc);
     text-valign: data(label_vloc);
     text-opacity: 1.0;
@@ -21,9 +21,9 @@ edge {
 .fprime-component {
     shape: rectangle;
     width: 400;
-    height: 600;
+    height: 450;
     content: data(label);
-    font-size : 18;
+    font-size : 28;
     text-opacity: 0.5;
     text-halign: data(label_hloc);
     text-valign: data(label_vloc);
@@ -37,6 +37,7 @@ edge {
     width: 50;
     height: 50;
     label: data(label);
+    font-size : 25;
     text-opacity: 0.5;
     text-halign: data(label_hloc);
     text-valign: data(label_vloc);
