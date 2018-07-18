@@ -1,0 +1,113 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: asf400px;
+  height: qwerwd450px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#Ref_SG1 {
+  x: 217;
+  y: 791.5605110667506;
+}
+
+#Ref_SG1_timeCaller {
+  x: 419;
+  y: 791.5605110667506;
+}
+
+#Ref_linuxTime {
+  x: 1198.1755955568356;
+  y: 1202.6444901216043;
+}
+
+#Ref_linuxTime_timeGetPort {
+  x: 1198.1755955568356;
+  y: 975.6444901216043;
+}
+
+#Ref_SG2 {
+  x: 1229.6268740031232;
+  y: 242;
+}
+
+#Ref_SG2_timeCaller {
+  x: 1229.6268740031232;
+  y: 469;
+}
+
+#Ref_SG3 {
+  x: 608.7591304589622;
+  y: 1397.8283409852618;
+}
+
+#Ref_SG3_timeCaller {
+  x: 608.7591304589622;
+  y: 1170.8283409852618;
+}
+
+#Ref_SG4 {
+  x: 1642.225511223132;
+  y: 861.5362523287564;
+}
+
+#Ref_SG4_timeCaller {
+  x: 1440.225511223132;
+  y: 861.5362523287563;
+}
+
+#Ref_SG5 {
+  x: 627.4446195584636;
+  y: 322.25956803753525;
+}
+
+#Ref_SG5_timeCaller {
+  x: 627.4446195584636;
+  y: 549.2595680375352;
+}
