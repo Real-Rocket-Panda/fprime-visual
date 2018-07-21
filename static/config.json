@@ -96,7 +96,20 @@
         "fit": true,
         "padding": 10,
         "avoidOverlap": true,
-        "nodeDimensionsIncludeLabels": true
+        "nodeDimensionsIncludeLabels": true,
+        "minLen": "(function(edge) { if(edge.target().data(\"direction\")==undefined || edge.source().data(\"direction\")==undefined) return -1; else return 1;})",
+        "edgeWeight": "(function(edge) { if(edge.target().data(\"direction\")==undefined || edge.source().data(\"direction\")==undefined) { console.log(edge.source().id()+\" \"+edge.source().data(\"direction\")); console.log(edge.target().id()+\" \"+edge.target().data(\"direction\")); console.log(\"\"); return 1000000000000; } else return -100000000000;})"
+      }
+    },
+    {
+      "Name": "cola",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "avoidOverlap": true,
+        "flow": { "axis": "y", "minSeparation": 100 },
+        "nodeSpacing": "(function (node){ return 100; })"
       }
     }
   ]
