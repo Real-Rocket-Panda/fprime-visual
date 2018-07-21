@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<namespace name="Large">
+  <data_type name="T1" namespace="Large"/>
+  <data_type name="T2" namespace="Large"/>
+  <port_type name="P1" namespace="Large">
+    <arg name="a" type="Large.T1"/>
+  </port_type>
+  <port_type name="P2" namespace="Large">
+    <arg name="a" type="Large.T1"/>
+    <arg name="b" type="Large.T2"/>
+  </port_type>
+  <component kind="active" name="OutComp" namespace="Large">
+    <port direction="out" name="pout" type="Large.P1"/>
+    <port direction="in" kind="async" name="pin" type="Large.P1"/>
+  </component>
+  <component kind="passive" name="InComp" namespace="Large">
+    <port direction="in" kind="sync" name="pin" type="Large.P1"/>
+  </component>
+  <system name="sys">
+    <instance base_id="1" base_id_window="10" name="c1" namespace="Large" type="Large.InComp"/>
+    <instance base_id="2" base_id_window="10" name="c2" namespace="Large" type="Large.InComp"/>
+    <instance base_id="3" base_id_window="10" name="c3" namespace="Large" type="Large.InComp"/>
+    <instance base_id="4" base_id_window="10" name="c4" namespace="Large" type="Large.InComp"/>
+    <instance base_id="5" base_id_window="10" name="c5" namespace="Large" type="Large.InComp"/>
+    <instance base_id="6" base_id_window="10" name="c6" namespace="Large" type="Large.InComp"/>
+    <instance base_id="7" base_id_window="10" name="c7" namespace="Large" type="Large.InComp"/>
+    <instance base_id="8" base_id_window="10" name="c8" namespace="Large" type="Large.InComp"/>
+    <instance base_id="9" base_id_window="10" name="c9" namespace="Large" type="Large.InComp"/>
+    <instance base_id="10" base_id_window="10" name="c10" namespace="Large" type="Large.InComp"/>
+    <instance base_id="11" base_id_window="10" name="c11" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="12" base_id_window="10" name="c12" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="13" base_id_window="10" name="c13" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="14" base_id_window="10" name="c14" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="15" base_id_window="10" name="c15" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="16" base_id_window="10" name="c16" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="17" base_id_window="10" name="c17" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="18" base_id_window="10" name="c18" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="19" base_id_window="10" name="c19" namespace="Large" type="Large.OutComp"/>
+    <instance base_id="20" base_id_window="10" name="c20" namespace="Large" type="Large.OutComp"/>
+    <topology name="top1">
+      <connection name="connection1">
+        <source index="0" instance="c11" port="pout"/>
+        <target index="0" instance="c1" port="pin"/>
+      </connection>
+      <connection name="connection2">
+        <source index="0" instance="c12" port="pout"/>
+        <target index="0" instance="c2" port="pin"/>
+      </connection>
+      <connection name="connection3">
+        <source index="0" instance="c13" port="pout"/>
+        <target index="0" instance="c3" port="pin"/>
+      </connection>
+      <connection name="connection4">
+        <source index="0" instance="c14" port="pout"/>
+        <target index="0" instance="c4" port="pin"/>
+      </connection>
+      <connection name="connection5">
+        <source index="0" instance="c15" port="pout"/>
+        <target index="0" instance="c5" port="pin"/>
+      </connection>
+      <connection name="connection6">
+        <source index="1" instance="c11" port="pout"/>
+        <target index="0" instance="c6" port="pin"/>
+      </connection>
+      <connection name="connection7">
+        <source index="0" instance="c16" port="pout"/>
+        <target index="0" instance="c7" port="pin"/>
+      </connection>
+      <connection name="connection8">
+        <source index="0" instance="c17" port="pout"/>
+        <target index="0" instance="c8" port="pin"/>
+      </connection>
+      <connection name="connection9">
+        <source index="0" instance="c18" port="pout"/>
+        <target index="0" instance="c9" port="pin"/>
+      </connection>
+      <connection name="connection10">
+        <source index="0" instance="c19" port="pout"/>
+        <target index="0" instance="c10" port="pin"/>
+      </connection>
+      <connection name="connection11">
+        <source index="2" instance="c11" port="pout"/>
+        <target index="0" instance="c12" port="pin"/>
+      </connection>
+      <connection name="connection12">
+        <source index="1" instance="c12" port="pout"/>
+        <target index="0" instance="c13" port="pin"/>
+      </connection>
+      <connection name="connection13">
+        <source index="1" instance="c13" port="pout"/>
+        <target index="0" instance="c14" port="pin"/>
+      </connection>
+      <connection name="connection14">
+        <source index="1" instance="c14" port="pout"/>
+        <target index="0" instance="c15" port="pin"/>
+      </connection>
+      <connection name="connection15">
+        <source index="1" instance="c15" port="pout"/>
+        <target index="0" instance="c16" port="pin"/>
+      </connection>
+      <connection name="connection16">
+        <source index="1" instance="c16" port="pout"/>
+        <target index="0" instance="c17" port="pin"/>
+      </connection>
+      <connection name="connection17">
+        <source index="1" instance="c17" port="pout"/>
+        <target index="0" instance="c18" port="pin"/>
+      </connection>
+      <connection name="connection18">
+        <source index="1" instance="c18" port="pout"/>
+        <target index="0" instance="c19" port="pin"/>
+      </connection>
+      <connection name="connection19">
+        <source index="1" instance="c19" port="pout"/>
+        <target index="0" instance="c20" port="pin"/>
+      </connection>
+      <connection name="connection20">
+        <source index="0" instance="c20" port="pout"/>
+        <target index="0" instance="c11" port="pin"/>
+      </connection>
+    </topology>
+  </system>
+</namespace>
