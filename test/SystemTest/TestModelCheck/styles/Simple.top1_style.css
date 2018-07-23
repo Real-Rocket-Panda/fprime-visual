@@ -1,0 +1,93 @@
+edge {
+  line-color: rgb(210,200, 100);
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#Simple_c1 {
+  x: 248.63870557887907;
+  y: 1000.7096019966586;
+}
+
+#Simple_c1_pout {
+  x: 248.63870557887907;
+  y: 773.7096019966586;
+}
+
+#Simple_c2 {
+  x: 217;
+  y: 242;
+}
+
+#Simple_c2_pout {
+  x: 419;
+  y: 242;
+}
+
+#Simple_c3 {
+  x: 1780.6035698378967;
+  y: 1093.9772074901548;
+}
+
+#Simple_c3_pout {
+  x: 1578.6035698378967;
+  y: 1093.9772074901548;
+}
+
+#Simple_c4 {
+  x: 1081.8923880900004;
+  y: 395.3168744382375;
+}
+
+#Simple_c4_pin {
+  x: 1283.8923880900004;
+  y: 395.3168744382375;
+}

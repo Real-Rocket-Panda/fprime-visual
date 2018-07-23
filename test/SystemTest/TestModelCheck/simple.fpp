@@ -37,12 +37,12 @@ system sys {
         base_id_window = 10
     }
 
-    instance c2 : OutComp {
+    instance c2 : InComp {
         base_id = 2
         base_id_window = 10
     }
 
-    instance c3 : InComp {
+    instance c3 : OutComp {
         base_id = 3
         base_id_window = 10
     }
@@ -53,7 +53,8 @@ system sys {
     }
 
     topology top1 {
-        c1.pout -> c2.pout
+        c1.pout -> c2.pin
+	c3.pout -> c4.pin
     }
 
 }
