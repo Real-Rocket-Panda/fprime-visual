@@ -245,7 +245,8 @@ export default class ViewManager {
     // Parse the style information in cytoscape json,
     // write it back to the view descriptor
     const viewDescriptor = this.viewDescriptors[viewName];
-    viewDescriptor.Descriptor = ViewDescriptor.parseStyleFrom(json);
+    viewDescriptor.Descriptor = ViewDescriptor.parseStyleFrom(json,
+      this.styleManager.DefaultStyle);
   }
 
   /**

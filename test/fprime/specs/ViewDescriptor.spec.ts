@@ -259,14 +259,18 @@ describe("ViewDescriptor", () => {
         ],
       },
     };
-    const style: { [id: string]: IStyle } = {
-      ".fprime-instance": {
+
+    const defStyle: IStyle[] = [
+      {
         selector: ".fprime-instance",
         style: {
           height: 100,
           width: 100,
         },
       },
+    ];
+
+    const style: { [id: string]: IStyle } = {
       "#ins_1": {
         selector: "#ins_1",
         style: {
@@ -291,7 +295,7 @@ describe("ViewDescriptor", () => {
       },
     };
 
-    expect(ViewDescriptor.parseStyleFrom(json)).to.deep.equal(style);
+    expect(ViewDescriptor.parseStyleFrom(json, defStyle)).to.deep.equal(style);
   });
 
   it("should generate cytoscape json", () => {
