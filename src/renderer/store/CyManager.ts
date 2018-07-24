@@ -377,13 +377,27 @@ class CyManager {
             })(),
             trigger: "manual", // probably want manual mode
             sticky: false,
+            duration: [100, 100],
           }).tooltips[0];
 
+          tippy.active = false;
+
           node.on("mousemove", () => {
-            tippy.show();
+            tippy.active = true;
+            setTimeout(() => {
+              if (tippy.active) {
+                tippy.show();
+              }
+            }, 500);
           });
-          node.on("mouseout position", () => tippy.hide());
-          this.cy!.on("pan zoom", () => tippy.hide());
+          node.on("mouseout position", () => {
+            tippy.hide();
+            tippy.active = false;
+          });
+          this.cy!.on("pan zoom", () => {
+            tippy.hide();
+            tippy.active = false;
+          });
           return tippy;
         });
   }
