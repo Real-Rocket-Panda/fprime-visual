@@ -222,14 +222,16 @@ class CyManager {
    * @param color value of color to change
    */
   public setColor(eles: any, color: string): void {
-    eles.forEach((el: any) => {
-      if (!el.hasClass("fprime-port")) {
-        (this.cy!.style() as any)
-          .selector("#" + el.id())
-          .style({ "background-color": color });
-      }
-    });
-    (this.cy!.style() as any).update();
+    if (this.cy) {
+      eles.forEach((el: any) => {
+        if (!el.hasClass("fprime-port")) {
+          (this.cy!.style() as any)
+            .selector("#" + el.id())
+            .style({ "background-color": color });
+        }
+      });
+      (this.cy.style() as any).update();
+    }
   }
 
   /**
