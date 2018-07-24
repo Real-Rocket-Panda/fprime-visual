@@ -36,8 +36,13 @@ export default class StyleManager {
     // Read the project style file if any
     let projectStyle: IStyle[] = [];
     if (file && fs.existsSync(file)) {
-      projectStyle = this.styleConverter.parseStyleFile(
-        fs.readFileSync(file, "utf-8"));
+      try {
+        projectStyle = this.styleConverter.parseStyleFile(
+          fs.readFileSync(file, "utf-8"));
+      } catch (e) {
+        throw new Error(`parsing default style file '${path.basename(file)}',\n`
+          + e);
+      }
     }
     // Merge the projectStyle to the systemStyle
     this.defaultStyle = this.mergeStyle(systemStyle, projectStyle);
