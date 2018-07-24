@@ -364,24 +364,28 @@ class CyManager {
    */
   private addTooltips(): void {
     this.tippyIns =
-      this.cy!.nodes().map((node, _i, _nodes) => {
-        const ref = (node as any).popperRef();
-        const tippy = new Tippy(ref, { // tippy options:
-          html: (() => {
-            const content = document.createElement("div");
-            // content.innerHTML = node.data("properties");
-            content.innerHTML = this.constructHtml(node.data("properties"));
-            return content;
-          })(),
-          trigger: "manual", // probably want manual mode
-          sticky: false,
-        }).tooltips[0];
+      this.cy!.nodes().filter((node) => {
+        return Object.keys(node.data("properties")).length !== 0;
+      })
+        .map((node, _i, _nodes) => {
+          const ref = (node as any).popperRef();
+          const tippy = new Tippy(ref, { // tippy options:
+            html: (() => {
+              const content = document.createElement("div");
+              content.innerHTML = this.constructHtml(node.data("properties"));
+              return content;
+            })(),
+            trigger: "manual", // probably want manual mode
+            sticky: false,
+          }).tooltips[0];
 
-        node.on("mousemove", () => tippy.show());
-        node.on("mouseout position", () => tippy.hide());
-        this.cy!.on("pan zoom", () => tippy.hide());
-        return tippy;
-      });
+          node.on("mousemove", () => {
+            tippy.show();
+          });
+          node.on("mouseout position", () => tippy.hide());
+          this.cy!.on("pan zoom", () => tippy.hide());
+          return tippy;
+        });
   }
 
 
