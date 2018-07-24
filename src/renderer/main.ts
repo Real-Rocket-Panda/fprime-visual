@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueTreeNavigation from "vue-tree-navigation";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.css";
+import { sprintf } from "sprintf-js";
 
 import App from "./App.vue";
 import router from "./router";
@@ -22,3 +23,7 @@ const app = new Vue({
 });
 app.$router.replace("/");
 app.$mount("#app");
+
+window.console.error = (message?: any, ...optionalParams: any[]) => {
+  throw new Error(sprintf(message, ...optionalParams));
+};
