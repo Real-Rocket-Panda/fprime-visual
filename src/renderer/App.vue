@@ -184,7 +184,14 @@ export default Vue.extend({
       await fprime.viewManager.rebuild();
       // Force the reset lines to be asynchronous.
       setTimeout(() => {
-        this.showOutputPanel();  
+        this.showOutputPanel();
+        // Refresh the current open view
+        const viewName = this.$route.params.viewName;
+        if (viewName) {
+          const render = fprime.viewManager.render(viewName)!;
+          CyManager.startUpdate(viewName, render);
+          CyManager.endUpdate();
+        }
       }, 100);
     },
     /**
