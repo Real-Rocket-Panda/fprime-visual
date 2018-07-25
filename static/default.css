@@ -4,6 +4,9 @@ edge {
     mid-target-arrow-color: #000000;
     width: 2;
 }
+.invisible_edge {
+    display: none;
+}
 .fprime-instance {
     shape: rectangle;    
     width: 400;

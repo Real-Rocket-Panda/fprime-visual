@@ -1,4 +1,4 @@
-import cytoscape, { EventObject } from "cytoscape";
+import cytoscape, { EventObject, NodeSingular, ElementDefinition, CollectionReturnValue } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -136,10 +136,35 @@ class CyManager {
         };
         layoutOption = Object.assign(layoutOption,
           layoutConfig.Parameters);
-
+        let collection = this.cy!.collection();
         if (render.elesHasPosition.length === 0 ||
           render.elesNoPosition.length === 0) {
-          let layout: any = this.cy!.layout(layoutOption);
+          const plain: ElementDefinition[] = [];
+          this.cy!.nodes(".fprime-instance")
+            .forEach((node1: NodeSingular) => {
+              collection = collection.add(node1);
+              this.cy!.nodes(".fprime-instance")
+                .forEach((node2: NodeSingular) => {
+                  const intersect = (node1 as any).outgoers(".fprime-port")
+                    .outgoers(".fprime-port").outgoers(".fprime-instance")
+                    .intersection(node2);
+                  if (intersect.length !== 0) {
+                    plain.push({
+                      group: "edges",
+                      data: {
+                        id: node1.id() + "-" + node2.id(),
+                        source: node1.id(),
+                        target: node2.id(),
+                      },
+                      classes: "invisible_edge",
+                    });
+                  }
+                });
+            });
+          collection = collection.add(this.cy!.add(plain));
+          console.log(collection);
+          // let layout: any = this.cy!.nodes(".fprime-instances").layout(layoutOption);
+          let layout: any = collection.layout(layoutOption);
           // If the layout is invalid, it should be undefined.
           if (layout) {
             layout.run();
@@ -314,6 +339,10 @@ class CyManager {
 
 
   private movebackAllPort(): void {
+    const box = this.cy!.nodes(".fprime-instance").boundingBox(boundingBoxOpt);
+    const center = { x: ((box as any).w) / 2, y: ((box as any).h) / 2 };
+    this.cy!.nodes(".fprime-port").positions(center);
+
     const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
     Object.keys(simpleGraph).forEach((c) => {
       const comp = this.cy!.nodes(c);
