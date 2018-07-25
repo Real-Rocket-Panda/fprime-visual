@@ -44,9 +44,13 @@ export default class StyleConverter {
    */
   private getStyleFromCSS(ast: any): IStyle[] {
     return ast.stylesheet.rules.map((ele: any) => {
-      const styles: { [key: string]: string } = {};
+      const styles: { [key: string]: any } = {};
       ele.declarations.forEach((style: any) => {
-        styles[style.property] = style.value;
+        if (style.property === "x" || style.property === "y") {
+          styles[style.property] = parseFloat(style.value);
+        } else {
+          styles[style.property] = style.value;
+        }
       });
       return {
         selector: ele.selectors.join(),

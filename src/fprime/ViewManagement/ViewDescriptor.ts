@@ -353,7 +353,7 @@ export default class ViewDescriptor {
           const s = descriptor["#" + n.id];
           if (s && s.style.x && s.style.y) {
             // The element has position information
-            i.position = { x: parseFloat(s.style.x), y: parseFloat(s.style.y) };
+            i.position = { x: s.style.x, y: s.style.y };
             elesHasPosition.push(n.id);
           } else {
             // If any of the node does not have the x/y info, we should set
