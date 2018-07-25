@@ -319,6 +319,8 @@ class CyManager {
     this.movebackAllPort();
     this.appendAnalysisStyle();
     this.addTooltips();
+    fprime.viewManager.updateViewDescriptorFor(this.viewName,
+      this.getDescriptor());
   }
 
 
