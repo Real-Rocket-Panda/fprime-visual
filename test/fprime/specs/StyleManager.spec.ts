@@ -33,23 +33,15 @@ const systemStyle: IStyle[] = [
       "height": "140",
       "background-color": "rgb(216, 204, 186)",
     },
-  }
+  },
 ];
 
 const projectStyle: IStyle[] = [
-  {
-    selector: "edge",
-    style: {
-      "line-color": "#000000",
-      "width": "2",
-    },
-  },
   {
     selector: ".fprime-instance",
     style: {
       "width": "280",
       "height": "280",
-      "background-color": "rgb(252, 242, 199)",
       "text-opacity": "1",
     },
   },
@@ -58,7 +50,6 @@ const projectStyle: IStyle[] = [
     style: {
       "width": "280",
       "height": "280",
-      "background-color": "rgb(216, 204, 186)",
       "text-opacity": "1",
     },
   },
@@ -125,7 +116,8 @@ describe("StyleManager", () => {
 
     it("should return project style merged from system style", () => {
       styleManager.loadDefaultStyles(__projectDefaultStyle);
-      expect(styleManager.DefaultStyle).to.deep.equal(projectStyle);
+      expect(styleManager.DefaultStyle).to.deep.equal(
+        systemStyle.concat(projectStyle));
     });
   });
 

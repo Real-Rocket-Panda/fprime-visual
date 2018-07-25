@@ -44,8 +44,8 @@ export default class StyleManager {
           + e);
       }
     }
-    // Merge the projectStyle to the systemStyle
-    this.defaultStyle = this.mergeStyle(systemStyle, projectStyle);
+    // Concat the project style to the system style
+    this.defaultStyle = systemStyle.concat(projectStyle);
   }
 
   /**

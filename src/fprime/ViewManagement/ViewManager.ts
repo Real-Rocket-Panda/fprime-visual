@@ -400,9 +400,9 @@ export default class ViewManager {
    */
   private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): IRenderJSON {
     const json = viewDescriptor.generateCytoscapeJSON();
-    // Merge the default styles with all the other styles.
-    json.descriptor.style = this.styleManager.mergeStyle(
-      this.styleManager.DefaultStyle, json.descriptor.style);
+    // Concat the view specific style to the default sytle
+    json.descriptor.style = this.styleManager.DefaultStyle.concat(
+      json.descriptor.style);
     return json;
   }
 
