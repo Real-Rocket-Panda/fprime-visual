@@ -339,11 +339,7 @@ class CyManager {
         const compIns = this.cy!.$(c);
         this.cyutil!.positionInBox(
           portIns.position(),
-          this.cyutil!.generateBox(
-            (compIns as any).boundingBox(boundingBoxOpt),
-            portIns.width(),
-            portIns.height(),
-          ),
+          (compIns as any).boundingBox(boundingBoxOpt),
         );
 
         this.cyutil!.positionOutBox(
