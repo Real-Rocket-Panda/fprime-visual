@@ -116,18 +116,6 @@ export class CyUtil {
     }
   }
 
-  public generateBox(cb: BoundingBox12, pw: number, ph: number): any {
-    // TODO: dynamic offset
-    const offset = 12;
-    const x1: number = cb.x1 - (pw / 2) + offset;
-    const x2: number = cb.x2 + (pw / 2) - offset;
-    const y1: number = cb.y1 - (ph / 2) + offset;
-    const y2: number = cb.y2 + (ph / 2) - offset;
-    return { x1, x2, y1, y2 };
-  }
-
-
-
   public adjustCompAllPortsLook(
     comp: NodeSingular,
     ports: cytoscape.NodeCollection,
@@ -135,7 +123,7 @@ export class CyUtil {
     ports.forEach((p) => {
       this.adjustPortImg(comp, p);
       this.adjustPortLabel(comp, p);
-     });
+    });
   }
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
