@@ -13,17 +13,9 @@
         </v-btn>
 
         <!-- build button -->
-        <v-dialog v-model="building" persistent max-width="40">
-          <v-btn small icon @click="rebuild" slot="activator">
-            <v-icon>play_circle_filled</v-icon>
-          </v-btn>
-          <v-card width="40" height="40" :style="{padding: '4px 4px'}">
-            <v-progress-circular
-              indeterminate
-              color="primary">
-            </v-progress-circular>
-          </v-card>
-        </v-dialog>
+        <v-btn small icon @click="rebuild">
+          <v-icon>play_circle_filled</v-icon>
+        </v-btn>
 
         <!-- save button -->
         <v-btn small icon @click="saveView">
@@ -38,17 +30,9 @@
         <v-divider vertical></v-divider>
 
         <!-- analysis button -->
-        <v-dialog v-model="analyzing" persistent max-width="40">
-          <v-btn small icon @click="invokeAnalyzer" slot="activator">
-            <v-icon>insert_chart</v-icon>
-          </v-btn>
-          <v-card width="40" height="40" :style="{padding: '4px 4px'}">
-            <v-progress-circular
-              indeterminate
-              color="primary">
-            </v-progress-circular>
-          </v-card>
-        </v-dialog>
+        <v-btn small icon @click="invokeAnalyzer">
+          <v-icon>insert_chart</v-icon>
+        </v-btn>
         <toolbar-selector
           :option-list="analyzers"
           :on-change="loadAnalysisInfo"
@@ -64,8 +48,16 @@
         <!-- color picker -->
         <color-picker></color-picker>
 
-
       </v-toolbar>
+
+      <v-dialog v-model="processBar" persistent max-width="40">
+        <v-card width="40" height="40" :style="{padding: '4px 4px'}">
+          <v-progress-circular
+            indeterminate
+            color="primary">
+          </v-progress-circular>
+        </v-card>
+      </v-dialog>
       
       <v-navigation-drawer app fixed permanent clipped
         width="225" id="view-list-nav"
@@ -111,8 +103,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      building: false,
-      analyzing: false,
+      processBar: false,
       layoutAlgorithms: fprime.viewManager.LayoutAlgorithms,
       analyzers: fprime.viewManager.Analyzers,
     };
@@ -165,15 +156,12 @@ export default Vue.extend({
         properties: ["openDirectory"]
       });
       if (dirs) {
-        this.building = true;
+        this.processBar = true;
         await fprime.viewManager.build(dirs[0]);
-        // Force the reset lines to be asynchronous.
-        setTimeout(() => {
-          // Close all the opening views
-          view.CloseAll();
-          this.$router.replace("/");
-          this.showOutputPanel();
-        }, 100);
+        // Close all the opening views
+        view.CloseAll();
+        this.$router.replace("/");
+        this.showOutputPanel();
       }
     },
     /**
@@ -181,18 +169,16 @@ export default Vue.extend({
      * project path.
      */
     async rebuild() {
+      this.processBar = true;
       await fprime.viewManager.rebuild();
-      // Force the reset lines to be asynchronous.
-      setTimeout(() => {
-        this.showOutputPanel();
-        // Refresh the current open view
-        const viewName = this.$route.params.viewName;
-        if (viewName) {
-          const render = fprime.viewManager.render(viewName)!;
-          CyManager.startUpdate(viewName, render);
-          CyManager.endUpdate();
-        }
-      }, 100);
+      this.showOutputPanel();
+      // Refresh the current open view
+      const viewName = this.$route.params.viewName;
+      if (viewName) {
+        const render = fprime.viewManager.render(viewName)!;
+        CyManager.startUpdate(viewName, render);
+        CyManager.endUpdate();
+      }
     },
     /**
      * Refresh would delete the cached view descriptor, reload the default
@@ -225,7 +211,7 @@ export default Vue.extend({
      */
     showOutputPanel() {
       // Hide the progress animation
-      this.building = false;
+      this.processBar = false;
       // Show the output panel
       if (!panel.state.show || panel.state.curPanel !== PanelName.Output) {
         panel.showOutput();
@@ -235,16 +221,13 @@ export default Vue.extend({
      * Invoke the current selected compiler, and load its analysis result.
      */
     async invokeAnalyzer() {
-      this.analyzing = true;
+      this.processBar = true;
       await fprime.viewManager.invokeCurrentAnalyzer();
-      // Force the reset lines to be asynchronous.
-      setTimeout(() => {
-        this.analyzing = false;
-        if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
-          panel.showAnalysis();
-        }
-        this.loadAnalysisInfo();
-      }, 100);
+      this.processBar = false;
+      if (!panel.state.show || panel.state.curPanel !== PanelName.Analysis) {
+        panel.showAnalysis();
+      }
+      this.loadAnalysisInfo();
     },
     /**
      * Load the current selected analyzer's result.

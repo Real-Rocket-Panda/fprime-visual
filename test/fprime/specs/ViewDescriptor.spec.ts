@@ -314,33 +314,33 @@ describe("ViewDescriptor", () => {
           "width": "200",
           "height": "200",
           "background-color": "red",
-          "x": "50",
-          "y": "50",
+          "x": 50,
+          "y": 50,
         },
       },
       "#ins_2": {
         selector: "#ins_2",
-        style: { x: "200", y: "200" },
+        style: { x: 200, y: 200 },
       },
       "#ins_1_p1": {
         selector: "#ins_1_p1",
-        style: { x: "60", y: "60" },
+        style: { x: 60, y: 60 },
       },
       "#ins_2_p1": {
         selector: "#ins_2_p1",
-        style: { x: "210", y: "210" },
+        style: { x: 210, y: 210 },
       },
       "#comp_1": {
         selector: "#comp_1",
-        style: { x: "300", y: "300" },
+        style: { x: 300, y: 300 },
       },
       "#comp_1_p1": {
         selector: "#comp_1_p1",
-        style: { x: "310", y: "310" },
+        style: { x: 310, y: 310 },
       },
       "#comp_1_p2": {
         selector: "#comp_1_p2",
-        style: { x: "330", y: "330" },
+        style: { x: 330, y: 330 },
       },
     };
 
@@ -631,11 +631,11 @@ describe("ViewDescriptor", () => {
       },
       "#ins_2": {
         selector: "#ins_2",
-        style: { x: "200", y: "200" },
+        style: { x: 200, y: 200 },
       },
       "#ins_1_p1": {
         selector: "#ins_1_p1",
-        style: { x: "60", y: "60" },
+        style: { x: 60, y: 60 },
       },
     };
 

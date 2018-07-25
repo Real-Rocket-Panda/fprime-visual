@@ -140,5 +140,13 @@ export default Vue.extend({
 .v-dialog__content.v-dialog__content--active {
   z-index: 1100 !important;
 }
+
+.v-overlay.v-overlay--active {
+  display: block;
+}
+
+.v-overlay {
+  display: none;
+}
 </style>
 
