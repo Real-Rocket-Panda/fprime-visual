@@ -4,6 +4,12 @@ edge {
     mid-target-arrow-color: #000000;
     width: 2;
 }
+.instance-port {
+    display: none
+}
+.component-port {
+    display: none
+}
 .fprime-instance {
     shape: rectangle;    
     width: 400;
