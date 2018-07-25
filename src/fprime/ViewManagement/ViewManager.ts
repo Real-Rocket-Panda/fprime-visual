@@ -205,15 +205,20 @@ export default class ViewManager {
         descriptor: this.cytoscapeJSONs[viewName],
       };
     }
-    // If not, generate the corresponding view descriptor first, and then
-    // generate the corresponding Cytoscape JSON from the view descriptor.
-    const viewDescriptor = this.generateViewDescriptorFor(viewName);
-    this.viewDescriptors[viewName] = viewDescriptor;
-    // Convert the view descriptor to the render JSON (cytoscape format)
-    const json = this.generateRenderJSONFrom(viewDescriptor);
-    // Set the forceLayout layout flag
-    json.needLayout = json.needLayout || forceLayout;
-    return json;
+    try {
+      // If not, generate the corresponding view descriptor first, and then
+      // generate the corresponding Cytoscape JSON from the view descriptor.
+      const viewDescriptor = this.generateViewDescriptorFor(viewName);
+      this.viewDescriptors[viewName] = viewDescriptor;
+      // Convert the view descriptor to the render JSON (cytoscape format)
+      const json = this.generateRenderJSONFrom(viewDescriptor);
+      // Set the forceLayout layout flag
+      json.needLayout = json.needLayout || forceLayout;
+      return json;
+    } catch (e) {
+      this.appendOutput("Error: fails to generate render object,\n" + e);
+      return {} as IRenderJSON;
+    }
   }
 
   /**

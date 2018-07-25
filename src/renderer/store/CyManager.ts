@@ -119,7 +119,14 @@ class CyManager {
     this.cleanup();
     this.cy!.remove(this.cy!.elements());
     // Dump the new config data to cytoscape.
-    this.cy!.json(render.descriptor);
+    try {
+      this.cy!.json(render.descriptor);
+    } catch (e) {
+      this.cy!.remove(this.cy!.elements());
+      fprime.viewManager.appendOutput(
+        "Error: fail to render cytoscape graph,\n" + e);
+      return;
+    }
     // Resize the view port to get correct pan and zoom.
     this.cy!.resize();
     this.batch = () => {
