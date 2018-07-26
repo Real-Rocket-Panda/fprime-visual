@@ -283,6 +283,9 @@ export default class ViewManager {
    * @param json The current Cytoscape json of the view
    */
   public isViewChanged(viewName: string, json?: ICytoscapeJSON): boolean {
+    if (!(viewName in this.viewDescriptors)) {
+      return false;
+    }
     if (!json) {
       json = this.cytoscapeJSONs[viewName];
     }
