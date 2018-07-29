@@ -19,6 +19,8 @@
       "Default": true,
       "Parameters": {
         "nodeRepulsion": 1000000,
+        "idealEdgeLength": 250,
+        "animate": "end",
         "nodeDimensionsIncludeLabels": true,
         "fit": true,
         "padding": 10,
@@ -43,9 +45,8 @@
       "Parameters": {
         "animate": false,
         "fit": true,
-        "padding": 10,
-        "avoidOverlap": true,
-        "avoidOverlapPadding": 10
+        "avoidOverlapPadding": 500,
+        "avoidOverlap": true
       }
     },
     {
@@ -71,7 +72,7 @@
         "avoidOverlap": true,
         "nodeDimensionsIncludeLabels": true,
         "startAngle": "3 / 2 * Math.PI",
-        "minNodeSpacing": 10,
+        "minNodeSpacing": 400,
         "concentric": "(function(nodes) { return nodes.degree() })",
         "levelWidth": "(function(nodes) { return nodes.maxDegree() })"
       }
@@ -92,6 +93,9 @@
       "Name": "dagre",
       "Default": false,
       "Parameters": {
+        "nodeSep": 200,
+        "minLen": "(function( edge ){ return 10; })",
+        "randomrize": true,
         "animate": false,
         "fit": true,
         "padding": 10,
