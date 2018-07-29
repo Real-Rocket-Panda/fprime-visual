@@ -1,4 +1,4 @@
-import cytoscape, { EventObject, NodeSingular, ElementDefinition, CollectionReturnValue } from "cytoscape";
+import cytoscape, { EventObject, NodeSingular, ElementDefinition, CollectionReturnValue, NodeCollection } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -10,6 +10,7 @@ import fprime from "fprime";
 import Tippy from "tippy.js";
 import popper from "cytoscape-popper";
 import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
+import { RSA_PKCS1_OAEP_PADDING, SSL_OP_PKCS1_CHECK_1 } from "constants";
 
 cytoscape.use(coseBilkent);
 cytoscape.use(automove);
@@ -162,8 +163,6 @@ class CyManager {
                 });
             });
           collection = collection.add(this.cy!.add(plain));
-          console.log(collection);
-          // let layout: any = this.cy!.nodes(".fprime-instances").layout(layoutOption);
           let layout: any = collection.layout(layoutOption);
           // If the layout is invalid, it should be undefined.
           if (layout) {
@@ -331,22 +330,44 @@ class CyManager {
    */
 
   private commonFuncEntries(): void {
-    this.stickPort();
+    this.placeAllPort();
     this.movebackAllPort();
+    this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
   }
 
+  /**
+   * Place each port at the center of all the instances connected
+   * (including the source)
+   */
+  private placeAllPort(): void {
+    this.cy!.nodes(".fprime-port").forEach((p: NodeSingular) => {
+      this.cyutil!.placePortCenter(p);
+    });
+  }
 
   private movebackAllPort(): void {
-    const box = this.cy!.nodes(".fprime-instance").boundingBox(boundingBoxOpt);
-    const center = { x: ((box as any).w) / 2, y: ((box as any).h) / 2 };
-    this.cy!.nodes(".fprime-port").positions(center);
-
+    interface IComp2Ports {
+      comp: NodeCollection;
+      ports: NodeCollection;
+    }
     const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
+    const arr: IComp2Ports[] = [];
     Object.keys(simpleGraph).forEach((c) => {
       const comp = this.cy!.nodes(c);
       const ports = this.cy!.nodes(simpleGraph[c].join(","));
+      arr.push({ comp, ports });
+    });
+    arr.sort((c1, c2) => {
+      return this.cyutil!.compDegree(c1.ports)
+             - this.cyutil!.compDegree(c2.ports);
+    });
+    arr.reverse();
+    console.log(arr);
+    arr.forEach((c2p: IComp2Ports) => {
+      const comp = c2p.comp;
+      const ports = c2p.ports;
       this.cyutil!.portMoveBackComp(comp, ports);
       // Adjust port image after change port relative loc.
       this.cyutil!.adjustCompAllPortsLook(comp, ports);
