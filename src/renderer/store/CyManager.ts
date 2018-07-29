@@ -164,7 +164,7 @@ class CyManager {
                         source: node1.id(),
                         target: node2.id(),
                       },
-                      classes: "invisible_edge",
+                      classes: "component-component",
                     });
                   }
                 });
@@ -354,7 +354,7 @@ class CyManager {
  * (Only used for layout)
  */
   private removeInvisibleEdge(): void {
-    this.cy!.edges(".invisible_edge").remove();
+    this.cy!.edges(".component-component").remove();
   }
 
   /**
