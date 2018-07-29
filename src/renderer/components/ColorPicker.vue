@@ -14,13 +14,11 @@ import Vue from "vue";
 import { Chrome } from "vue-color";
 import CyManager from "@/store/CyManager";
 
-var colors = { hex: '#000000' }
-
 export default Vue.extend({
   components: { 'chrome-picker': Chrome },
   data() {
     return {
-      colors,
+      colors: { hex: "#000000" },
       show: false,
     }
   },
@@ -38,7 +36,7 @@ export default Vue.extend({
       else {
         const eles = CyManager.getGrabbed();
         if (eles.length > 0) {
-          this.colors = eles.style("background-color");
+          this.colors = { hex: eles.style("background-color") };
         }
       }
       // Switch the panel

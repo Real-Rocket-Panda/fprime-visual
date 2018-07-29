@@ -38,11 +38,6 @@ export default Vue.extend({
     this.updateCytoscape();
   },
   beforeDestroy() {
-    // Save the current cytoscape json
-    fprime.viewManager.updateViewDescriptorFor(
-      this.viewName,
-      CyManager.getDescriptor(),
-    );
     CyManager.destroy();
   },
   watch: {

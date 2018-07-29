@@ -116,6 +116,7 @@ export class CyUtil {
     }
   }
 
+
   public generateBox(cb: BoundingBox12, pw: number, ph: number): any {
     // TODO: dynamic offset
     const offset = 12;

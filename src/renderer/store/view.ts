@@ -81,6 +81,8 @@ export default {
     }
     if (i < opened.length) {
       opened.splice(i, 1);
+      // Close the view from ViewManager
+      fprime.viewManager.closeViewDescriptor(name);
     }
     return i < opened.length + 1 ? i : -1;
   },

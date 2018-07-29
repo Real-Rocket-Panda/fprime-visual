@@ -1,0 +1,173 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: abcd;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#Ref_SG1 {
+  x: 1348.4783669256203;
+  y: 1164.3659833103045;
+}
+
+#Ref_SG1_cmdRegOut {
+  x: 1415.8117002589536;
+  y: 937.3659833103045;
+}
+
+#Ref_SG1_cmdIn {
+  x: 1281.145033592287;
+  y: 937.3659833103045;
+}
+
+#Ref_SG1_cmdResponseOut {
+  x: 1146.4783669256203;
+  y: 1164.3659833103045;
+}
+
+#Ref_cmdDisp {
+  x: 794.8439561963728;
+  y: 242;
+}
+
+#Ref_cmdDisp_compCmdSend {
+  x: 794.8439561963728;
+  y: 469;
+}
+
+#Ref_cmdDisp_compCmdReg {
+  x: 895.8439561963728;
+  y: 469;
+}
+
+#Ref_cmdDisp_compCmdStat {
+  x: 693.8439561963728;
+  y: 469;
+}
+
+#Ref_SG2 {
+  x: 217;
+  y: 1105.172101392571;
+}
+
+#Ref_SG2_cmdRegOut {
+  x: 419;
+  y: 1105.172101392571;
+}
+
+#Ref_SG2_cmdIn {
+  x: 284.3333333333333;
+  y: 878.172101392571;
+}
+
+#Ref_SG2_cmdResponseOut {
+  x: 149.66666666666666;
+  y: 878.172101392571;
+}
+
+#Ref_SG3 {
+  x: 761.8475358913265;
+  y: 1336.6414533121003;
+}
+
+#Ref_SG3_cmdRegOut {
+  x: 862.8475358913265;
+  y: 1109.6414533121003;
+}
+
+#Ref_SG3_cmdIn {
+  x: 761.8475358913265;
+  y: 1109.6414533121003;
+}
+
+#Ref_SG3_cmdResponseOut {
+  x: 660.8475358913265;
+  y: 1109.6414533121003;
+}
+
+#Ref_SG4 {
+  x: 1339.4734007480083;
+  y: 295.4789131574022;
+}
+
+#Ref_SG4_cmdRegOut {
+  x: 1406.8067340813416;
+  y: 522.4789131574022;
+}
+
+#Ref_SG4_cmdIn {
+  x: 1137.4734007480083;
+  y: 295.4789131574022;
+}
+
+#Ref_SG4_cmdResponseOut {
+  x: 1272.140067414675;
+  y: 522.4789131574022;
+}
+
+#Ref_SG5 {
+  x: 221.46107022629735;
+  y: 247.71049347031737;
+}
+
+#Ref_SG5_cmdRegOut {
+  x: 423.46107022629735;
+  y: 247.71049347031737;
+}
+
+#Ref_SG5_cmdIn {
+  x: 288.79440355963067;
+  y: 474.7104934703174;
+}
+
+#Ref_SG5_cmdResponseOut {
+  x: 154.127736892964;
+  y: 474.7104934703174;
+}
