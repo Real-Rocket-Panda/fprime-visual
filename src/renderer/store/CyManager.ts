@@ -330,11 +330,20 @@ class CyManager {
    */
 
   private commonFuncEntries(): void {
+    this.removeInvisibleEdge();
     this.placeAllPort();
     this.movebackAllPort();
     this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
+  }
+
+/**
+ * Remove the extra edges between components and components
+ * (Only used for layout)
+ */
+  private removeInvisibleEdge(): void {
+    this.cy!.edges(".invisible_edge").remove();
   }
 
   /**
@@ -361,7 +370,7 @@ class CyManager {
     });
     arr.sort((c1, c2) => {
       return this.cyutil!.compDegree(c1.ports)
-             - this.cyutil!.compDegree(c2.ports);
+        - this.cyutil!.compDegree(c2.ports);
     });
     arr.reverse();
     console.log(arr);
