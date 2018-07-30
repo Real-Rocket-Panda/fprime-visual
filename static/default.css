@@ -10,6 +10,11 @@ edge {
 .component-port {
     display: none
 }
+
+.component-component {
+    display: none;
+}
+
 .fprime-instance {
     shape: rectangle;    
     width: 400;

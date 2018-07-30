@@ -116,6 +116,25 @@ export class CyUtil {
     }
   }
 
+
+  public generateBox(cb: BoundingBox12, pw: number, ph: number): any {
+    // TODO: dynamic offset
+    const offset = 12;
+    const x1: number = cb.x1 - (pw / 2) + offset;
+    const x2: number = cb.x2 + (pw / 2) - offset;
+    const y1: number = cb.y1 - (ph / 2) + offset;
+    const y2: number = cb.y2 + (ph / 2) - offset;
+    return { x1, x2, y1, y2 };
+  }
+
+  /**
+   * Compute the number of connection of a component instance
+   * @param ports ports attached to the same component
+   */
+  public compDegree(ports: NodeCollection): number {
+    return (ports as any).neighborhood().length;
+  }
+
   public adjustCompAllPortsLook(
     comp: NodeSingular,
     ports: cytoscape.NodeCollection,
@@ -357,5 +376,4 @@ export class CyUtil {
 
     return { x: source.x + signx * xOff, y: source.y + signy * yOff };
   }
-
 }

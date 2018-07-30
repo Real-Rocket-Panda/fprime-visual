@@ -1,4 +1,4 @@
-import cytoscape, { EventObject, NodeSingular, ElementDefinition, CollectionReturnValue, NodeCollection } from "cytoscape";
+import cytoscape, { EventObject, NodeSingular, ElementDefinition, NodeCollection } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -10,7 +10,6 @@ import fprime from "fprime";
 import Tippy from "tippy.js";
 import popper from "cytoscape-popper";
 import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
-import { RSA_PKCS1_OAEP_PADDING, SSL_OP_PKCS1_CHECK_1 } from "constants";
 
 cytoscape.use(coseBilkent);
 cytoscape.use(automove);
