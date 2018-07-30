@@ -8,6 +8,6 @@
             "Type": "Fake analyzer"
         }
     ],
-    "FPPCompilerPath": "fast_compiler",
-    "FPPCompilerOutputPath": "./fpp_output/model.xml"
+    "FPPCompilerPath": "Parser.jar",
+    "FPPCompilerOutputPath": "./fpp_output/"
 }

@@ -29,6 +29,10 @@ component InComp {
         direction = in
         kind = sync
     }
+
+    port pout : P1 {
+        direction = out
+    }
 }
 
 system sys {
@@ -53,7 +57,7 @@ system sys {
     }
 
     topology top1 {
-        c1.pout -> c2.pout
+        c2.pout -> c1.pin
     }
 
 }

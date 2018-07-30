@@ -9,5 +9,5 @@
         }
     ],
     "FPPCompilerPath": "fast_compiler",
-    "FPPCompilerOutputPath": "./fpp_output/model.xml"
+    "FPPCompilerOutputPath": "./fpp_output/"
 }
