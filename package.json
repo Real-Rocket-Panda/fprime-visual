@@ -1,6 +1,6 @@
 {
   "name": "fprime-visual",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Rocket Panda",
   "description": "A tool to visualize FPrime models",
   "license": "",
@@ -86,6 +86,7 @@
     "konva": "^1.6.3",
     "rp-automove": "^1.9.0",
     "rp-cytoscape-node-resize": "^3.1.2",
+    "sprintf-js": "^1.1.1",
     "tippy.js": "^2.5.3",
     "vue": "^2.5.16",
     "vue-color": "^2.4.6",

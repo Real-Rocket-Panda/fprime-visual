@@ -1,4 +1,4 @@
-import cytoscape, { EventObject } from "cytoscape";
+import cytoscape, { EventObject, NodeSingular, ElementDefinition, NodeCollection } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -119,7 +119,14 @@ class CyManager {
     this.cleanup();
     this.cy!.remove(this.cy!.elements());
     // Dump the new config data to cytoscape.
-    this.cy!.json(render.descriptor);
+    try {
+      this.cy!.json(render.descriptor);
+    } catch (e) {
+      this.cy!.remove(this.cy!.elements());
+      fprime.viewManager.appendOutput(
+        "Error: fail to render cytoscape graph,\n" + e);
+      return;
+    }
     // Resize the view port to get correct pan and zoom.
     this.cy!.resize();
     this.batch = () => {
@@ -136,10 +143,33 @@ class CyManager {
         };
         layoutOption = Object.assign(layoutOption,
           layoutConfig.Parameters);
-
+        let collection = this.cy!.collection();
         if (render.elesHasPosition.length === 0 ||
           render.elesNoPosition.length === 0) {
-          let layout: any = this.cy!.layout(layoutOption);
+          const plain: ElementDefinition[] = [];
+          this.cy!.nodes(".fprime-instance")
+            .forEach((node1: NodeSingular) => {
+              collection = collection.add(node1);
+              this.cy!.nodes(".fprime-instance")
+                .forEach((node2: NodeSingular) => {
+                  const intersect = (node1 as any).outgoers(".fprime-port")
+                    .outgoers(".fprime-port").outgoers(".fprime-instance")
+                    .intersection(node2);
+                  if (intersect.length !== 0) {
+                    plain.push({
+                      group: "edges",
+                      data: {
+                        id: node1.id() + "-" + node2.id(),
+                        source: node1.id(),
+                        target: node2.id(),
+                      },
+                      classes: "component-component",
+                    });
+                  }
+                });
+            });
+          collection = collection.add(this.cy!.add(plain));
+          let layout: any = collection.layout(layoutOption);
           // If the layout is invalid, it should be undefined.
           if (layout) {
             layout.run();
@@ -222,14 +252,16 @@ class CyManager {
    * @param color value of color to change
    */
   public setColor(eles: any, color: string): void {
-    eles.forEach((el: any) => {
-      if (!el.hasClass("fprime-port")) {
-        (this.cy!.style() as any)
-          .selector("#" + el.id())
-          .style({ "background-color": color });
-      }
-    });
-    (this.cy!.style() as any).update();
+    if (this.cy) {
+      eles.forEach((el: any) => {
+        if (!el.hasClass("fprime-port")) {
+          (this.cy!.style() as any)
+            .selector("#" + el.id())
+            .style({ "background-color": color });
+        }
+      });
+      (this.cy.style() as any).update();
+    }
   }
 
   /**
@@ -306,18 +338,55 @@ class CyManager {
    */
 
   private commonFuncEntries(): void {
-    this.stickPort();
+    this.removeInvisibleEdge();
+    this.placeAllPort();
     this.movebackAllPort();
+    this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
+    fprime.viewManager.updateViewDescriptorFor(this.viewName,
+      this.getDescriptor());
   }
 
+/**
+ * Remove the extra edges between components and components
+ * (Only used for layout)
+ */
+  private removeInvisibleEdge(): void {
+    this.cy!.edges(".component-component").remove();
+  }
+
+  /**
+   * Place each port at the center of all the instances connected
+   * (including the source)
+   */
+  private placeAllPort(): void {
+    this.cy!.nodes(".fprime-port").forEach((p: NodeSingular) => {
+      this.cyutil!.placePortCenter(p);
+    });
+  }
 
   private movebackAllPort(): void {
+    interface IComp2Ports {
+      comp: NodeCollection;
+      ports: NodeCollection;
+    }
     const simpleGraph = fprime.viewManager.getSimpleGraphFor(this.viewName);
+    const arr: IComp2Ports[] = [];
     Object.keys(simpleGraph).forEach((c) => {
       const comp = this.cy!.nodes(c);
       const ports = this.cy!.nodes(simpleGraph[c].join(","));
+      arr.push({ comp, ports });
+    });
+    arr.sort((c1, c2) => {
+      return this.cyutil!.compDegree(c1.ports)
+        - this.cyutil!.compDegree(c2.ports);
+    });
+    arr.reverse();
+    console.log(arr);
+    arr.forEach((c2p: IComp2Ports) => {
+      const comp = c2p.comp;
+      const ports = c2p.ports;
       this.cyutil!.portMoveBackComp(comp, ports);
       // Adjust port image after change port relative loc.
       this.cyutil!.adjustCompAllPortsLook(comp, ports);
@@ -339,11 +408,7 @@ class CyManager {
         const compIns = this.cy!.$(c);
         this.cyutil!.positionInBox(
           portIns.position(),
-          this.cyutil!.generateBox(
-            (compIns as any).boundingBox(boundingBoxOpt),
-            portIns.width(),
-            portIns.height(),
-          ),
+          (compIns as any).boundingBox(boundingBoxOpt),
         );
 
         this.cyutil!.positionOutBox(
@@ -364,24 +429,42 @@ class CyManager {
    */
   private addTooltips(): void {
     this.tippyIns =
-      this.cy!.nodes().map((node, _i, _nodes) => {
-        const ref = (node as any).popperRef();
-        const tippy = new Tippy(ref, { // tippy options:
-          html: (() => {
-            const content = document.createElement("div");
-            // content.innerHTML = node.data("properties");
-            content.innerHTML = this.constructHtml(node.data("properties"));
-            return content;
-          })(),
-          trigger: "manual", // probably want manual mode
-          sticky: false,
-        }).tooltips[0];
+      this.cy!.nodes().filter((node) => {
+        return Object.keys(node.data("properties")).length !== 0;
+      })
+        .map((node, _i, _nodes) => {
+          const ref = (node as any).popperRef();
+          const tippy = new Tippy(ref, { // tippy options:
+            html: (() => {
+              const content = document.createElement("div");
+              content.innerHTML = this.constructHtml(node.data("properties"));
+              return content;
+            })(),
+            trigger: "manual", // probably want manual mode
+            sticky: false,
+            duration: [100, 100],
+          }).tooltips[0];
 
-        node.on("mousemove", () => tippy.show());
-        node.on("mouseout position", () => tippy.hide());
-        this.cy!.on("pan zoom", () => tippy.hide());
-        return tippy;
-      });
+          tippy.active = false;
+
+          node.on("mousemove", () => {
+            tippy.active = true;
+            setTimeout(() => {
+              if (tippy.active) {
+                tippy.show();
+              }
+            }, 500);
+          });
+          node.on("mouseout position", () => {
+            tippy.hide();
+            tippy.active = false;
+          });
+          this.cy!.on("pan zoom", () => {
+            tippy.hide();
+            tippy.active = false;
+          });
+          return tippy;
+        });
   }
 
 

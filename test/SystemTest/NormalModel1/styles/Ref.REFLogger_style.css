@@ -1,0 +1,153 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: 500px;
+  height: 500px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#Ref_SG1 {
+  x: 1331.15198192146;
+  y: 1637.7684175144016;
+}
+
+#Ref_SG1_logTextOut {
+  x: 1079.15198192146;
+  y: 1637.7684175144016;
+}
+
+#Ref_SG1_logOut {
+  x: 1331.15198192146;
+  y: 1385.7684175144016;
+}
+
+#Ref_textLogger {
+  x: 202.0905716744674;
+  y: 1623.5834601309596;
+}
+
+#Ref_textLogger_TextLogger {
+  x: 454.0905716744675;
+  y: 1623.5834601309596;
+}
+
+#Ref_SG2 {
+  x: 1867.3890744021223;
+  y: 897.7864703745958;
+}
+
+#Ref_SG2_logTextOut {
+  x: 1615.3890744021223;
+  y: 897.7864703745958;
+}
+
+#Ref_SG2_logOut {
+  x: 1867.3890744021223;
+  y: 645.7864703745958;
+}
+
+#Ref_SG3 {
+  x: 478.796122478895;
+  y: -56.18856651065313;
+}
+
+#Ref_SG3_logTextOut {
+  x: 394.796122478895;
+  y: 195.81143348934694;
+}
+
+#Ref_SG3_logOut {
+  x: 562.796122478895;
+  y: 195.81143348934694;
+}
+
+#Ref_SG4 {
+  x: 863.891087388395;
+  y: 917.8875827788879;
+}
+
+#Ref_SG4_logTextOut {
+  x: 611.891087388395;
+  y: 917.8875827788879;
+}
+
+#Ref_SG4_logOut {
+  x: 1115.8910873883951;
+  y: 917.8875827788879;
+}
+
+#Ref_SG5 {
+  x: -271.09359707748627;
+  y: 709.5290132405061;
+}
+
+#Ref_SG5_logTextOut {
+  x: -19.093597077486294;
+  y: 793.5290132405061;
+}
+
+#Ref_SG5_logOut {
+  x: -19.093597077486294;
+  y: 625.5290132405061;
+}
+
+#Ref_eventLogger {
+  x: 1583.833829986335;
+  y: 350.8467579233266;
+}
+
+#Ref_eventLogger_LogRecv {
+  x: 1331.833829986335;
+  y: 350.8467579233266;
+}
+
+#Ref_eventLogger_LogText {
+  x: 1583.833829986335;
+  y: 602.8467579233265;
+}

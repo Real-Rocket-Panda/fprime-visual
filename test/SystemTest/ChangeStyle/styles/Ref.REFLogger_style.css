@@ -1,0 +1,207 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 202, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+.fprime-port-in {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(100, 200, 20);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+.fprime-port-out {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(100, 100, 20);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+.fprime-port-sync {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(100, 100, 200);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#Ref_SG1 {
+  height: 394.6540690588259px;
+  width: 400px;
+  background-color: rgb(205, 200, 200);
+  x: 433.9326932567276;
+  y: 1132.1902376456;
+}
+
+#Ref_SG1_logTextOut {
+  x: 433.9326932567276;
+  y: 932.8632031161872;
+}
+
+#Ref_SG1_logOut {
+  x: 433.9326932567276;
+  y: 1331.517272175013;
+}
+
+#Ref_textLogger {
+  x: 1027.3784808391952;
+  y: 242;
+}
+
+#Ref_textLogger_TextLogger {
+  x: 1027.3784808391952;
+  y: 469;
+}
+
+#Ref_SG2 {
+  x: 986.6373320922745;
+  y: 1451.0657520720938;
+}
+
+#Ref_SG2_logTextOut {
+  x: 919.3039987589411;
+  y: 1224.0657520720938;
+}
+
+#Ref_SG2_logOut {
+  x: 1053.9706654256079;
+  y: 1224.0657520720938;
+}
+
+#Ref_SG3 {
+  x: 56.26151339012465;
+  y: 692.0028455919058;
+}
+
+#Ref_SG3_logTextOut {
+  x: 258.26151339012466;
+  y: 616.3361789252392;
+}
+
+#Ref_SG3_logOut {
+  x: 258.26151339012466;
+  y: 767.6695122585725;
+}
+
+#Ref_SG4 {
+  x: 1547.4459111981273;
+  y: 416.34821923289434;
+}
+
+#Ref_SG4_logTextOut {
+  x: 1345.4459111981273;
+  y: 340.68155256622765;
+}
+
+#Ref_SG4_logOut {
+  x: 1345.4459111981273;
+  y: 492.01488589956097;
+}
+
+#Ref_SG5 {
+  x: 1547.0822488650433;
+  y: 1159.8345068456217;
+}
+
+#Ref_SG5_logTextOut {
+  x: 1345.0822488650433;
+  y: 1235.5011735122885;
+}
+
+#Ref_SG5_logOut {
+  x: 1345.0822488650433;
+  y: 1084.167840178955;
+}
+
+#Ref_eventLogger {
+  x: 693.708956027357;
+  y: 399.5494203915039;
+}
+
+#Ref_eventLogger_LogRecv {
+  x: 693.708956027357;
+  y: 626.5494203915039;
+}
+
+#Ref_eventLogger_LogText {
+  x: 895.708956027357;
+  y: 399.5494203915039;
+}

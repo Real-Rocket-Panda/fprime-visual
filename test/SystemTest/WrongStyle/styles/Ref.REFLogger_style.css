@@ -1,0 +1,174 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+avsavdsafsd
+.fprime-instance {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+ {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 50px;
+  shape: rectangle;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 0.5;
+  text-margin-y: 0px;
+  background-color: rgb(205, 217, 205);
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+}
+
+#Ref_SG1 {
+  x: 217;
+  y: 865.0812445171464;
+}
+
+#Ref_SG1_logTextOut {
+  x: 419;
+  y: 940.7479111838131;
+}
+
+#Ref_SG1_logOut {
+  x: 419;
+  y: 789.4145778504798;
+}
+
+#Ref_textLogger {
+  x: 585.6029925121215;
+  y: 320.4854786690742;
+}
+
+#Ref_textLogger_TextLogger {
+  x: 585.6029925121215;
+  y: 547.4854786690742;
+}
+
+#Ref_SG2 {
+  x: 1552.4947149975214;
+  y: 651.6068789754991;
+}
+
+#Ref_SG2_logTextOut {
+  x: 1350.4947149975214;
+  y: 575.9402123088324;
+}
+
+#Ref_SG2_logOut {
+  x: 1350.4947149975214;
+  y: 727.2735456421658;
+}
+
+#Ref_SG3 {
+  x: 1083.2876872192555;
+  y: 242;
+}
+
+#Ref_SG3_logTextOut {
+  x: 1015.9543538859222;
+  y: 469;
+}
+
+#Ref_SG3_logOut {
+  x: 1150.6210205525888;
+  y: 469;
+}
+
+#Ref_SG4 {
+  x: 1566.1763786378638;
+  y: 1047.8754184009083;
+}
+
+#Ref_SG4_logTextOut {
+  x: 1364.1763786378638;
+  y: 1123.542085067575;
+}
+
+#Ref_SG4_logOut {
+  x: 1364.1763786378638;
+  y: 972.2087517342417;
+}
+
+#Ref_SG5 {
+  x: 504.8294612527245;
+  y: 1418.1777633274048;
+}
+
+#Ref_SG5_logTextOut {
+  x: 437.49612791939114;
+  y: 1191.1777633274048;
+}
+
+#Ref_SG5_logOut {
+  x: 572.1627945860578;
+  y: 1191.1777633274048;
+}
+
+#Ref_eventLogger {
+  x: 1043.9717467989708;
+  y: 1397.2898246472694;
+}
+
+#Ref_eventLogger_LogRecv {
+  x: 1111.305080132304;
+  y: 1170.2898246472694;
+}
+
+#Ref_eventLogger_LogText {
+  x: 976.6384134656374;
+  y: 1170.2898246472694;
+}

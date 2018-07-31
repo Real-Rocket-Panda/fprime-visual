@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<namespace name="fprime">
+  <data_type name="U32" namespace="fprime"/>
+  <data_type name="NATIVE_UINT_TYPE" namespace="fprime"/>
+  <enum name="TextLogSeverity">
+    <item name="TEXT_LOG_FATAL">1</item>
+    <item name="TEXT_LOG_WARNING_HI">2</item>
+    <item name="TEXT_LOG_WARNING_LO">3</item>
+    <item name="TEXT_LOG_COMMAND">4</item>
+    <item name="TEXT_LOG_ACTIVITY_HI">5</item>
+    <item name="TEXT_LOG_ACTIVITY_LO">6</item>
+    <item name="TEXT_LOG_DIAGNOSTIC">7</item>
+  </enum>
+  <enum name="CommandResponse">
+    <item name="COMMAND_OK">0</item>
+    <item name="COMMAND_INVALID_OPCODE">1</item>
+    <item name="COMMAND_VALIDATION_ERROR">2</item>
+    <item name="COMMAND_FORMAT_ERROR">3</item>
+    <item name="COMMAND_EXECUTION_ERROR">4</item>
+    <item name="COMMAND_BUSY">5</item>
+  </enum>
+</namespace>

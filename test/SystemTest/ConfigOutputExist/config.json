@@ -1,0 +1,13 @@
+{
+    "Analyzers": [
+        {
+            "Name": "MockAnalyzer",
+            "Path": "./mockChecker",
+            "Parameters": "",
+            "OutputFilePath": "./mock_analyzer/mock_analysis.css",
+            "Type": "Fake analyzer"
+        }
+    ],
+    "FPPCompilerPath": "Parser.jar",
+    "FPPCompilerOutputPath": "./fpp_output/"
+}

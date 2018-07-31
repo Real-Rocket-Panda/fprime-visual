@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<namespace name="Fw">
+  <data_type name="FwEventIdType" namespace="Fw"/>
+  <data_type name="Time" namespace="Fw"/>
+  <data_type name="TextLogString" namespace="Fw"/>
+  <data_type name="LogBuffer" namespace="Fw"/>
+  <data_type name="ComBuffer" namespace="Fw"/>
+  <data_type name="FwOpcodeType" namespace="Fw"/>
+  <data_type name="CmdArgBuffer" namespace="Fw"/>
+  <data_type name="TlmBuffer" namespace="Fw"/>
+  <data_type name="FwChanIdType" namespace="Fw"/>
+  <port_type name="LogText" namespace="Fw">
+    <arg name="id" type="Fw.FwEventIdType"/>
+    <arg name="timeTag" pass_by="reference" type="Fw.Time"/>
+    <arg name="severity" type="TextLogSeverity"/>
+    <arg name="text" pass_by="reference" type="Fw.TextLogString"/>
+  </port_type>
+  <port_type name="Log" namespace="Fw">
+    <arg name="id" type="Fw.FwEventIdType"/>
+    <arg name="timeTag" pass_by="reference" type="Fw.Time"/>
+    <arg name="severity" type="TextLogSeverity"/>
+    <arg name="text" pass_by="reference" type="Fw.LogBuffer"/>
+  </port_type>
+  <port_type name="Com" namespace="Fw">
+    <arg name="data" pass_by="reference" type="Fw.ComBuffer"/>
+    <arg name="context" type="fprime.U32"/>
+  </port_type>
+  <port_type name="Time" namespace="Fw">
+    <arg name="time" pass_by="reference" type="Fw.Time"/>
+  </port_type>
+  <port_type name="CmdReg" namespace="Fw">
+    <arg name="opCode" type="Fw.FwOpcodeType"/>
+  </port_type>
+  <port_type name="Cmd" namespace="Fw">
+    <arg name="opCode" type="Fw.FwOpcodeType"/>
+    <arg name="cmdSeq" type="fprime.U32"/>
+    <arg name="args" pass_by="reference" type="Fw.CmdArgBuffer"/>
+  </port_type>
+  <port_type name="CmdResponse" namespace="Fw">
+    <arg name="opCode" type="Fw.FwOpcodeType"/>
+    <arg name="cmdSeq" type="fprime.U32"/>
+    <arg name="response" type="CommandResponse"/>
+  </port_type>
+  <port_type name="Tlm" namespace="Fw">
+    <arg name="id" type="Fw.FwChanIdType"/>
+    <arg name="timeTag" pass_by="reference" type="Fw.Time"/>
+    <arg name="val" pass_by="reference" type="Fw.TlmBuffer"/>
+  </port_type>
+</namespace>
