@@ -1,4 +1,4 @@
-import { BoundingBox12, Position, NodeSingular } from "cytoscape";
+import { BoundingBox12, Position, NodeSingular, NodeCollection } from "cytoscape";
 const boundingBoxOpt = {
   includeOverlays: false,
   includeEdges: true,
@@ -24,10 +24,10 @@ export class CyUtil {
     comp: cytoscape.NodeCollection,
     ports: cytoscape.NodeCollection,
   ): void {
-    interface IEdge2Porints {
+    interface IEdge2Points {
       [key: string]: any;
     }
-    const edge2points: IEdge2Porints = {};
+    const edge2points: IEdge2Points = {};
     ports.forEach((port: cytoscape.NodeSingular) => {
       let intersection: any;
       if (port.data().direction === "in") {
@@ -116,6 +116,7 @@ export class CyUtil {
     }
   }
 
+
   public generateBox(cb: BoundingBox12, pw: number, ph: number): any {
     // TODO: dynamic offset
     const offset = 12;
@@ -126,7 +127,13 @@ export class CyUtil {
     return { x1, x2, y1, y2 };
   }
 
-
+  /**
+   * Compute the number of connection of a component instance
+   * @param ports ports attached to the same component
+   */
+  public compDegree(ports: NodeCollection): number {
+    return (ports as any).neighborhood().length;
+  }
 
   public adjustCompAllPortsLook(
     comp: NodeSingular,
@@ -135,7 +142,7 @@ export class CyUtil {
     ports.forEach((p) => {
       this.adjustPortImg(comp, p);
       this.adjustPortLabel(comp, p);
-     });
+    });
   }
 
   public adjustPortImg(comp: NodeSingular, port: NodeSingular): void {
@@ -190,20 +197,39 @@ export class CyUtil {
         break;
     }
   }
+  /**
+   * Place the port at the center of all connected components
+   * @param the port to be placed
+   */
+  public placePortCenter(p: NodeSingular): void {
+    let connected = this.cy!.collection();
+    const connectedPort = (p as any).neighborhood(".fprime-port");
+    // conncted components: connect to other ports first, then the components
+    connected = connected.add(connectedPort.neighborhood(".fprime-instance"));
+    // source component: directly connected
+    connected = connected.add((p as any).neighborhood(".fprime-instance"));
+    // Generate the bounding box of all hte connected instances
+    const box = connected.boundingBox(boundingBoxOpt);
+    const center = {
+      x: ((box as any).x1 + (box as any).x2) / 2,
+      y: ((box as any).y1 + (box as any).y2) / 2,
+    };
+    p.position(center);
+  }
 
+  /**
+   *  Put the ports evenly on the edge
+   * @param bb bounding box of the component
+   * @param horizontal true if the edge is horizental, false if the edge is vertical
+   * @param ports ports to be put on the edge
+   */
   private distributePositions(
     bb: BoundingBox12,
     horizontal: boolean,
     ports: NodeSingular[],
   ): void {
     const axis = horizontal ? "x" : "y";
-    ports.sort((a: NodeSingular, b: NodeSingular) => {
-      if (a.position(axis) > b.position(axis)) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    this.sortPortsonEdge(ports, horizontal);
     const base = horizontal ? bb.x1 : bb.y1;
     const distance = horizontal ? (bb.x2 - bb.x1) : (bb.y2 - bb.y1);
     const unitDis = distance / (ports.length + 1);
@@ -211,6 +237,53 @@ export class CyUtil {
       ports[i].position(axis, (i + 1) * unitDis + base);
     }
   }
+
+  /**
+   * Sort ports on the same edge to avoid crossing between connections
+   * @param ports ports on the same edge of component instance
+   * @param horizontal true if the edge is horizontal, otherwise vertical
+   */
+  private sortPortsonEdge(
+    ports: NodeSingular[],
+    horizontal: boolean,
+  ): NodeSingular[] {
+    return ports.sort((p1, p2) => {
+      const bb1 = (p1 as any).neighborhood(".fprime-port").boundingBox();
+      const bb2 = (p2 as any).neighborhood(".fprime-port").boundingBox();
+      const c1 = {
+        x: ((bb1 as any).x1 + (bb1 as any).x2) / 2,
+        y: ((bb1 as any).y1 + (bb1 as any).y2) / 2,
+      };
+      const c2 = {
+        x: ((bb2 as any).x1 + (bb2 as any).x2) / 2,
+        y: ((bb2 as any).y1 + (bb2 as any).y2) / 2,
+      };
+      if (horizontal) {
+        if (c1.x !== c2.x) {
+          return c1.x - c2.x;
+        } else {
+          if (Math.abs(c1.y - p1.position("y"))
+            > Math.abs(c2.y - p1.position("y"))) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
+      } else {
+        if (c1.y !== c2.y) {
+          return c1.y - c2.y;
+        } else {
+          if (Math.abs(c1.x - p1.position("x"))
+            > Math.abs(c2.x - p1.position("x"))) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+      }
+    });
+  }
+
 
 
   private decideEdge(bb: BoundingBox12, pos: Position): number {

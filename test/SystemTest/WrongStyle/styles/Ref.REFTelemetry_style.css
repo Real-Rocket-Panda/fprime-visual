@@ -1,0 +1,115 @@
+edge {
+  asfsavscvasdfas;
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  asvsavszvdsafsea
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 400px;
+  height: 450px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 50px;
+  height: 50px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 0.5;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(205, 217, 205);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+}
+
+#SG1 {
+  x: 1619.9775825601291;
+  y: 605.7523247601416;
+}
+
+#SG1_tlmOut {
+  x: 1417.9775825601291;
+  y: 605.7523247601416;
+}
+
+#chanTlm {
+  x: 472.46506800998395;
+  y: 544.0166511786726;
+}
+
+#chanTlm_TlmRecv {
+  x: 674.465068009984;
+  y: 544.0166511786726;
+}
+
+#SG2 {
+  x: 1067.9113372076401;
+  y: 242;
+}
+
+#SG2_tlmOut {
+  x: 1067.9113372076401;
+  y: 469;
+}
+
+#SG3 {
+  x: 1420.3015908704356;
+  y: 1167.5041865626588;
+}
+
+#SG3_tlmOut {
+  x: 1420.3015908704356;
+  y: 940.5041865626588;
+}
+
+#SG4 {
+  x: 836.4142560467039;
+  y: 1329.1346683629765;
+}
+
+#SG4_tlmOut {
+  x: 836.4142560467039;
+  y: 1102.1346683629765;
+}
+
+#SG5 {
+  x: 217;
+  y: 1009.7335579002488;
+}
+
+#SG5_tlmOut {
+  x: 419;
+  y: 1009.7335579002488;
+}

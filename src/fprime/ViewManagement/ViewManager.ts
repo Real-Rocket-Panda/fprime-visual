@@ -205,15 +205,20 @@ export default class ViewManager {
         descriptor: this.cytoscapeJSONs[viewName],
       };
     }
-    // If not, generate the corresponding view descriptor first, and then
-    // generate the corresponding Cytoscape JSON from the view descriptor.
-    const viewDescriptor = this.generateViewDescriptorFor(viewName);
-    this.viewDescriptors[viewName] = viewDescriptor;
-    // Convert the view descriptor to the render JSON (cytoscape format)
-    const json = this.generateRenderJSONFrom(viewDescriptor);
-    // Set the forceLayout layout flag
-    json.needLayout = json.needLayout || forceLayout;
-    return json;
+    try {
+      // If not, generate the corresponding view descriptor first, and then
+      // generate the corresponding Cytoscape JSON from the view descriptor.
+      const viewDescriptor = this.generateViewDescriptorFor(viewName);
+      this.viewDescriptors[viewName] = viewDescriptor;
+      // Convert the view descriptor to the render JSON (cytoscape format)
+      const json = this.generateRenderJSONFrom(viewDescriptor);
+      // Set the forceLayout layout flag
+      json.needLayout = json.needLayout || forceLayout;
+      return json;
+    } catch (e) {
+      this.appendOutput("Error: fails to generate render object,\n" + e);
+      return {} as IRenderJSON;
+    }
   }
 
   /**
@@ -231,7 +236,7 @@ export default class ViewManager {
   /**
    * The UI has updated the Cytoscape JSON and needs to store the change to the
    * view descriptor. This function should store the Cytoscape JSON in the
-   * cytoscapeJSONs map and convert the JSON back to the view descriptor.
+   * cytoscapeJSONs map.
    * @param viewName The name of the view to update
    * @param descriptor The cytoscape json object to update
    */
@@ -242,10 +247,6 @@ export default class ViewManager {
       return;
     }
     this.cytoscapeJSONs[viewName] = json;
-    // Parse the style information in cytoscape json,
-    // write it back to the view descriptor
-    const viewDescriptor = this.viewDescriptors[viewName];
-    viewDescriptor.Descriptor = ViewDescriptor.parseStyleFrom(json);
   }
 
   /**
@@ -253,16 +254,55 @@ export default class ViewManager {
    * recent cytoscape json obejct, update the in-memory view descriptor,
    * and then write the view descriptor to the file.
    * @param viewName The name of the view to save.
-   * @param descriptor The current cytoscape json object.
+   * @param json The current cytoscape json object. If it is not passed, go
+   * search the cached json.
    */
-  public saveViewDescriptorFor(viewName: string, descriptor: ICytoscapeJSON) {
+  public saveViewDescriptorFor(viewName: string, json?: ICytoscapeJSON) {
     if (!this.viewDescriptors[viewName]) {
       return;
     }
-    // Update the view descriptor first
-    this.updateViewDescriptorFor(viewName, descriptor);
-    const styles = this.viewDescriptors[viewName].CSSStyles;
-    this.styleManager.saveStyleFor(viewName, styles, this.configManager);
+    // Update the cytoscape json first
+    if (json) {
+      this.updateViewDescriptorFor(viewName, json);
+    } else {
+      json = this.cytoscapeJSONs[viewName];
+    }
+    // Parse the style information in cytoscape json,
+    // write it back to the view descriptor
+    const viewDescriptor = this.viewDescriptors[viewName];
+    viewDescriptor.Descriptor = ViewDescriptor.parseStyleFrom(json,
+      this.styleManager.DefaultStyle);
+    this.styleManager.saveStyleFor(viewName, viewDescriptor.CSSStyles,
+      this.configManager);
+  }
+
+  /**
+   * Compare the current Cytoscape json with the cached json to decide whether
+   * the view is changed.
+   * @param viewName The name of the view to compare
+   * @param json The current Cytoscape json of the view
+   */
+  public isViewChanged(viewName: string, json?: ICytoscapeJSON): boolean {
+    if (!(viewName in this.viewDescriptors)) {
+      return false;
+    }
+    if (!json) {
+      json = this.cytoscapeJSONs[viewName];
+    }
+    const x = ViewDescriptor.parseStyleFrom(json,
+      this.styleManager.DefaultStyle);
+    const y = this.viewDescriptors[viewName].Descriptor;
+    return JSON.stringify(x) !== JSON.stringify(y);
+  }
+
+  /**
+   * When closing a tab, the UI should invoke this method to clean up the
+   * cached render objects.
+   * @param viewName The name of the view to close.
+   */
+  public closeViewDescriptor(viewName: string) {
+    delete this.viewDescriptors[viewName];
+    delete this.cytoscapeJSONs[viewName];
   }
 
   /**
@@ -363,9 +403,9 @@ export default class ViewManager {
    */
   private generateRenderJSONFrom(viewDescriptor: ViewDescriptor): IRenderJSON {
     const json = viewDescriptor.generateCytoscapeJSON();
-    // Merge the default styles with all the other styles.
-    json.descriptor.style = this.styleManager.mergeStyle(
-      this.styleManager.DefaultStyle, json.descriptor.style);
+    // Concat the view specific style to the default sytle
+    json.descriptor.style = this.styleManager.DefaultStyle.concat(
+      json.descriptor.style);
     return json;
   }
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<namespace name="Svc">
+  <component kind="active" name="ActiveLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="LogRecv" type="Fw.Log"/>
+    <port direction="out" name="PktSend" type="Fw.Com"/>
+    <port direction="out" name="FatalAnnounce" type="Svc.FatalEvent"/>
+    <port direction="in" kind="async" name="pingIn" type="Svc.Ping"/>
+    <port direction="out" name="pingOut" type="Svc.Ping"/>
+    <dict name="events">
+      <dict id="0" name="event"/>
+    </dict>
+    <port direction="out" name="LogText" role="LogTextEvent" type="Fw.LogText"/>
+    <port direction="out" name="Log" role="LogEvent" type="Fw.Log"/>
+  </component>
+  <port_type name="Ping" namespace="Svc">
+    <arg name="key" type="fprime.U32"/>
+  </port_type>
+  <port_type name="FatalEvent" namespace="Svc">
+    <arg name="id" type="Fw.FwEventIdType"/>
+  </port_type>
+  <port_type name="Sched" namespace="Svc">
+    <arg name="context" type="fprime.NATIVE_UINT_TYPE"/>
+  </port_type>
+  <component kind="active" name="TlmChan" namespace="Svc">
+    <port direction="in" kind="guarded" max_number="10" min_number="1" name="TlmRecv" type="Fw.Tlm"/>
+    <port direction="in" kind="guarded" name="TlmGet" type="Fw.Tlm"/>
+    <port direction="in" kind="async" name="Run" type="Svc.Sched"/>
+  </component>
+  <component kind="passive" name="Time" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="timeGetPort" type="Fw.Time"/>
+  </component>
+  <component kind="active" name="CommandDispatcher" namespace="Svc">
+    <port direction="out" max_number="10" min_number="1" name="compCmdSend" type="Fw.Cmd"/>
+    <port direction="in" kind="guarded" max_number="10" min_number="1" name="compCmdReg" type="Fw.CmdReg"/>
+    <port direction="in" kind="async" max_number="10" min_number="1" name="compCmdStat" type="Fw.CmdResponse"/>
+    <port direction="out" max_number="10" min_number="1" name="seqCmdStatus" type="Fw.CmdResponse"/>
+    <port direction="in" kind="async" max_number="10" min_number="1" name="seqCmdBuff" type="Fw.Com"/>
+    <port direction="out" name="pingOut" number="1" type="Svc.Ping"/>
+  </component>
+  <component kind="passive" name="PassiveTextLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="TextLogger" type="Fw.LogText"/>
+  </component>
+</namespace>

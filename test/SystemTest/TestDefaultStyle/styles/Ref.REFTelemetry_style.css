@@ -1,0 +1,122 @@
+edge {
+  line-color: #000000;
+  mid-target-arrow-shape: triangle;
+  mid-target-arrow-color: #000000;
+  width: 2px;
+}
+
+.fprime-instance {
+  shape: rectangle;
+  width: 280px;
+  height: 280px;
+  label: data(label);
+  font-size: 28px;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-opacity: 1;
+  text-margin-y: 0px;
+  background-color: rgb(252, 242, 199);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-component {
+  shape: rectangle;
+  width: 280px;
+  height: 280px;
+  label: data(label);
+  font-size: 28px;
+  text-opacity: 1;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  text-margin-y: 0px;
+  background-color: rgb(216, 204, 186);
+  border-width: 2px;
+  border-color: #c0c0c0;
+}
+
+.fprime-port {
+  shape: rectangle;
+  width: 20px;
+  height: 20px;
+  label: data(label);
+  font-size: 25px;
+  text-opacity: 1;
+  text-halign: data(label_hloc);
+  text-valign: data(label_vloc);
+  background-color: rgb(100,100,200);
+  background-image: data(img);
+  background-width: 70%;
+  background-height: 70%;
+  border-width: 2px;
+  border-color: rgb(158, 173, 145);
+  z-index: 100;
+}
+
+.fprime-port-async {
+  width: 20px;
+  height: 20px;
+  text-opacity: 1;
+  z-index: 100;
+  background-color: rgb(200,100,200);
+}
+
+#Ref_SG1 {
+  x: 495.3029203283752;
+  y: 157;
+}
+
+#Ref_SG1_tlmOut {
+  x: 495.3029203283752;
+  y: 299;
+}
+
+#Ref_chanTlm {
+  x: 1015.9098825897823;
+  y: 643.0527225468968;
+}
+
+#Ref_chanTlm_TlmRecv {
+  x: 873.9098825897825;
+  y: 643.0527225468968;
+}
+
+#Ref_SG2 {
+  x: 576.1345106900476;
+  y: 1026.8189509782253;
+}
+
+#Ref_SG2_tlmOut {
+  x: 576.1345106900476;
+  y: 884.8189509782253;
+}
+
+#Ref_SG3 {
+  x: 341.22471643097083;
+  y: 1039.5141159226105;
+}
+
+#Ref_SG3_tlmOut {
+  x: 341.22471643097083;
+  y: 897.5141159226105;
+}
+
+#Ref_SG4 {
+  x: 157;
+  y: 466.3410553264901;
+}
+
+#Ref_SG4_tlmOut {
+  x: 299;
+  y: 466.34105532649005;
+}
+
+#Ref_SG5 {
+  x: 895.3038219630472;
+  y: 167.6075571511007;
+}
+
+#Ref_SG5_tlmOut {
+  x: 895.3038219630471;
+  y: 309.6075571511007;
+}
