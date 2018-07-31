@@ -1,4 +1,5 @@
-import { BoundingBox12, Position, NodeSingular, NodeCollection } from "cytoscape";
+import { BoundingBox12, Position } from "cytoscape";
+import { NodeSingular, NodeCollection } from "cytoscape";
 const boundingBoxOpt = {
   includeOverlays: false,
   includeEdges: true,
@@ -220,7 +221,8 @@ export class CyUtil {
   /**
    *  Put the ports evenly on the edge
    * @param bb bounding box of the component
-   * @param horizontal true if the edge is horizental, false if the edge is vertical
+   * @param horizontal true if the edge is horizental, false if the edge
+   * is vertical
    * @param ports ports to be put on the edge
    */
   private distributePositions(

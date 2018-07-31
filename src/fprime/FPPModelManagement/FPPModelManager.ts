@@ -170,7 +170,6 @@ export default class FPPModelManager {
         const ins: IFPPInstance[] = [];
         const cons: IFPPConnection[] = [];
         const comps = this.components.filter((i) => i.name === viewName);
-        // console.log(comps);
         return {
           instances: ins,
           connections: cons,

@@ -1,4 +1,5 @@
-import cytoscape, { EventObject, NodeSingular, ElementDefinition, NodeCollection } from "cytoscape";
+import cytoscape, { EventObject } from "cytoscape";
+import { NodeSingular, ElementDefinition, NodeCollection } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
@@ -383,7 +384,6 @@ class CyManager {
         - this.cyutil!.compDegree(c2.ports);
     });
     arr.reverse();
-    console.log(arr);
     arr.forEach((c2p: IComp2Ports) => {
       const comp = c2p.comp;
       const ports = c2p.ports;

@@ -1,5 +1,17 @@
 namespace Ref
- 
+
+component SignalGen{
+    kind = queued
+    port timeCaller:Fw.Time {
+        direction = out
+        role = TimeGet
+        number = 1
+    }
+    port cmdRegOut:Fw.CmdReg {
+        direction = out
+        role = CmdRegistration
+        number = 1
+    }
  
     port cmdIn:Fw.Cmd {
         direction = in
