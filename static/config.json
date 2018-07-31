@@ -15,6 +15,31 @@
   "ViewStyleFileFolder": "./styles",
   "AutoLayout": [
     {
+      "Name": "breadthfirst",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "directed": true,
+        "nodeDimensionsIncludeLabels": true
+      }
+    },
+    {
+      "Name": "circle",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "padding": 10,
+        "avoidOverlap": true,
+        "avoidOverlapPadding": 10,
+        "nodeDimensionsIncludeLabels": true,
+        "startAngle": "3 / 2 * Math.PI"
+      }
+    },
+    {
       "Name": "cose-bilkent",
       "Default": true,
       "Parameters": {
@@ -31,35 +56,15 @@
       }
     },
     {
-      "Name": "random",
+      "Name": "cola",
       "Default": false,
       "Parameters": {
+        "minLen": "(function( edge ){ return 10; })",
+        "randomrize": true,
         "animate": false,
         "fit": true,
-        "padding": 10
-      }
-    },
-    {
-      "Name": "grid",
-      "Default": false,
-      "Parameters": {
-        "animate": false,
-        "fit": true,
-        "avoidOverlapPadding": 500,
-        "avoidOverlap": true
-      }
-    },
-    {
-      "Name": "circle",
-      "Default": false,
-      "Parameters": {
-        "animate": false,
-        "fit": true,
-        "padding": 10,
         "avoidOverlap": true,
-        "avoidOverlapPadding": 10,
-        "nodeDimensionsIncludeLabels": true,
-        "startAngle": "3 / 2 * Math.PI"
+        "nodeSpacing": "(function(node) { return 100; })"
       }
     },
     {
@@ -78,29 +83,40 @@
       }
     },
     {
-      "Name": "breadthfirst",
-      "Default": false,
-      "Parameters": {
-        "animate": false,
-        "fit": true,
-        "padding": 10,
-        "avoidOverlap": true,
-        "directed": true,
-        "nodeDimensionsIncludeLabels": true
-      }
-    },
-    {
       "Name": "dagre",
       "Default": false,
       "Parameters": {
         "nodeSep": 200,
-        "minLen": "(function( edge ){ return 10; })",
+        "minLen": "(function(edge) { return 10; })",
         "randomrize": true,
         "animate": false,
         "fit": true,
         "padding": 10,
         "avoidOverlap": true,
         "nodeDimensionsIncludeLabels": true
+      }
+    },
+    {
+      "Name": "grid",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "avoidOverlapPadding": 500,
+        "avoidOverlap": true
+      }
+    },
+    {
+      "Name": "klay",
+      "Default": false,
+      "Parameters": {
+        "animate": false,
+        "fit": true,
+        "klay": {
+          "inLayerSpacingFactor": 2.0,
+          "spacing": 150,
+          "direction": "UP"
+        }
       }
     }
   ]

@@ -266,9 +266,9 @@ export class CyUtil {
         } else {
           if (Math.abs(c1.y - p1.position("y"))
             > Math.abs(c2.y - p1.position("y"))) {
-            return -1;
-          } else {
             return 1;
+          } else {
+            return -1;
           }
         }
       } else {

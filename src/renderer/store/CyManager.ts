@@ -3,6 +3,8 @@ import { NodeSingular, ElementDefinition, NodeCollection } from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
+import cola from "cytoscape-cola";
+import klay from "cytoscape-klay";
 import konva from "konva";
 import jquery from "jquery";
 import automove from "rp-automove";
@@ -13,6 +15,8 @@ import popper from "cytoscape-popper";
 import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
 
 cytoscape.use(coseBilkent);
+cytoscape.use(cola);
+cytoscape.use( klay );
 cytoscape.use(automove);
 nodeResize(cytoscape, jquery, konva);
 cytoscape.use(dagre);
