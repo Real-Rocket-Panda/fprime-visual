@@ -263,6 +263,13 @@ export class CyUtil {
       if (horizontal) {
         if (c1.x !== c2.x) {
           return c1.x - c2.x;
+        } else if (c1.x > p1.position("x")) {
+          if (Math.abs(c1.y - p1.position("y"))
+            > Math.abs(c2.y - p1.position("y"))) {
+            return -1;
+          } else {
+            return 1;
+          }
         } else {
           if (Math.abs(c1.y - p1.position("y"))
             > Math.abs(c2.y - p1.position("y"))) {
@@ -274,6 +281,13 @@ export class CyUtil {
       } else {
         if (c1.y !== c2.y) {
           return c1.y - c2.y;
+        } else if (c1.y > p1.position("y")) {
+          if (Math.abs(c1.x - p1.position("x"))
+            > Math.abs(c2.x - p1.position("x"))) {
+            return -1;
+          } else {
+            return 1;
+          }
         } else {
           if (Math.abs(c1.x - p1.position("x"))
             > Math.abs(c2.x - p1.position("x"))) {

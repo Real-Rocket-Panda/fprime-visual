@@ -115,7 +115,7 @@
         "klay": {
           "inLayerSpacingFactor": 2.0,
           "spacing": 150,
-          "direction": "UP"
+          "direction": "DOWN"
         }
       }
     }
