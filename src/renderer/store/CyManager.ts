@@ -140,6 +140,7 @@ class CyManager {
         let layoutOption = {
           name: layoutConfig.Name,
           stop: () => {
+            this.placeAllPort();
             this.commonFuncEntries();
             this.cy!.fit(undefined, 10);
             // Show the viewport again
@@ -344,7 +345,6 @@ class CyManager {
 
   private commonFuncEntries(): void {
     this.removeInvisibleEdge();
-    this.placeAllPort();
     this.movebackAllPort();
     this.stickPort();
     this.appendAnalysisStyle();
