@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <namespace name="Ref">
+  <component kind="active" name="PingReceiver" namespace="Ref">
+    <port direction="in" kind="async" name="PingIn" number="1" type="Svc.Ping"/>
+    <port direction="out" name="PingOut" number="1" type="Svc.Ping"/>
+  </component>
   <component kind="queued" name="SignalGen" namespace="Ref">
     <port direction="out" name="timeCaller" number="1" role="TimeGet" type="Fw.Time"/>
     <port direction="out" name="cmdRegOut" number="1" role="CmdRegistration" type="Fw.CmdReg"/>
@@ -9,10 +13,6 @@
     <port direction="out" name="logOut" number="1" role="LogEvent" type="Fw.Log"/>
     <port direction="out" name="cmdResponseOut" number="1" role="CmdResponse" type="Fw.CmdResponse"/>
     <port direction="out" name="tlmOut" number="1" role="Telemetry" type="Fw.Tlm"/>
-  </component>
-  <component kind="active" name="PingReceiver" namespace="Ref">
-    <port direction="in" kind="async" name="PingIn" number="1" type="Svc.Ping"/>
-    <port direction="out" name="PingOut" number="1" type="Svc.Ping"/>
   </component>
   <system name="sys">
     <instance base_id="181" base_id_window="20" name="SG1" namespace="Ref" type="Ref.SignalGen"/>

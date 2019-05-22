@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <namespace name="Svc">
-  <port_type name="Ping" namespace="Svc">
-    <arg name="key" type="fprime.U32"/>
-  </port_type>
-  <port_type name="FatalEvent" namespace="Svc">
-    <arg name="id" type="Fw.FwEventIdType"/>
-  </port_type>
-  <port_type name="Sched" namespace="Svc">
-    <arg name="context" type="fprime.NATIVE_UINT_TYPE"/>
-  </port_type>
   <component kind="active" name="ActiveLogger" namespace="Svc">
     <port direction="in" kind="sync" max_number="10" min_number="1" name="LogRecv" type="Fw.Log"/>
     <port direction="out" name="PktSend" type="Fw.Com"/>
@@ -21,13 +12,19 @@
     <port direction="out" name="LogText" role="LogTextEvent" type="Fw.LogText"/>
     <port direction="out" name="Log" role="LogEvent" type="Fw.Log"/>
   </component>
+  <port_type name="Ping" namespace="Svc">
+    <arg name="key" type="fprime.U32"/>
+  </port_type>
+  <port_type name="FatalEvent" namespace="Svc">
+    <arg name="id" type="Fw.FwEventIdType"/>
+  </port_type>
+  <port_type name="Sched" namespace="Svc">
+    <arg name="context" type="fprime.NATIVE_UINT_TYPE"/>
+  </port_type>
   <component kind="active" name="TlmChan" namespace="Svc">
     <port direction="in" kind="guarded" max_number="10" min_number="1" name="TlmRecv" type="Fw.Tlm"/>
     <port direction="in" kind="guarded" name="TlmGet" type="Fw.Tlm"/>
     <port direction="in" kind="async" name="Run" type="Svc.Sched"/>
-  </component>
-  <component kind="passive" name="PassiveTextLogger" namespace="Svc">
-    <port direction="in" kind="sync" max_number="10" min_number="1" name="TextLogger" type="Fw.LogText"/>
   </component>
   <component kind="passive" name="Time" namespace="Svc">
     <port direction="in" kind="sync" max_number="10" min_number="1" name="timeGetPort" type="Fw.Time"/>
@@ -39,5 +36,8 @@
     <port direction="out" max_number="10" min_number="1" name="seqCmdStatus" type="Fw.CmdResponse"/>
     <port direction="in" kind="async" max_number="10" min_number="1" name="seqCmdBuff" type="Fw.Com"/>
     <port direction="out" name="pingOut" number="1" type="Svc.Ping"/>
+  </component>
+  <component kind="passive" name="PassiveTextLogger" namespace="Svc">
+    <port direction="in" kind="sync" max_number="10" min_number="1" name="TextLogger" type="Fw.LogText"/>
   </component>
 </namespace>
