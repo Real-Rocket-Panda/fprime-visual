@@ -1,6 +1,6 @@
-# fprime-visual
+# fprime-editor
 
-> An electron-vue project
+> The next generation of [fprime-visualizer](https://github.com/Real-Rocket-Panda/fprime-visual)
 
 #### Build Setup
 

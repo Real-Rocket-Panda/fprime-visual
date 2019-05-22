@@ -5,7 +5,7 @@
       <v-toolbar app fixed clipped-left flat height="40px"
         :style="{zIndex: 1000}" id="fprime-header-toolbar"
       >
-        <v-toolbar-title class="mr-3">FPrime Visual</v-toolbar-title>
+        <v-toolbar-title class="mr-3">FPrime Editor</v-toolbar-title>
 
         <!-- open button -->
         <v-btn small icon @click="openProject">
@@ -92,7 +92,7 @@ import CyManager from "@/store/CyManager";
 import view from "@/store/view";
 
 export default Vue.extend({
-  name: "fprime-visual",
+  name: "fprime-editor",
   components: {
     ViewList,
     ViewTabs,
