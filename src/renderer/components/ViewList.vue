@@ -1,9 +1,56 @@
 <template>
-  <vue-tree-navigation
-    :items="items"
-    :defaultOpenLevel="1"
-    style="width:100%"
-  />
+  <v-navigation-drawer 
+    value="true"
+    stateless
+  >
+    <v-list>
+      <v-list-group
+        v-for="(viewtype, typeid) in items"
+        :key="typeid"
+        no-action
+        sub-group
+        value="true"
+      >
+        <template v-slot:activator>
+          <v-list-tile>
+            <v-list-tile-title>{{viewtype.name}}</v-list-tile-title>
+            <v-list-tile-action>
+              <v-icon
+              @click.stop="addNewItem(viewtype.name)"
+              >add</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </template>
+
+        <v-list-tile 
+          v-for="(viewitem, viewid) in viewtype.children" 
+          :key="viewid" 
+          :to="viewitem.route"
+          @contextmenu="show($event)"
+        >
+          <v-list-tile-title v-text="viewitem.name"></v-list-tile-title>
+        </v-list-tile>
+      </v-list-group>
+    </v-list>
+    <v-menu
+              v-model="showMenu"
+              :position-x="x"
+              :position-y="y"
+              absolute
+              offset-y
+              flat="true"
+            >
+              <v-list>
+                <v-list-tile
+                  v-for="(menuitem, menuid) in menuitems"
+                  :key="menuid"
+                  @click="clickMenuItem(menuitem.title)"
+                >
+                  <v-list-tile-title>{{ menuitem.title }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+  </v-navigation-drawer>
 </template>
 
 <script lang='ts'>
@@ -14,18 +61,43 @@ import { Route } from "vue-router/types/router";
 export default Vue.extend({
   name: "view-list",
   data() {
-    return { viewlist: View.state.views };
+    return { 
+      showMenu: false,
+      x: 0,
+      y: 0,
+      menuitems: [
+        { title: 'add' },
+        { title: 'delete' }
+      ],
+      viewlist: View.state.views 
+      };
   },
   computed: {
     items() {
       return View.GetViewList();
-    },
+    }
   },
   watch: {
     '$route'(to: Route) {
       if (to.params.viewName) {
         View.LoadViewByName(to.params.viewName);
       }
+    }
+  },
+  methods: {
+    addNewItem(name: string) {
+      alert("add new item to " + name);
+    },
+    show (e : any) {
+      this.showMenu = false
+      this.x = e.clientX
+      this.y = e.clientY
+      this.$nextTick(() => {
+        this.showMenu = true
+      })
+    },
+    clickMenuItem(name: string) {
+      alert("click the menu item " + name);
     }
   },
   mounted() {
@@ -48,24 +120,19 @@ export default Vue.extend({
 </script>
 
 <style>
-.NavigationLevel__children > li:hover,
-.NavigationLevel__parent:hover {
-  color: #757575;
+.v-list__group__header .v-list__group__header__append-icon,
+.v-list__group__header .v-list__group__header__prepend-icon {
+  padding: 0 8px;
+}
+.v-list__group__header .v-list__group__header__prepend-icon {
+  min-width: 0px;
 }
 
-.TreeNavigation {
-  user-select: none;
+.v-list__tile__action {
+  min-width: 0px;
 }
 
-.NavigationItem > a {
-  color: inherit;
-  text-decoration: inherit;
-  display: inline-block;
+.v-list__group__items--no-action .v-list__tile {
+  padding-left: 40px;
 }
-
-span.NavigationItem {
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-
 </style>

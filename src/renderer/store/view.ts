@@ -24,7 +24,7 @@ export default {
    *  element: string
    * }
    * This is the type used by the vue-tree-navigation component.
-   * See https://vue-tree-navigation.misrob.cz/#/introduction.
+   * See https://misrob.github.io/vue-tree-navigation/#/introduction.
    * When the user click on the navigation item, we should change the
    * route (path)
    * of the program. Thus, we set route to "/view/:viewType/:viewName/edit".
