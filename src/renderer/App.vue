@@ -73,6 +73,7 @@
 
       <!-- app footer -->
       <message-footer :height="24"></message-footer>
+      <v-expansion-panel></v-expansion-panel>
     </v-app>
   </div>
 </template>
@@ -85,6 +86,7 @@ import MessageFooter from "./components/MessageFooter.vue";
 import MessagePanel from "./components/MessagePanel.vue";
 import ColorPicker from "./components/ColorPicker.vue";
 import ToolbarSelector from "./components/ToolbarSelector.vue";
+import InfoPanel from "./components/InfoPanel.vue";
 import { remote } from "electron";
 import fprime from "fprime";
 import panel, { PanelName } from "@/store/panel";
@@ -99,7 +101,8 @@ export default Vue.extend({
     MessageFooter,
     MessagePanel,
     ColorPicker,
-    ToolbarSelector
+    ToolbarSelector,
+    InfoPanel
   },
   data() {
     return {
