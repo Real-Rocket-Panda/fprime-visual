@@ -26,16 +26,16 @@
           v-for="(viewitem, viewid) in viewtype.children" 
           :key="viewid" 
           :to="viewitem.route"
-          @contextmenu="show($event)"
+          @contextmenu="show(viewitem.name, viewtype.name, $event)"
         >
           <v-list-tile-title v-text="viewitem.name"></v-list-tile-title>
         </v-list-tile>
       </v-list-group>
     </v-list>
     <v-menu
-              v-model="showMenu"
-              :position-x="x"
-              :position-y="y"
+              v-model="menu.showMenu"
+              :position-x="menu.x"
+              :position-y="menu.y"
               absolute
               offset-y
               flat="true"
@@ -62,9 +62,13 @@ export default Vue.extend({
   name: "view-list",
   data() {
     return { 
-      showMenu: false,
-      x: 0,
-      y: 0,
+      menu: {
+        showMenu: false,
+        x: 0,
+        y: 0,
+        clickedName: "",
+        clickedType: "",
+      },
       menuitems: [
         { title: 'add' },
         { title: 'delete' }
@@ -85,37 +89,27 @@ export default Vue.extend({
     }
   },
   methods: {
-    addNewItem(name: string) {
-      alert("add new item to " + name);
-    },
-    show (e : any) {
-      this.showMenu = false
-      this.x = e.clientX
-      this.y = e.clientY
+    show (viewitem: string, viewtype: string, e : any) {
+      this.menu.showMenu = false
+      this.menu.x = e.clientX
+      this.menu.y = e.clientY
+      this.menu.clickedName = viewitem
+      this.menu.clickedType = viewtype
       this.$nextTick(() => {
-        this.showMenu = true
+        this.menu.showMenu = true
       })
     },
-    clickMenuItem(name: string) {
-      alert("click the menu item " + name);
-    }
+    clickMenuItem(menuitem: string) {
+      if (menuitem === 'add') {
+        View.addNewItem(this.menu.clickedType)
+      } else if (menuitem === 'delete') {
+        View.removeItem(this.menu.clickedName, this.menu.clickedType)
+      }
+    },
+    addNewItem(name: string) {
+      View.addNewItem(name);
+    },
   },
-  mounted() {
-    // The following statements add click event listender to the root
-    // navigation item of the view types (e.g., "Function View").
-    // Clicking on those item should cause the list to toggle.
-    const pars = document.getElementsByClassName("NavigationLevel__parent");
-    for (let i = 0; i < pars.length; i++) {
-      const par = pars[i];
-      const item = par.lastElementChild!;
-      item.addEventListener("click", function() {
-        const toggle = item.previousElementSibling!;
-        if (!toggle.classList.contains("NavigationToggle--closed")) {
-          item.previousElementSibling!.dispatchEvent(new Event("click"));
-        }
-      });
-    }
-  }
 });
 </script>
 

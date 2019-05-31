@@ -83,6 +83,7 @@ export default class FPPModelManager {
 
     // Invoke the compiler
     const data = await this.dataImporter.invokeCompiler(config, output);
+    console.dir(data);
 
     // Load the model from xml object and return the view list
     if (data == null || data.length === 0) {
@@ -205,6 +206,93 @@ export default class FPPModelManager {
         return null;
       }
     }
+  }
+
+  /**
+   * Add a new component to the current model.
+   * The default values of the component should includes:
+   *  - a default name pass by param
+   *  - an unspecified namespace
+   *  - an empty port array 
+   * Then the model should be updated in the source file 
+   * in an async way.
+   * 
+   * @param defaultName default name of the new component
+   */
+  public addNewComponent(defaultName : string) {
+    const item: IFPPComponent[] = [];
+    const ps: IFPPPort[] = [];
+    item.push({
+      name: defaultName,
+      namespace: "unspecified",
+      ports: ps,
+    });
+
+    this.components = this.components.concat(item);
+    // TODO: (async) update the model data
+  }
+
+  /**
+   * Add a new instance to the current model.
+   * The instance should created only when the corresponding component exists.
+   * The default values of the instance should includes:
+   *  - name: @param defaultName
+   *  - base_id: defalut should be ? @todo
+   *  - ports: the ports array in the component
+   *  - properties: defalut should be ? @todo
+   * 
+   * @param defaultName default name of the new instance
+   * @param cpName name of the corresponding component
+   */
+  public addNewInstance(defaultName : string, cpName: string) {
+    const item: IFPPInstance[] = [];
+    item.push({
+      name: defaultName,
+      base_id: "-1",
+      ports: {},
+      properties: {}
+    });
+
+    this.instances = this.instances.concat(item);
+    // TODO: (async) update the model data
+  }
+
+  /**
+   * Add an empty function view AKA. new topology
+   * The default values of the topology should includes:
+   *  - a default name pass by param
+   *  - an empty connection array 
+   * @param defaultName default name of the new function view
+   */
+  public addNewFunctionView(defaultName : string) {
+    const item: IFPPTopology[] = [];
+    item.push({
+      name: defaultName,
+      connections: []
+    });
+
+    this.topologies = this.topologies.concat(item);
+    // TODO: (async) update the model data
+  }
+
+  /**
+   * If you want to delete a component, 
+   * you need to cope with all the relevant instance and topology
+   * @param name name of the component to delete
+   */
+  public deleteComponent(name: string) : boolean {
+    this.components = this.components.filter((i) => i.name !== name);
+    return true;
+  }
+  
+  public deleteInstance(name: string) : boolean {
+    this.instances = this.instances.filter((i) => i.name !== name);
+    return true;
+  }
+
+  public deleteTopology(name: string) : boolean {
+    this.topologies = this.topologies.filter((i) => i.name !== name);
+    return true;
   }
 
   private reset() {
