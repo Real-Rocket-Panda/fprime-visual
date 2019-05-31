@@ -90,9 +90,9 @@ export default class ViewManager {
    * The view list of the current project.
    */
   private viewList: IViewList = {
-    [ViewType.Function]: [],
-    [ViewType.InstanceCentric]: [],
     [ViewType.Component]: [],
+    [ViewType.InstanceCentric]: [],
+    [ViewType.Function]: [],
   };
 
   public get ViewList(): IViewList {
