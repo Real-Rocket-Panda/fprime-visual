@@ -57,6 +57,7 @@
 import Vue from "vue";
 import View from "@/store/view";
 import { Route } from "vue-router/types/router";
+import ViewTabs from "ViewTabs.vue";
 
 export default Vue.extend({
   name: "view-list",
@@ -104,6 +105,8 @@ export default Vue.extend({
         View.addNewItem(this.menu.clickedType)
       } else if (menuitem === 'delete') {
         View.removeItem(this.menu.clickedName, this.menu.clickedType)
+        // Remove tab
+        this.$root.$emit('closeTab', this.menu.clickedName)
       }
     },
     addNewItem(name: string) {
