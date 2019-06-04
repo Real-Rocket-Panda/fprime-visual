@@ -61,6 +61,12 @@ export default class ViewManager {
   private layoutAlgorithms: { selected: string, selections: string[] } =
     { selected: "", selections: [] };
 
+  private indexCursor : {[type: string] : number} = {
+    [ViewType.Component] : 1,
+    [ViewType.Function] : 1,
+    [ViewType.InstanceCentric] : 1,
+  }
+
   public get LayoutAlgorithms() {
     return this.layoutAlgorithms;
   }
@@ -84,9 +90,9 @@ export default class ViewManager {
    * The view list of the current project.
    */
   private viewList: IViewList = {
-    [ViewType.Function]: [],
-    [ViewType.InstanceCentric]: [],
     [ViewType.Component]: [],
+    [ViewType.InstanceCentric]: [],
+    [ViewType.Function]: [],
   };
 
   public get ViewList(): IViewList {
@@ -354,6 +360,10 @@ export default class ViewManager {
     Object.keys(this.viewList).forEach((key) => {
       this.viewList[key] = [];
     });
+    // reset the index to 1
+    Object.keys(this.indexCursor).forEach((key) => {
+      this.indexCursor[key] = 1;
+    })
   }
 
   /**
@@ -409,4 +419,50 @@ export default class ViewManager {
     return json;
   }
 
+  /**
+   * Add a new default component to the view list
+   */
+  public addNewItem(type: ViewType) : string {
+    // define the default name of the new created component
+    let defaultName : string = "undefined";
+    switch(type) {
+      case ViewType.Component:
+        defaultName  = "NewComponent" + this.indexCursor[type];
+        // add new component to the model
+        this.modelManager.addNewComponent(defaultName);
+        break;
+      case ViewType.InstanceCentric:
+        defaultName  = "NewInstance" + this.indexCursor[type];
+        // add new instance to the model
+        this.modelManager.addNewInstance(defaultName, "componentToAdd");
+        break;
+      case ViewType.Function:
+        defaultName  = "NewTopology" + this.indexCursor[type];
+        // add new component to the model
+        this.modelManager.addNewFunctionView(defaultName);
+        break;
+      default:
+        break;
+    }
+    // add to the view list
+    this.viewList[type].push( 
+      { name: defaultName, type: type });
+    // increment the index cursor
+    this.indexCursor[type]++;
+    // return the new created item's name
+    return defaultName;
+  }
+
+  public removeItem(name: string, type: string){
+    // remove the item in the model
+    if (type === ViewType.Component) {
+      this.modelManager.deleteComponent(name);
+    } else if (type === ViewType.InstanceCentric) {
+      this.modelManager.deleteInstance(name);
+    } else if (type == ViewType.Function) {
+      this.modelManager.deleteTopology(name);
+    }
+    // remove in the view list
+    this.viewList[type] = this.viewList[type].filter((i) => i.name !== name);
+  }
 }
