@@ -1,4 +1,5 @@
 # fprime-editor
+[![Build Status](http://128.2.25.105:8080/job/FPP%20Graphical%20Editor/badge/icon)](http://128.2.25.105:8080/job/FPP%20Graphical%20Editor/)
 
 > The next generation of [fprime-visualizer](https://github.com/Real-Rocket-Panda/fprime-visual)
 
