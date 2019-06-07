@@ -19,6 +19,7 @@ export enum ViewType {
   Function = "Function View",
   InstanceCentric = "InstanceCentric View",
   Component = "Component View",
+  PortType = "PortType View",
 }
 
 export default class ViewManager {
@@ -65,6 +66,7 @@ export default class ViewManager {
     [ViewType.Component] : 1,
     [ViewType.Function] : 1,
     [ViewType.InstanceCentric] : 1,
+    [ViewType.PortType] : 1,
   }
 
   public get LayoutAlgorithms() {
@@ -90,6 +92,7 @@ export default class ViewManager {
    * The view list of the current project.
    */
   private viewList: IViewList = {
+    [ViewType.PortType]: [],
     [ViewType.Component]: [],
     [ViewType.InstanceCentric]: [],
     [ViewType.Function]: [],
@@ -383,6 +386,10 @@ export default class ViewManager {
       .map((e: string) => {
         return { name: e, type: ViewType.Component };
       });
+    this.viewList[ViewType.PortType] = viewList.ports
+      .map((e:string) => {
+        return {name: e, type: ViewType.PortType};
+    })
   }
 
   /**
@@ -422,10 +429,14 @@ export default class ViewManager {
   /**
    * Add a new default component to the view list
    */
-  public addNewItem(type: ViewType) : string {
+  public addNewItem(type: string) : IViewListItem {
     // define the default name of the new created component
     let defaultName : string = "undefined";
     switch(type) {
+      case ViewType.PortType:
+        defaultName = "NewPortType" + this.indexCursor[type];
+        this.modelManager.addNewPortType(defaultName);
+        break;
       case ViewType.Component:
         defaultName  = "NewComponent" + this.indexCursor[type];
         // add new component to the model
@@ -445,12 +456,12 @@ export default class ViewManager {
         break;
     }
     // add to the view list
-    this.viewList[type].push( 
-      { name: defaultName, type: type });
+    const listItem: IViewListItem = { name: defaultName, type: type }
+    this.viewList[type].push(listItem);
     // increment the index cursor
     this.indexCursor[type]++;
     // return the new created item's name
-    return defaultName;
+    return listItem;
   }
 
   public removeItem(name: string, type: string){
@@ -461,6 +472,8 @@ export default class ViewManager {
       this.modelManager.deleteInstance(name);
     } else if (type == ViewType.Function) {
       this.modelManager.deleteTopology(name);
+    } else if (type == ViewType.PortType) {
+      this.modelManager.deletePortType(name);
     }
     // remove in the view list
     this.viewList[type] = this.viewList[type].filter((i) => i.name !== name);

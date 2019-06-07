@@ -1,7 +1,5 @@
 import fprime from "fprime";
 import { IViewList, IViewListItem, ViewType } from "fprime/ViewManagement/ViewManager";
-import ViewTabs from "../components/ViewTabs.vue";
-import Vue from "vue";
 const views: IViewList = fprime.viewManager.ViewList;
 const opened: IViewListItem[] = [];
 
@@ -130,15 +128,9 @@ export default {
    * create an item with default vaule.
    * @param name The view category aimed to add the item
    */
-  addNewItem(name: string) {
+  addNewItem(name: string): IViewListItem {
     // add a new viewlist item
-    if (name === ViewType.Component) {
-      fprime.viewManager.addNewItem(ViewType.Component);
-    } else if (name === ViewType.InstanceCentric) {
-      fprime.viewManager.addNewItem(ViewType.InstanceCentric);
-    } else if (name === ViewType.Function) {
-      fprime.viewManager.addNewItem(ViewType.Function);
-    }
+    return fprime.viewManager.addNewItem(name);
   },
 
   removeItem(name: string, type: string) {

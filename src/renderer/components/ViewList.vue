@@ -9,7 +9,6 @@
         :key="typeid"
         no-action
         sub-group
-        value="true"
       >
         <template v-slot:activator>
           <v-list-tile>
@@ -57,7 +56,7 @@
 import Vue from "vue";
 import View from "@/store/view";
 import { Route } from "vue-router/types/router";
-import ViewTabs from "ViewTabs.vue";
+import { IViewListItem } from "../../fprime/ViewManagement/ViewManager";
 
 export default Vue.extend({
   name: "view-list",
@@ -109,8 +108,12 @@ export default Vue.extend({
         this.$root.$emit('closeTab', this.menu.clickedName)
       }
     },
-    addNewItem(name: string) {
-      View.addNewItem(name);
+    addNewItem(itemType: string) {
+      const newitem: IViewListItem = View.addNewItem(itemType);
+      // open the tab
+      View.LoadViewByName(newitem.name);
+      const newRoute: string = View.GetViewRoute(newitem);
+      this.$router.push(newRoute);
     },
   },
 });

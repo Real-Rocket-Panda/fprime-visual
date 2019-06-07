@@ -8,6 +8,7 @@ export enum ViewType {
   Function = "Function View",
   InstanceCentric = "InstanceCentric View",
   Component = "Component View",
+  PortType = "PortType View",
 }
 
 /**
@@ -70,6 +71,7 @@ export default class FPPModelManager {
   private instances: IFPPInstance[] = [];
   private topologies: IFPPTopology[] = [];
   private components: IFPPComponent[] = [];
+  private ports: IFPPPort[] = [];
   private keywords: string[] = ["base_id", "name"];
 
   /**
@@ -96,6 +98,14 @@ export default class FPPModelManager {
       ));
     });
 
+    // add the port instance to port type arrays
+    this.components.forEach((comp: IFPPComponent) => {
+      this.ports = this.ports.concat(comp.ports.filter((p : IFPPPort) => {
+        return this.ports.find((pp : IFPPPort) => {
+          return pp.name === p.name;
+        }) === undefined;
+      }));
+    });
 
     data.forEach((i: any) => {
       if (i.namespace.system == null || i.namespace.system.length === 0) {
@@ -124,6 +134,7 @@ export default class FPPModelManager {
       topologies: [],
       instances: [],
       components: [],
+      ports: [],
     };
     this.topologies.forEach((e: IFPPTopology) => {
       viewlist.topologies.push(e.name);
@@ -136,6 +147,10 @@ export default class FPPModelManager {
     this.components.forEach((e: IFPPComponent) => {
       viewlist.components.push(e.name);
     });
+
+    this.ports.forEach((e: IFPPPort) => {
+      viewlist.ports.push(e.name);
+    })
 
 
     // Add output information
@@ -209,6 +224,24 @@ export default class FPPModelManager {
   }
 
   /**
+   * Add a new port type to the current model
+   * The default values of the port should includes:
+   *  - a default name past by param
+   *  - instance number of the port type is 0 
+   * @param defaultName default name of the new port type
+   */
+  public addNewPortType(defaultName: string) {
+    const port: IFPPPort = {
+      name: defaultName,
+      properties: {
+        ["name"]: defaultName,
+        ["number"]: "0",
+      },
+    }
+    this.ports.push(port);
+  }
+
+  /**
    * Add a new component to the current model.
    * The default values of the component should includes:
    *  - a default name pass by param
@@ -273,6 +306,11 @@ export default class FPPModelManager {
 
     this.topologies = this.topologies.concat(item);
     // TODO: (async) update the model data
+  }
+
+  public deletePortType(name: string) : boolean {
+    this.ports = this.ports.filter((i) => i.name !== name);
+    return true;
   }
 
   /**
