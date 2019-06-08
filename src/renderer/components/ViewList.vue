@@ -25,7 +25,7 @@
           v-for="(viewitem, viewid) in viewtype.children" 
           :key="viewid" 
           :to="viewitem.route"
-          @contextmenu="show(viewitem.name, viewtype.name, $event)"
+          @contextmenu.stop="showMenu(viewitem.name, viewtype.name, $event)"
         >
           <v-list-tile-title v-text="viewitem.name"></v-list-tile-title>
         </v-list-tile>
@@ -71,7 +71,6 @@
             <v-btn color="blue darken-1" flat @click="resetDialog()">Cancel</v-btn>
             <v-btn color="blue darken-1" flat 
             @click="
-              instance_dialog.showDialog = false; 
               instance_dialog.clicked = true;
               addNewItem('InstanceCentric View', instance_dialog.selected);
             "
@@ -131,23 +130,32 @@ export default Vue.extend({
     }
   },
   methods: {
-    show (viewitem: string, viewtype: string, e : any) {
+    showMenu (viewitem: string, viewtype: string, e : any) {
+      if(this.menuitems.length == 3) {
+        this.menuitems.pop()
+      }
       this.menu.showMenu = false
       this.menu.x = e.clientX
       this.menu.y = e.clientY
       this.menu.clickedName = viewitem
       this.menu.clickedType = viewtype
+      if(viewtype === ViewType.Component) {
+        this.menuitems.push({title: 'instantiate'})
+      }
       this.$nextTick(() => {
         this.menu.showMenu = true
       })
     },
     clickMenuItem(menuitem: string) {
       if (menuitem === 'add') {
-        View.addNewItem(this.menu.clickedType)
+        this.addNewItem(this.menu.clickedType)
       } else if (menuitem === 'delete') {
         View.removeItem(this.menu.clickedName, this.menu.clickedType)
         // Remove tab
         this.$root.$emit('closeTab', this.menu.clickedName)
+      } else if (menuitem === 'instantiate') {
+        // must be component
+        this.addNewItem(ViewType.InstanceCentric, this.menu.clickedName)
       }
     },
     addNewItem(itemType: string, compName?: string) {
