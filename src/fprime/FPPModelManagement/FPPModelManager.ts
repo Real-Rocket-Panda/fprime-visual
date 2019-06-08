@@ -272,21 +272,40 @@ export default class FPPModelManager {
    *  - name: @param defaultName
    *  - base_id: defalut should be ? @todo
    *  - ports: the ports array in the component
-   *  - properties: defalut should be ? @todo
+   *  - 
    * 
    * @param defaultName default name of the new instance
    * @param cpName name of the corresponding component
    */
   public addNewInstance(defaultName : string, cpName: string) {
-    const item: IFPPInstance[] = [];
-    item.push({
-      name: defaultName,
-      base_id: "-1",
-      ports: {},
-      properties: {}
-    });
+    const ps: { [p: string]: IFPPPort } = {};
+    const type = cpName.split("\.");
+      if (type.length !== 2) {
+        throw new Error("Invalid type format for [" + cpName + "]");
+      }
 
-    this.instances = this.instances.concat(item);
+      const namespace = type[0];
+      const name = type[1];
+      this.components.forEach((c: IFPPComponent) => {
+        if (c.name === namespace + "." + name && c.namespace === namespace) {
+          c.ports.forEach((p: IFPPPort) => {
+            ps[p.name] = p;
+          });
+        }
+      });
+    
+    const item: IFPPInstance = {
+      name: namespace + "." + defaultName,
+      base_id: "-1",
+      ports: ps,
+      properties: {
+        ["name"]: name,
+        ["namespace"]: namespace,
+      }
+    };
+
+    this.instances.push(item);
+    console.dir(item);
     // TODO: (async) update the model data
   }
 

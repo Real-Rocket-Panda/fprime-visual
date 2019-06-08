@@ -429,7 +429,7 @@ export default class ViewManager {
   /**
    * Add a new default component to the view list
    */
-  public addNewItem(type: string) : IViewListItem {
+  public addNewItem(type: string, compName? : string) : IViewListItem {
     // define the default name of the new created component
     let defaultName : string = "undefined";
     switch(type) {
@@ -445,7 +445,16 @@ export default class ViewManager {
       case ViewType.InstanceCentric:
         defaultName  = "NewInstance" + this.indexCursor[type];
         // add new instance to the model
-        this.modelManager.addNewInstance(defaultName, "componentToAdd");
+        if(compName) {
+          this.modelManager.addNewInstance(defaultName, compName);
+          const type = compName.split("\.");
+          if(type.length == 2) {
+            defaultName = type[0] + "." + defaultName;
+          }
+        } else {
+          this.modelManager.addNewInstance(defaultName, "UndefinedComponent");
+        }
+        
         break;
       case ViewType.Function:
         defaultName  = "NewTopology" + this.indexCursor[type];

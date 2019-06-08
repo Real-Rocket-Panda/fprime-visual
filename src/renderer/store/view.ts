@@ -128,9 +128,13 @@ export default {
    * create an item with default vaule.
    * @param name The view category aimed to add the item
    */
-  addNewItem(name: string): IViewListItem {
+  addNewItem(name: string, compName?: string): IViewListItem {
     // add a new viewlist item
-    return fprime.viewManager.addNewItem(name);
+    if(compName) {
+      return fprime.viewManager.addNewItem(name, compName);
+    } else {
+      return fprime.viewManager.addNewItem(name);
+    }
   },
 
   removeItem(name: string, type: string) {
