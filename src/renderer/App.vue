@@ -67,13 +67,13 @@
       
       <!-- app main content -->
       <v-content id="view-main-content">
+        <info-panel id="info-panel"> </info-panel>
         <router-view :height="25"></router-view>
         <message-panel :offset="24"></message-panel>
       </v-content>
-
       <!-- app footer -->
       <message-footer :height="24"></message-footer>
-      <v-expansion-panel></v-expansion-panel>
+
     </v-app>
   </div>
 </template>
@@ -274,8 +274,16 @@ export default Vue.extend({
 /* Global CSS */
 #view-list-nav {
   min-width: 200px;
+  height: 1px;
+  margin: 0px;
 }
 
+#info-panel{
+  position: absolute;
+  right: 5px;
+  min-width: 50px;
+  width: 20%;
+}
 #view-list-nav > .v-navigation-drawer__border {
   cursor: ew-resize;
   width: 2px;
