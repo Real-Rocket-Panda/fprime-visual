@@ -299,7 +299,7 @@ export default class FPPModelManager {
       base_id: "-1",
       ports: ps,
       properties: {
-        ["name"]: name,
+        ["type"]: cpName,
         ["namespace"]: namespace,
       }
     };
