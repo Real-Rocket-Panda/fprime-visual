@@ -1,5 +1,5 @@
 import fprime from "fprime";
-import { IViewList, IViewListItem, ViewType } from "fprime/ViewManagement/ViewManager";
+import { IViewList, IViewListItem} from "fprime/ViewManagement/ViewManager";
 const views: IViewList = fprime.viewManager.ViewList;
 const opened: IViewListItem[] = [];
 

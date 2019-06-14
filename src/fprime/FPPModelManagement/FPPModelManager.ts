@@ -352,6 +352,21 @@ export default class FPPModelManager {
     return true;
   }
 
+  public addPortToComponent(portname: string, compname: string): boolean {
+    let port = this.ports.find((i) => i.name === portname);
+    let comp = this.components.find((i) => i.name === compname);
+    if(port == undefined || comp == undefined) return false;
+
+    comp.ports.push(port);
+    console.log(comp);
+    return true;
+  }
+
+  public addInstanceToTopo(instname: string, toponame: string): boolean {
+    //
+    return false;
+  }
+
   private reset() {
     this.instances = [];
     this.topologies = [];

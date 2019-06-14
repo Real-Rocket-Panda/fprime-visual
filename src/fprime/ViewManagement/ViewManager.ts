@@ -230,6 +230,18 @@ export default class ViewManager {
     }
   }
 
+  public rerender(viewName: string): IRenderJSON {
+    // generate the corresponding view descriptor first, and then
+    // generate the corresponding Cytoscape JSON from the view descriptor.
+    const viewDescriptor = this.generateViewDescriptorFor(viewName);
+    this.viewDescriptors[viewName] = viewDescriptor;
+    // Convert the view descriptor to the render JSON (cytoscape format)
+    const json = this.generateRenderJSONFrom(viewDescriptor);
+    // Set the forceLayout layout flag
+    json.needLayout = json.needLayout;
+    return json;
+  }
+
   /**
    * Get a simple graph of the view. See, ViewDescriptor.getSimpleGraph()
    * @param viewName The name of the view.
@@ -486,5 +498,13 @@ export default class ViewManager {
     }
     // remove in the view list
     this.viewList[type] = this.viewList[type].filter((i) => i.name !== name);
+  }
+
+  public addPortToComponent(portname: string, compname: string): boolean {
+    return this.modelManager.addPortToComponent(portname, compname);
+  }
+
+  public addInstanceToTopo(instname: string, toponame: string): boolean {
+    return this.modelManager.addInstanceToTopo(instname, toponame);
   }
 }

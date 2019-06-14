@@ -112,7 +112,7 @@ export default Vue.extend({
   // This is for closing tabs from ViewList
   mounted: function () {
     this.$root.$on('closeTab', (name: string) => {
-      this.closeTab(name)
+      this.closeTab(name);
     });
   },
   updated() {
