@@ -182,6 +182,13 @@ export default class ViewManager {
   }
 
   /**
+   * Call modelManager to write the model into file
+   */
+  public writeToFile(folderPath: string) {
+    this.modelManager.writeToFile(folderPath);
+  }
+
+  /**
    * Render a specific view with its name. The name of the views should be
    * distinct in the project. The name should be in the view list. If the
    * view descriptor has not generated yet, generate the view descriptor
