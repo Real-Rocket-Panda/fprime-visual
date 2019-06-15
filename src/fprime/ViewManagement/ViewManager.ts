@@ -403,7 +403,7 @@ export default class ViewManager {
       .map((e: string) => {
         return { name: e, type: ViewType.Component };
       });
-    this.viewList[ViewType.PortType] = viewList.ports
+    this.viewList[ViewType.PortType] = viewList.porttypes
       .map((e:string) => {
         return {name: e, type: ViewType.PortType};
     })

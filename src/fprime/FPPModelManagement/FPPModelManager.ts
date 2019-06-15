@@ -13,7 +13,16 @@ export enum ViewType {
 }
 
 /**
- *
+ * A port type defined 
+ */
+export interface IFPPPortType {
+  name: string;
+  namespace: string;
+  arg: { [key: string]: string };
+}
+
+/**
+ * A port created in a component
  */
 export interface IFPPPort {
   name: string;
@@ -21,7 +30,7 @@ export interface IFPPPort {
 }
 
 /**
- * 
+ * A component type
  */
 export interface IFPPComponent {
   name: string;
@@ -30,7 +39,7 @@ export interface IFPPComponent {
 }
 
 /**
- * 
+ * A component instance
  */
 export interface IFPPInstance {
   name: string;
@@ -40,7 +49,7 @@ export interface IFPPInstance {
 }
 
 /**
- * 
+ * A connection in the topology
  */
 export interface IFPPConnection {
   from: { inst: IFPPInstance, port: IFPPPort };
@@ -48,7 +57,7 @@ export interface IFPPConnection {
 }
 
 /**
- * 
+ * A topology information in the functional view
  */
 export interface IFPPTopology {
   name: string;
@@ -56,7 +65,7 @@ export interface IFPPTopology {
 }
 
 /**
- * 
+ * The whole FPP model
  */
 export interface IFPPModel {
   instances: IFPPInstance[];
@@ -72,7 +81,7 @@ export default class FPPModelManager {
   private instances: IFPPInstance[] = [];
   private topologies: IFPPTopology[] = [];
   private components: IFPPComponent[] = [];
-  private ports: IFPPPort[] = [];
+  private porttypes: IFPPPortType[] = [];
   private keywords: string[] = ["base_id", "name"];
 
   /**
@@ -94,18 +103,15 @@ export default class FPPModelManager {
     }
 
     data.forEach((i: any) => {
+      this.porttypes = this.porttypes.concat(this.generatePortType(
+        i.namespace.port_type,
+      ));
+    });
+    
+    data.forEach((i: any) => {
       this.components = this.components.concat(this.generateComponents(
         i.namespace.component,
       ));
-    });
-
-    // add the port instance to port type arrays
-    this.components.forEach((comp: IFPPComponent) => {
-      this.ports = this.ports.concat(comp.ports.filter((p : IFPPPort) => {
-        return this.ports.find((pp : IFPPPort) => {
-          return pp.name === p.name;
-        }) === undefined;
-      }));
     });
 
     data.forEach((i: any) => {
@@ -135,7 +141,7 @@ export default class FPPModelManager {
       topologies: [],
       instances: [],
       components: [],
-      ports: [],
+      porttypes: [],
     };
     this.topologies.forEach((e: IFPPTopology) => {
       viewlist.topologies.push(e.name);
@@ -149,10 +155,11 @@ export default class FPPModelManager {
       viewlist.components.push(e.name);
     });
 
-    this.ports.forEach((e: IFPPPort) => {
-      viewlist.ports.push(e.name);
+    this.porttypes.forEach((e: IFPPPortType) => {
+      viewlist.porttypes.push(e.namespace + "." + e.name);
     })
-
+    console.log(viewlist);
+    
 
     // Add output information
     if (output) {
@@ -232,14 +239,12 @@ export default class FPPModelManager {
    * @param defaultName default name of the new port type
    */
   public addNewPortType(defaultName: string) {
-    const port: IFPPPort = {
+    const porttype: IFPPPortType = {
       name: defaultName,
-      properties: {
-        ["name"]: defaultName,
-        ["number"]: "0",
-      },
+      namespace: "undefined",
+      arg: {}
     }
-    this.ports.push(port);
+    this.porttypes.push(porttype);
   }
 
   /**
@@ -329,7 +334,7 @@ export default class FPPModelManager {
   }
 
   public deletePortType(name: string) : boolean {
-    this.ports = this.ports.filter((i) => i.name !== name);
+    this.porttypes = this.porttypes.filter((i) => i.name !== name);
     return true;
   }
 
@@ -354,12 +359,30 @@ export default class FPPModelManager {
   }
 
   public addPortToComponent(portname: string, compname: string): boolean {
-    let port = this.ports.find((i) => i.name === portname);
+    portname = portname.split(".")[1];
+    
+    let porttype = this.porttypes.find((i) => {
+      return i.name === portname;
+    });
     let comp = this.components.find((i) => i.name === compname);
-    if(port == undefined || comp == undefined) return false;
+    if(porttype == undefined || comp == undefined) return false;
+    // existing port
+    const newPortname = porttype.name.charAt(0).toLowerCase() + porttype.name.slice(1);
+    if(comp.ports.find((i) => i.name === newPortname)) return false;
+
+    const port: IFPPPort = {
+      name: newPortname,
+      properties: {
+        ["direction"]: "in",
+        ["kind"]: "",
+        ["number"]: 1,
+        ["type"]: porttype.namespace + "." + porttype.name,
+        ["role"]: "",
+      }
+    }
 
     comp.ports.push(port);
-    console.log(comp);
+    console.dir(comp);
     return true;
   }
 
@@ -413,10 +436,33 @@ export default class FPPModelManager {
   }
 
   private reset() {
-    this.ports = []
+    this.porttypes = []
     this.instances = [];
     this.topologies = [];
     this.components = [];
+  }
+
+  private generatePortType(porttypes: any[]): IFPPPortType[] {
+    const res: IFPPPortType[] = [];
+
+    if(porttypes == null || porttypes.length === 0) {
+      return res;
+    }
+
+    porttypes.forEach((ele: any) => {
+      const args : {[p:string]: string} = {} 
+      ele.arg.forEach((a: any) => {
+        args[a.name] = a.type;
+      })
+      const pt: IFPPPortType = {
+        name: ele.$.name,
+        namespace: ele.$.namespace,
+        arg: args,
+      }
+      res.push(pt)
+    })
+
+    return res;
   }
 
   private generateComponents(components: any[]): IFPPComponent[] {
