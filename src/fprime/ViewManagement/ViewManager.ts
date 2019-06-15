@@ -237,8 +237,6 @@ export default class ViewManager {
     this.viewDescriptors[viewName] = viewDescriptor;
     // Convert the view descriptor to the render JSON (cytoscape format)
     const json = this.generateRenderJSONFrom(viewDescriptor);
-    // Set the forceLayout layout flag
-    json.needLayout = json.needLayout;
     return json;
   }
 
