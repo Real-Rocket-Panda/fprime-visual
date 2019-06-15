@@ -413,6 +413,7 @@ export default class FPPModelManager {
   }
 
   private reset() {
+    this.ports = []
     this.instances = [];
     this.topologies = [];
     this.components = [];
