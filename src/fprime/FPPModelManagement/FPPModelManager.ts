@@ -1,5 +1,6 @@
 import IConfig from "../Common/Config";
 import DataImporter, { IOutput } from "../DataImport/DataImporter";
+import fs from 'fs';
 
 /**
  * 
@@ -365,6 +366,50 @@ export default class FPPModelManager {
   public addInstanceToTopo(instname: string, toponame: string): boolean {
     //
     return false;
+  }
+
+  /**
+   * Output the model into the selected folder
+   */
+  public writeToFile(folderPath: string) {
+    const tab: string = "    ";
+
+
+    // let componentSet: { [namespace: string]: new Set(); } = {};
+    let componentContent: string = "";
+    this.components.forEach((e: IFPPComponent) => {
+      componentContent += e.name + " " + e.namespace + "\n";
+      // for (const key in e.) {
+      //     const value = e.properties[key];
+      //     if (key === "type")
+      //     {
+      //         portTypeSet.add(value)
+      //     }
+      //     // portTypeContent = portTypeContent + (tab + "arg " + key + ":" + value + "\n");
+      // }
+      // portTypeContent = portTypeContent + "}\n";
+    });
+
+
+    // this.topologies.forEach((e: IFPPTopology) => {
+    //     viewlist.topologies.push(e.name);
+    // });
+    //
+    // this.instances.forEach((e: IFPPInstance) => {
+    //     viewlist.instances.push(e.name);
+    // });
+    //
+    // this.components.forEach((e: IFPPComponent) => {
+    //     viewlist.components.push(e.name);
+    // });
+
+
+
+    fs.writeFile(folderPath.concat("\\test.fpp"), componentContent, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   private reset() {
