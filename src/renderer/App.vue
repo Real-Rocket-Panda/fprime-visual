@@ -278,9 +278,10 @@ export default Vue.extend({
   margin: 0px;
 }
 
-#info-panel{
+#info-panel {
   position: absolute;
   right: 5px;
+  top: 25px;
   min-width: 50px;
   width: 20%;
 }

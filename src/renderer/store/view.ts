@@ -141,5 +141,8 @@ export default {
     fprime.viewManager.removeItem(name, type);
   },
 
+  getComponents() {
+    return fprime.viewManager.getComponents();
+  },
 
 };

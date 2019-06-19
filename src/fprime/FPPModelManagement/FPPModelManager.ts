@@ -222,7 +222,9 @@ export default class FPPModelManager {
       }
     }
   }
-
+    public getComponents() {
+        return this.components;
+    }
   /**
    * Add a new port type to the current model
    * The default values of the port should includes:

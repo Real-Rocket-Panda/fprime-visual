@@ -425,7 +425,11 @@ export default class ViewManager {
       json.descriptor.style);
     return json;
   }
-
+  public async getComponents(){
+    const viewlist = await this.modelManager.loadModel(
+        this.configManager.Config, this);
+    return this.modelManager.getComponents();
+  }
   /**
    * Add a new default component to the view list
    */
