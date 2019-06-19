@@ -317,12 +317,12 @@
   }
 
   #info-panel {
-  position: absolute;
-  right: 5px;
-  top: 25px;
-  min-width: 50px;
-  width: 20%;
-}
+    position: absolute;
+    right: 5px;
+    top: 25px;
+    min-width: 50px;
+    width: 20%;
+  }
 
   #view-list-nav > .v-navigation-drawer__border {
     cursor: ew-resize;
