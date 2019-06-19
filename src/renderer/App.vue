@@ -316,21 +316,21 @@
     margin: 0px;
   }
 
-  #info-panel {
-    position: absolute;
-    right: 5px;
-    top: 25px;
-    min-width: 50px;
-    width: 20%;
-  }
+#info-panel {
+  position: absolute;
+  right: 5px;
+  top: 25px;
+  min-width: 50px;
+  width: 20%;
+}
 
-  #view-list-nav > .v-navigation-drawer__border {
-    cursor: ew-resize;
-    width: 2px;
-    background-color: rgba(150, 150, 150, 0.12);
-  }
+#view-list-nav > .v-navigation-drawer__border {
+  cursor: ew-resize;
+  width: 2px;
+  background-color: rgba(150, 150, 150, 0.12);
+}
 
-  #fprime-header-toolbar .tooltip {
-    height: 48px;
-  }
+#fprime-header-toolbar .tooltip {
+  height: 48px;
+}
 </style>
