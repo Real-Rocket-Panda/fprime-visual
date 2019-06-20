@@ -36,6 +36,7 @@ export interface IFPPComponent {
   name: string;
   namespace: string;
   ports: IFPPPort[];
+  kind: string;
 }
 
 /**
@@ -267,6 +268,7 @@ export default class FPPModelManager {
       name: defaultName,
       namespace: "unspecified",
       ports: ps,
+      kind: "undefined",
     });
 
     this.components = this.components.concat(item);
@@ -289,6 +291,7 @@ export default class FPPModelManager {
     const ps: { [p: string]: IFPPPort } = {};
     const type = cpName.split("\.");
       if (type.length !== 2) {
+        alert("Please specify a namespace before instantiate")
         throw new Error("Invalid type format for [" + cpName + "]");
       }
 
@@ -313,7 +316,6 @@ export default class FPPModelManager {
     };
 
     this.instances.push(item);
-    console.dir(item);
     // TODO: (async) update the model data
   }
 
@@ -574,6 +576,7 @@ export default class FPPModelManager {
         name: ns + "." + ele.$.name,
         namespace: ns,
         ports: ps,
+        kind: ele.$.kind,
       });
     });
 

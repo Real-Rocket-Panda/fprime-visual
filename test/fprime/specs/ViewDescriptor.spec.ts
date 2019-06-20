@@ -45,12 +45,14 @@ const mockModel: IFPPModel = {
         { name: "p1", properties: { direction: "out", kind: "async" } },
         { name: "p2", properties: { direction: "out", kind: "sync" } },
       ],
+      kind: "active",
     },
     {
       name: "comp_2",
       namespace: "ref",
       ports: [{ name: "p1", properties: { direction: "in", num: "2",
                                           kind: "async" } }],
+      kind: "active",
     },
   ],
 };
