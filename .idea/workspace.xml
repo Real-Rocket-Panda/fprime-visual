@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="230d7251-9028-4cb2-a050-83b87472ee32" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/components/InfoPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/InfoPanel.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/store/CyManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/CyManager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/store/view.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/view.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -22,8 +22,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="224" column="28" lean-forward="true" selection-start-line="224" selection-start-column="28" selection-end-line="224" selection-end-column="28" />
+            <state relative-caret-position="-915">
+              <caret line="416" column="28" selection-start-line="416" selection-start-column="28" selection-end-line="416" selection-end-column="28" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -31,13 +31,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/InfoPanel.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1045">
-              <caret line="55" column="22" lean-forward="true" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
+            <state relative-caret-position="450">
+              <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
               <folding>
-                <element signature="e#419#441#0" expanded="true" />
+                <element signature="e#484#506#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/renderer/store/CyManager.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="8926">
+              <caret line="470" column="3" lean-forward="true" selection-start-line="470" selection-start-column="3" selection-end-line="470" selection-end-column="3" />
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,8 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/store/view.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1842">
-              <caret line="142" selection-start-line="142" selection-end-line="142" />
+            <state relative-caret-position="57">
+              <caret line="3" column="35" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -55,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/renderer/components/ViewList.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="286" column="1" selection-start-line="286" selection-start-column="1" selection-end-line="286" selection-end-column="1" />
+            <state relative-caret-position="-1478">
+              <caret line="84" column="17" selection-start-line="84" selection-start-column="17" selection-end-line="84" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -67,11 +79,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="427" column="21" lean-forward="true" selection-start-line="427" selection-start-column="21" selection-end-line="427" selection-end-column="21" />
+            <state relative-caret-position="8265">
+              <caret line="435" column="3" selection-start-line="435" selection-start-column="3" selection-end-line="435" selection-end-column="3" />
               <folding>
                 <element signature="e#0#79#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-846">
+              <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -88,6 +109,18 @@
       <find>NODE_ENV</find>
       <find>node</find>
       <find>View</find>
+      <find>tooltip</find>
+      <find>cy</find>
+      <find>update</find>
+      <find>menu</find>
+      <find>console</find>
+      <find>append</find>
+      <find>app</find>
+      <find>Cy</find>
+      <find>vue</find>
+      <find>el</find>
+      <find>fprime</find>
+      <find>Vue</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -98,26 +131,25 @@
       <list>
         <option value="$PROJECT_DIR$/src/renderer/components/ViewList.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/ViewTabs.vue" />
-        <option value="$PROJECT_DIR$/src/renderer/components/InfoPanel.vue" />
         <option value="$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts" />
-        <option value="$PROJECT_DIR$/src/renderer/store/view.ts" />
-        <option value="$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts" />
         <option value="$PROJECT_DIR$/src/renderer/App.vue" />
+        <option value="$PROJECT_DIR$/src/renderer/components/InfoPanel.vue" />
+        <option value="$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts" />
+        <option value="$PROJECT_DIR$/src/renderer/store/CyManager.ts" />
+        <option value="$PROJECT_DIR$/src/renderer/store/view.ts" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="170" />
-    <option name="y" value="50" />
-    <option name="width" value="3500" />
-    <option name="height" value="1960" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="x" value="1680" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -146,6 +178,13 @@
               <item name="fprime-editor" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="fprime" type="462c0819:PsiDirectoryNode" />
+              <item name="FPPModelManagement" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="fprime-editor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="fprime-editor" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="fprime" type="462c0819:PsiDirectoryNode" />
               <item name="ViewManagement" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -159,12 +198,20 @@
               <item name="fprime-editor" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="renderer" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="fprime-editor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="fprime-editor" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="renderer" type="462c0819:PsiDirectoryNode" />
               <item name="store" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -178,7 +225,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="C:\fprime-editor\node_modules\prettier" />
-    <property name="ts.external.directory.path" value="C:\fprime-editor\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -244,17 +291,19 @@
       <workItem from="1559316573551" duration="3297000" />
       <workItem from="1559425123289" duration="2290000" />
       <workItem from="1559585038435" duration="12404000" />
+      <workItem from="1561127650581" duration="108000" />
+      <workItem from="1561127801540" duration="18053000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41218000" />
+    <option name="totallyTimeSpent" value="59379000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1680" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7721519" visible="true" weight="0.2527646" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7721519" visible="true" weight="0.13006845" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" sideWeight="0.2278481" side_tool="true" visible="true" weight="0.13852243" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -275,9 +324,9 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.77040815" visible="true" weight="0.28993368" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7721519" visible="true" weight="0.13059504" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" sideWeight="0.22959183" side_tool="true" visible="true" weight="0.28993368" />
+      <window_info id="npm" order="2" sideWeight="0.2278481" side_tool="true" visible="true" weight="0.13852243" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32911393" />
@@ -358,16 +407,6 @@
     <entry file="file://$PROJECT_DIR$/.electron-vue/webpack.main.config.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/CyManager.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4879">
-          <caret line="301" column="26" selection-start-line="301" selection-start-column="22" selection-end-line="301" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/fprime/DataImport/DataImporter.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -408,11 +447,6 @@
         <state relative-caret-position="-539" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/ViewContent.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-510" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/ToolbarSelector.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-522" />
@@ -427,20 +461,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/ViewList.vue">
+    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewDescriptor.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="112" column="28" lean-forward="true" selection-start-line="112" selection-start-column="28" selection-end-line="112" selection-end-column="28" />
-          <folding>
-            <element signature="e#1562#1584#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="615">
+          <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/ViewTabs.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="111" column="43" selection-start-line="111" selection-start-column="43" selection-end-line="111" selection-end-column="43" />
+        <state relative-caret-position="1527">
+          <caret line="120" column="10" selection-start-line="120" selection-start-column="8" selection-end-line="120" selection-end-column="10" />
           <folding>
             <element signature="e#1322#1344#0" expanded="true" />
           </folding>
@@ -449,55 +480,75 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="224" column="28" lean-forward="true" selection-start-line="224" selection-start-column="28" selection-end-line="224" selection-end-column="28" />
+        <state relative-caret-position="-915">
+          <caret line="416" column="28" selection-start-line="416" selection-start-column="28" selection-end-line="416" selection-end-column="28" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/InfoPanel.vue">
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/ViewContent.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1045">
-          <caret line="55" column="22" lean-forward="true" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
+        <state relative-caret-position="-158">
+          <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
           <folding>
-            <element signature="e#419#441#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="427" column="21" lean-forward="true" selection-start-line="427" selection-start-column="21" selection-end-line="427" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewDescriptor.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/view.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1842">
-          <caret line="142" selection-start-line="142" selection-end-line="142" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#151#173#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="286" column="1" selection-start-line="286" selection-start-column="1" selection-end-line="286" selection-end-column="1" />
+        <state relative-caret-position="-846">
+          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/CyManager.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8926">
+          <caret line="470" column="3" lean-forward="true" selection-start-line="470" selection-start-column="3" selection-end-line="470" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/ViewList.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1478">
+          <caret line="84" column="17" selection-start-line="84" selection-start-column="17" selection-end-line="84" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/view.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="35" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8265">
+          <caret line="435" column="3" selection-start-line="435" selection-start-column="3" selection-end-line="435" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/InfoPanel.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
+          <folding>
+            <element signature="e#484#506#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

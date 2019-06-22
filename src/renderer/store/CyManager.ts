@@ -13,7 +13,6 @@ import fprime from "fprime";
 import Tippy from "tippy.js";
 import popper from "cytoscape-popper";
 import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
-
 cytoscape.use(coseBilkent);
 cytoscape.use(cola);
 cytoscape.use( klay );
@@ -28,7 +27,6 @@ const boundingBoxOpt = {
   includeLabels: false,
   includeNodes: true,
 };
-
 class CyManager {
 
   /**
@@ -349,6 +347,7 @@ class CyManager {
     this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
+    this.showComponentInfo();
     fprime.viewManager.updateViewDescriptorFor(this.viewName,
       this.getDescriptor());
   }
@@ -469,6 +468,25 @@ class CyManager {
           });
           return tippy;
         });
+  }
+  public cyShowComponentInfo(type: string, namespace: string):void{
+
+  }
+  public showComponentInfo(): void {
+    this.cy!.nodes().filter((node) => {
+      return Object.keys(node.data("properties")).length !== 0;
+    })
+        .map((node) => {
+        node.on("click", () => {
+          const info = node.data("properties");
+          const type = info.type.split(".")[1];
+          const namespace = info.namespace;
+          //console.log(type, namespace);
+          this.cyShowComponentInfo(type, namespace);
+          // view.comp.compType = type;
+          // view.comp.compNamespace = namespace;
+          });
+      });
   }
 
 

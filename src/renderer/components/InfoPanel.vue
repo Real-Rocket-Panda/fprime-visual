@@ -1,52 +1,63 @@
 <template v-slot:header xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-container class="info-panel">
-        <v-select
-                :items="CompNames"
-                box
-                label="Name"
-        ></v-select>
-        <v-select
-                :items="CompNameSpaces"
-                box
-                label="Namespace"
-        ></v-select>
-
+        <v-autocomplete
+                v-model="compName"
+                :items="compNames"
+                label="Type"
+        ></v-autocomplete>
+        <v-autocomplete
+                v-model="compNameSpace"
+                :items="compNameSpaces"
+                label="NameSpace"
+        ></v-autocomplete>
     </v-container>
 </template>
 
-<script>
+<script lang='ts'>
     import Vue from "vue";
-    import View from "@/store/view";
+    import view from "@/store/view";
+    import CyManager from "@/store/CyManager";
     export default Vue.extend({
         name: "info-panel",
         data(){
             return{
-                CompNames:[],
-                CompNameSpaces:[],
-                ComPorts:[]
+                compName: "",
+                compNameSpace: "",
+                compNames:[""],
+                compNameSpaces:[""],
+                comPorts:[""]
             };
         },
         created(){
             this.getComponentInfo;
         },
+        mounted(){
+            CyManager.cyShowComponentInfo = this.showComponentInfo;
+        },
         computed:{
-            getComponentInfo:function(){
+            getComponentInfo: function() {
 
-                View.getComponents().then(value => {
-                    var name = new Array;
-                    var namespace = new Array;
-                    var port = new Array;
+                view.getComponents().then(value => {
+                    var name:string[] = new Array();
+                    var namespace:string[] = new Array();
+                    //var port:string[] = new Array();
                     for(var i=0; i < value.length;i++){
                         name.push(value[i].name.split('.')[1]);
                         namespace.push(value[i].namespace);
-                        port.push(value[i].ports);
+                        //port.push(value[i].ports);
                     }
-                    this.CompNames = name;
-                    this.CompNameSpaces = namespace;
-                    this.ComPorts = port;
+                    this.compNames = name;
+                    this.compNameSpaces = namespace;
+                    //this.comPorts = port;
                 });
             }
-        }
+        },
+        methods:{
+            showComponentInfo(compType :string, compNamespace: string){
+                this.compName = compType;
+                this.compNameSpace = compNamespace;
+            }
+        },
     })
 </script>
 
