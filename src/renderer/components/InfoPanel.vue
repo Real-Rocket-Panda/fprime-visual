@@ -34,6 +34,7 @@
         mounted(){
             CyManager.cyShowComponentInfo = this.showComponentInfo;
         },
+        // Get all components in the current model and push them to the items of the selector.
         computed:{
             getComponentInfo: function() {
 
@@ -52,6 +53,7 @@
                 });
             }
         },
+        // Get the information of the selected component and assign it to the v-model of the selector.
         methods:{
             showComponentInfo(compType :string, compNamespace: string){
                 this.compName = compType;

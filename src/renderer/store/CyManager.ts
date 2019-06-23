@@ -469,9 +469,20 @@ class CyManager {
           return tippy;
         });
   }
+
+  /**
+   * This is an empty function in order to be exposed to InfoPanel.vue
+   * @param type
+   * @param namespace
+   */
   public cyShowComponentInfo(type: string, namespace: string):void{
 
   }
+
+  /**
+   * This function binds each node on the canvas with a click event so that
+   * the info panel can show the information of the selected component.
+   */
   public showComponentInfo(): void {
     this.cy!.nodes().filter((node) => {
       return Object.keys(node.data("properties")).length !== 0;
@@ -481,10 +492,7 @@ class CyManager {
           const info = node.data("properties");
           const type = info.type.split(".")[1];
           const namespace = info.namespace;
-          //console.log(type, namespace);
           this.cyShowComponentInfo(type, namespace);
-          // view.comp.compType = type;
-          // view.comp.compNamespace = namespace;
           });
       });
   }
