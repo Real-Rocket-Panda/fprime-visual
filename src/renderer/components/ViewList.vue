@@ -206,16 +206,17 @@ export default Vue.extend({
       if(droptype === ViewType.PortType && viewtype === ViewType.Component) {
         // a port is dropped
           fprime.viewManager.addPortToComponent(dropname, itemname);
-          if(View.state.opened.find((i) => {return (i.name === itemname && i.type === ViewType.Component)})) {
-            // if the tab is opened, update the content
-            this.$root.$emit("updateContent", itemname);
-          }
       } else if (droptype === ViewType.Component && viewtype === ViewType.InstanceCentric) {
         // a component is dropped
         this.addNewItem(viewtype, dropname);
       } else if (droptype === ViewType.InstanceCentric) {
         // an instance is dropped
         fprime.viewManager.addInstanceToTopo(dropname, itemname);
+      }
+      if(View.state.opened.find((i) => {return (i.name === itemname &&
+       (i.type === ViewType.Component || i.type === ViewType.Function))})) {
+        // if the tab is opened, update the content
+        this.$root.$emit("updateContent", itemname);
       }
     }
   }
