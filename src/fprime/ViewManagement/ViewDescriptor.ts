@@ -108,6 +108,8 @@ export default class ViewDescriptor {
    * @param model The mocked model data
    */
   public static buildFrom(model: IFPPModel): ViewDescriptor {
+    console.log(model);
+    
     const view = new ViewDescriptor();
 
     // For all the instances in a model
@@ -211,18 +213,22 @@ export default class ViewDescriptor {
     // The edge has the format: <from instance id>_<from port id>-
     //  <to instance id>_<to instance id>
     model.connections.forEach((t) => {
-      const from = `${escapeDot(t.from.inst.name)}_${t.from.port.name}`;
-      const to = `${escapeDot(t.to.inst.name)}_${t.to.port.name}`;
-      const edge = `${from}-${to}`;
-      view.graph.edges[edge] = {
-        id: edge,
-        modelID: "",
-        type: EdgeType.Port2Port,
-        from: view.graph.nodes[from],
-        to: view.graph.nodes[to],
-      };
+      if(t.from.port && t.to) {
+        const from = `${escapeDot(t.from.inst.name)}_${t.from.port.name}`;
+        const to = `${escapeDot(t.to.inst.name)}_${t.to.port.name}`;
+        const edge = `${from}-${to}`;
+        view.graph.edges[edge] = {
+          id: edge,
+          modelID: "",
+          type: EdgeType.Port2Port,
+          from: view.graph.nodes[from],
+          to: view.graph.nodes[to],
+        };
+      }
     });
 
+    console.dir(view);
+    
     return view;
   }
 
