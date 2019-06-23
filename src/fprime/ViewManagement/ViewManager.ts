@@ -442,6 +442,10 @@ export default class ViewManager {
       json.descriptor.style);
     return json;
   }
+
+  /**
+   * Get all the components in the model
+   */
   public async getComponents(){
     const viewlist = await this.modelManager.loadModel(
         this.configManager.Config, this);
