@@ -2,7 +2,6 @@ import fprime from "fprime";
 import { IViewList, IViewListItem} from "fprime/ViewManagement/ViewManager";
 const views: IViewList = fprime.viewManager.ViewList;
 const opened: IViewListItem[] = [];
-
 export default {
   state: {
     /**
@@ -140,7 +139,9 @@ export default {
   removeItem(name: string, type: string) {
     fprime.viewManager.removeItem(name, type);
   },
-
+  /**
+   * Get all the components in the current model.
+   */
   getComponents() {
     return fprime.viewManager.getComponents();
   },
