@@ -42,12 +42,13 @@ export default Vue.extend({
       let droptype: string = data[0];
       let dropname: string = data[1];
       console.log(droptype + " " + dropname + " " + this.viewName);
+      var res = false;
       if(droptype === ViewType.PortType) {
-      var res = fprime.viewManager.addPortToComponent(dropname, this.viewName);
-      if(res) this.updateContent(this.viewName);
+        res = fprime.viewManager.addPortToComponent(dropname, this.viewName);
       } else if (droptype === ViewType.InstanceCentric) {
-        fprime.viewManager.addInstanceToTopo(dropname, this.viewName);
+        res = fprime.viewManager.addInstanceToTopo(dropname, this.viewName);
       }
+      if(res) this.updateContent(this.viewName);
     },
     allowDrop(event: any) {
       event.preventDefault();

@@ -53,8 +53,8 @@ export interface IFPPInstance {
  * A connection in the topology
  */
 export interface IFPPConnection {
-  from: { inst: IFPPInstance, port: IFPPPort };
-  to: { inst: IFPPInstance, port: IFPPPort };
+  from: { inst: IFPPInstance, port?: IFPPPort };
+  to?: { inst: IFPPInstance, port: IFPPPort };
 }
 
 /**
@@ -179,7 +179,7 @@ export default class FPPModelManager {
           if (ins.indexOf(c.from.inst) === -1) {
             ins.push(Object.assign({}, c.from.inst));
           }
-          if (ins.indexOf(c.to.inst) === -1) {
+          if (c.to && ins.indexOf(c.to.inst) === -1) {
             ins.push(Object.assign({}, c.to.inst));
           }
         });
@@ -208,11 +208,11 @@ export default class FPPModelManager {
 
         this.topologies.forEach((t) => {
           t.connections.forEach((c) => {
-            if (c.from.inst === root) {
+            if (c.from.inst === root && c.to) {
               ins.push(Object.assign({}, c.to.inst));
               cons.push(c);
             }
-            if (c.to.inst === root) {
+            if (c.to && c.to.inst === root) {
               ins.push(Object.assign({}, c.from.inst));
               cons.push(c);
             }
@@ -391,8 +391,25 @@ export default class FPPModelManager {
   }
 
   public addInstanceToTopo(instname: string, toponame: string): boolean {
-    //
-    return false;
+    // console.log("add instance to topo: " + instname + " " + toponame);
+    
+    let instance = this.instances.find((i) => i.name === instname);
+    if(instance == undefined) return false;
+    console.log("find instance");
+    console.log(instance);
+    
+    let topology = this.topologies.find((i) => i.name === toponame);
+    if(topology == undefined) return false;
+    console.log("find topo");
+    console.log(topology);
+    
+    const halfConnection: IFPPConnection = {
+      from: {
+        inst: instance,
+      }
+    }
+    topology.connections.push(halfConnection);
+    return true;
   }
 
   /**
@@ -489,19 +506,22 @@ export default class FPPModelManager {
           // write each connection
           for (const connection of e.connections) {
               // Get rid of namespace
-              let fromInst: string = connection.from.inst.name;
-              fromInst = fromInst.substring(fromInst.indexOf(".") + 1);
-              let fromPort: string = connection.from.port.name;
-              fromPort = fromPort.substring(fromPort.indexOf(".") + 1);
-              let toInst: string = connection.to.inst.name;
-              toInst = toInst.substring(toInst.indexOf(".") + 1);
-              let toPort: string = connection.to.port.name;
-              toPort = toPort.substring(toPort.indexOf(".") + 1);
+              // Modified by Minghui Tang 6/22, only write the valid connections
+              if(connection.from.port && connection.to) {
+                let fromInst: string = connection.from.inst.name;
+                fromInst = fromInst.substring(fromInst.indexOf(".") + 1);
+                let fromPort: string = connection.from.port.name;
+                fromPort = fromPort.substring(fromPort.indexOf(".") + 1);
+                let toInst: string = connection.to.inst.name;
+                toInst = toInst.substring(toInst.indexOf(".") + 1);
+                let toPort: string = connection.to.port.name;
+                toPort = toPort.substring(toPort.indexOf(".") + 1);
 
-              topologyContent[topologyNameSpace] += tab + tab;
-              topologyContent[topologyNameSpace] += fromInst + "." + fromPort;
-              topologyContent[topologyNameSpace] += " -> ";
-              topologyContent[topologyNameSpace] += toInst + "." + toPort + "\n";
+                topologyContent[topologyNameSpace] += tab + tab;
+                topologyContent[topologyNameSpace] += fromInst + "." + fromPort;
+                topologyContent[topologyNameSpace] += " -> ";
+                topologyContent[topologyNameSpace] += toInst + "." + toPort + "\n";
+              }
           }
           // closing bracket
           topologyContent[topologyNameSpace] += tab + "}\n";
@@ -694,7 +714,7 @@ export default class FPPModelManager {
           if (c.from.port === p) {
             ps[key] = p;
           }
-          if (c.to.port === p) {
+          if (c.to && c.to.port === p) {
             ps[key] = p;
           }
         });
