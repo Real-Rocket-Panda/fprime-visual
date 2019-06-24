@@ -24,7 +24,7 @@
 
         <!-- save button -->
         <v-btn small icon @click="saveView">
-          <v-icon>save</v-icon>
+          <v-icon>color_lens</v-icon>
         </v-btn>
 
         <!-- write to file button -->
