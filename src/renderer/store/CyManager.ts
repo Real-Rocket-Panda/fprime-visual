@@ -13,7 +13,6 @@ import fprime from "fprime";
 import Tippy from "tippy.js";
 import popper from "cytoscape-popper";
 import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
-
 cytoscape.use(coseBilkent);
 cytoscape.use(cola);
 cytoscape.use( klay );
@@ -28,7 +27,6 @@ const boundingBoxOpt = {
   includeLabels: false,
   includeNodes: true,
 };
-
 class CyManager {
 
   /**
@@ -349,6 +347,7 @@ class CyManager {
     this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
+    this.showComponentInfo();
     fprime.viewManager.updateViewDescriptorFor(this.viewName,
       this.getDescriptor());
   }
@@ -469,6 +468,33 @@ class CyManager {
           });
           return tippy;
         });
+  }
+
+  /**
+   * This is an empty function in order to be exposed to InfoPanel.vue
+   * @param type
+   * @param namespace
+   */
+  public cyShowComponentInfo(type: string, namespace: string):void{
+
+  }
+
+  /**
+   * This function binds each node on the canvas with a click event so that
+   * the info panel can show the information of the selected component.
+   */
+  public showComponentInfo(): void {
+    this.cy!.nodes().filter((node) => {
+      return Object.keys(node.data("properties")).length !== 0;
+    })
+        .map((node) => {
+        node.on("click", () => {
+          const info = node.data("properties");
+          const type = info.type.split(".")[1];
+          const namespace = info.namespace;
+          this.cyShowComponentInfo(type, namespace);
+          });
+      });
   }
 
 
