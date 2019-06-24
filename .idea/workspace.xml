@@ -2,11 +2,343 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="230d7251-9028-4cb2-a050-83b87472ee32" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" afterPath="$PROJECT_DIR$/.babelrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.electron-vue/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/.electron-vue/build.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.electron-vue/dev-client.js" beforeDir="false" afterPath="$PROJECT_DIR$/.electron-vue/dev-client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.electron-vue/dev-runner.js" beforeDir="false" afterPath="$PROJECT_DIR$/.electron-vue/dev-runner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.electron-vue/webpack.main.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/.electron-vue/webpack.main.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.electron-vue/webpack.renderer.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/.electron-vue/webpack.renderer.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.electron-vue/webpack.web.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/.electron-vue/webpack.web.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/bug_report.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/bug_report.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/fprime-editor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fprime-editor.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appveyor.yml" beforeDir="false" afterPath="$PROJECT_DIR$/appveyor.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/Common/Config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/Common/Config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/ConfigManagement/ConfigManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/ConfigManagement/ConfigManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/DataImport/CompilerConverter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/DataImport/CompilerConverter.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/DataImport/DataImporter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/DataImport/DataImporter.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/DataImport/StyleConverter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/DataImport/StyleConverter.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/StyleManagement/AnalyzerManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/StyleManagement/AnalyzerManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/StyleManagement/StyleManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/StyleManagement/StyleManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/ViewManagement/LayoutGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/ViewManagement/LayoutGenerator.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/ViewManagement/ViewDescriptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/ViewManagement/ViewDescriptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fprime/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/fprime/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/index.dev.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/index.dev.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/ColorPicker.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/ColorPicker.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/components/InfoPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/InfoPanel.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/MessageFooter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/MessageFooter.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/MessagePanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/MessagePanel.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/ToolbarSelector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/ToolbarSelector.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/ViewContent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/ViewContent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/ViewList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/ViewList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/components/ViewTabs.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/components/ViewTabs.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/store/CyManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/CyManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/store/CyUtil.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/CyUtil.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/store/panel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/panel.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/store/view.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/store/view.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/css.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/css.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/cytoscape-cola.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/cytoscape-cola.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/cytoscape-edge-bend-editing.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/cytoscape-edge-bend-editing.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/electron-shims.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/electron-shims.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/jquery.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/jquery.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/konva.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/konva.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/rp-automove.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/rp-automove.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/rp-cytoscape-node-resize.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/rp-cytoscape-node-resize.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/vue-color.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/vue-color.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/vue-cytoscape.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/vue-cytoscape.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/vue-shims.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/vue-shims.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/vue-tree-nav-shims.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/vue-tree-nav-shims.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/.eslintrc" beforeDir="false" afterPath="$PROJECT_DIR$/test/.eslintrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref/styles/Ref.SG1_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref/styles/Ref.SG1_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref1/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref1/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref1/fpp_output/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref1/fpp_output/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref1/mystyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref1/mystyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref1/mystyles/test_view_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref1/mystyles/test_view_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref1/styles/Ref.REFLogger_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref1/styles/Ref.REFLogger_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref1/styles/test_view_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref1/styles/test_view_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/illegal_model_instance1/model_illegal_instance1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/illegal_model_instance1/model_illegal_instance1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/illegal_model_instance2/model_illegal_instance2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/illegal_model_instance2/model_illegal_instance2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/model_mult_system.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/model_mult_system.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/model_without_system_section/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/model_without_system_section/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/multi_model_files/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/multi_model_files/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/multi_model_files/model2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/multi_model_files/model2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/path with blank/fppcompiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/path with blank/fppcompiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/path with blank/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/path with blank/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Ref2/valid_model/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Ref2/valid_model/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Simple/Simple.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Simple/Simple.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Simple_analyzer_UT/Simple.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Simple_analyzer_UT/Simple.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Simple_analyzer_UT/acme_output/acme_result.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/Simple_analyzer_UT/acme_output/acme_result.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Simple_analyzer_UT/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/Simple_analyzer_UT/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Simple_analyzer_UT/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/Simple_analyzer_UT/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/styles/Ref.REFLogger_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/styles/Ref.REFLogger_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ChangeStyle/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/mystyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/mystyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigCompilerNotExist/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/fppcompiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/fppcompiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigDefaultStyleNotExist/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/acme_output/acme_result.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/acme_output/acme_result.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/mystyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/mystyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputDirNotExist/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/fast_compiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/fast_compiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/fppcompiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/fppcompiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/mystyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/mystyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ConfigOutputExist/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/DefaultStyleFileNotExist/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyDefaultStyleFile/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/EmptyStyle/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/LargeModel/Large.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/LargeModel/Large.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/LargeModel/fpp_output/Large.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/LargeModel/fpp_output/Large.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel1/styles/Ref.REFLogger_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel1/styles/Ref.REFLogger_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/NormalModel2/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/fast_compiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/fast_compiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/noSG2/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/noSG2/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/withSG2/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/ParitialLayout/withSG2/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/mystyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/mystyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/styles/Ref.REFTelemetry_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestDefaultStyle/styles/Ref.REFTelemetry_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/acme_output/acme_result.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/acme_output/acme_result.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/simple.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/simple.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/styles/Simple.c1_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/styles/Simple.c1_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/styles/Simple.top1_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/TestModelCheck/styles/Simple.top1_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/UseSystemDefaultStyle/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/mystyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongDefaultStyleFile/mystyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongModel/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongModel/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongModel/fast_compiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongModel/fast_compiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongModel/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongModel/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongModel/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongModel/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongModel/model(noSG2).xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongModel/model(noSG2).xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongModel/model(withSG2).xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongModel/model(withSG2).xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Fw/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Fw/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Ref/PingReceiver.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Ref/PingReceiver.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Ref/SignalGen.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Ref/SignalGen.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Ref/System.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Ref/System.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/ActiveLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/ActiveLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/CommandDispatcher.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/CommandDispatcher.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/PassiveTextLogger.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/PassiveTextLogger.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/PortType.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/PortType.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/Time.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/Time.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/TlmChan.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/Svc/TlmChan.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Fw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Fw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Ref.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Ref.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Simple.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Simple.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Svc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/Svc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/fprime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fpp_output/fprime.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fprime.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/fprime.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFCommanding_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFCommanding_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFLogger_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFLogger_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFTelemetry_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFTelemetry_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFTime_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/styles/Ref.REFTime_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/WrongStyle/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/WrongStyle/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/template/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/template/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/template/fast_compiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/template/fast_compiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/template/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/template/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/template/model.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/template/model.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SystemTest/template/testmodel.fpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/SystemTest/template/testmodel.fpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/e2e/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/e2e/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/e2e/specs/Launch.spec.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/e2e/specs/Launch.spec.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/e2e/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/e2e/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/mocha.opts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/mocha.opts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/specs/AnalyzerManager.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/specs/AnalyzerManager.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/specs/ConfigManager.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/specs/ConfigManager.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/specs/FPPModelManager.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/specs/FPPModelManager.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/specs/StyleManager.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/specs/StyleManager.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/specs/ViewDescriptor.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/specs/ViewDescriptor.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/specs/ViewManager.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/specs/ViewManager.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fprime/ts-node-hook.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/fprime/ts-node-hook.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/static/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/test/static/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/static/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/test/static/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/static/fppcompiler" beforeDir="false" afterPath="$PROJECT_DIR$/test/static/fppcompiler" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/static/mockChecker" beforeDir="false" afterPath="$PROJECT_DIR$/test/static/mockChecker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/ui/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/ui/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/ui/karma.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/ui/karma.conf.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tslint.json" beforeDir="false" afterPath="$PROJECT_DIR$/tslint.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -22,8 +354,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="224" column="28" lean-forward="true" selection-start-line="224" selection-start-column="28" selection-end-line="224" selection-end-column="28" />
+            <state relative-caret-position="3774">
+              <caret line="224" column="25" selection-start-line="224" selection-start-column="25" selection-end-line="224" selection-end-column="25" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -34,11 +366,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/InfoPanel.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1045">
-              <caret line="55" column="22" lean-forward="true" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
-              <folding>
-                <element signature="e#419#441#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="323">
+              <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -46,7 +375,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/renderer/store/view.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1842">
+            <state relative-caret-position="2397">
               <caret line="142" selection-start-line="142" selection-end-line="142" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
@@ -58,8 +387,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="286" column="1" selection-start-line="286" selection-start-column="1" selection-end-line="286" selection-end-column="1" />
+            <state relative-caret-position="-826">
+              <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -67,8 +396,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="427" column="21" lean-forward="true" selection-start-line="427" selection-start-column="21" selection-end-line="427" selection-end-column="21" />
+            <state relative-caret-position="7157">
+              <caret line="427" column="21" selection-start-line="427" selection-start-column="21" selection-end-line="427" selection-end-column="21" />
               <folding>
                 <element signature="e#0#79#0" expanded="true" />
               </folding>
@@ -117,7 +446,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -165,6 +493,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -244,19 +573,21 @@
       <workItem from="1559316573551" duration="3297000" />
       <workItem from="1559425123289" duration="2290000" />
       <workItem from="1559585038435" duration="12404000" />
+      <workItem from="1561091133725" duration="1651000" />
+      <workItem from="1561127368684" duration="1351000" />
+      <workItem from="1561143305673" duration="1375000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41218000" />
+    <option name="totallyTimeSpent" value="45595000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1680" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
+    <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7721519" visible="true" weight="0.2527646" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7679325" visible="true" weight="0.25263852" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" sideWeight="0.2278481" side_tool="true" visible="true" weight="0.13852243" />
+      <window_info id="npm" order="2" sideWeight="0.23206751" side_tool="true" visible="true" weight="0.25263852" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32911393" />
@@ -447,10 +778,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewDescriptor.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/fprime/FPPModelManagement/FPPModelManager.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="224" column="28" lean-forward="true" selection-start-line="224" selection-start-column="28" selection-end-line="224" selection-end-column="28" />
+        <state relative-caret-position="3774">
+          <caret line="224" column="25" selection-start-line="224" selection-start-column="25" selection-end-line="224" selection-end-column="25" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
@@ -459,34 +797,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/InfoPanel.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1045">
-          <caret line="55" column="22" lean-forward="true" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
-          <folding>
-            <element signature="e#419#441#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="427" column="21" lean-forward="true" selection-start-line="427" selection-start-column="21" selection-end-line="427" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewDescriptor.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="33" />
+        <state relative-caret-position="323">
+          <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/store/view.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1842">
+        <state relative-caret-position="2397">
           <caret line="142" selection-start-line="142" selection-end-line="142" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
@@ -494,10 +812,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/fprime/ViewManagement/ViewManager.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7157">
+          <caret line="427" column="21" selection-start-line="427" selection-start-column="21" selection-end-line="427" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="286" column="1" selection-start-line="286" selection-start-column="1" selection-end-line="286" selection-end-column="1" />
+        <state relative-caret-position="-826">
+          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
         </state>
       </provider>
     </entry>
