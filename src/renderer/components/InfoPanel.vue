@@ -10,6 +10,7 @@
                 :items="compNameSpaces"
                 label="NameSpace"
         ></v-autocomplete>
+        <v-btn color="success" @click="updateComponentInfo()">Update</v-btn>
     </v-container>
 </template>
 
@@ -58,6 +59,14 @@
             showComponentInfo(compType :string, compNamespace: string){
                 this.compName = compType;
                 this.compNameSpace = compNamespace;
+            },
+            updateComponentInfo(){
+                if(this.compName && this.compNameSpace){
+                    CyManager.cyUpdateComponentInfo(this.compName, this.compNameSpace);
+                }
+                else{
+                    alert("Please use valid input!");
+                }
             }
         },
     })
