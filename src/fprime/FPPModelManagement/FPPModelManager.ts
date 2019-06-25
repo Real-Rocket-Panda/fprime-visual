@@ -363,8 +363,9 @@ export default class FPPModelManager {
   }
 
   public addPortToComponent(portname: string, compname: string): boolean {
-    portname = portname.split(".")[1];
-    
+    if(portname.indexOf(".") >= 0) {
+      portname = portname.split(".")[1];
+    }
     let porttype = this.porttypes.find((i) => {
       return i.name === portname;
     });
@@ -373,6 +374,10 @@ export default class FPPModelManager {
     // existing port
     const newPortname = porttype.name.charAt(0).toLowerCase() + porttype.name.slice(1);
     if(comp.ports.find((i) => i.name === newPortname)) return false;
+    console.log("In addPortToComponent");
+    
+    console.dir(porttype);
+    console.dir(comp);
 
     const port: IFPPPort = {
       name: newPortname,
