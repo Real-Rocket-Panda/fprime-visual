@@ -480,6 +480,9 @@ export default class FPPModelManager {
                   if (key === "type" || key === "name") {
                       continue;
                   }
+                  if (!port.properties[key]) {  // If value is null
+                      continue;
+                  }
                   componentContent += tab + tab + key + " = " + port.properties[key] + "\n";
               }
               componentContent += tab + "}\n";
@@ -514,6 +517,9 @@ export default class FPPModelManager {
           // write each instance's properties
           for (const key in e.properties) {
               if (key === "type" || key === "namespace") {
+                  continue;
+              }
+              if (!e.properties[key]) {  // If value is null
                   continue;
               }
               instanceContent[instanceNameSpace] += tab + tab + key + " = " + e.properties[key] + "\n";
