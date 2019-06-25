@@ -475,7 +475,7 @@ class CyManager {
    * @param type
    * @param namespace
    */
-  public cyShowComponentInfo(type: string, namespace: string):void{
+  public cyShowComponentInfo(type: string, namespace: string, name: string, baseid: string):void{
 
   }
 
@@ -489,15 +489,19 @@ class CyManager {
     })
         .map((node) => {
         node.on("click", () => {
+          const name = node.data().id.split("_")[1];
           const info = node.data("properties");
-          const type = info.type.split(".")[1];
+          const type = info.type;
           const namespace = info.namespace;
-          this.cyShowComponentInfo(type, namespace);
+          const baseid = info.base_id_window;
+          this.cyShowComponentInfo(type, namespace, name, baseid);
           });
       });
   }
 
+  public cyUpdateComponentInfo(compName: string, compNameSpace: string):void{
 
+  }
   private constructHtml(data: any): string {
     let res = "";
     Object.keys(data).map((key) => {

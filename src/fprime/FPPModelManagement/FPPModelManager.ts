@@ -232,7 +232,7 @@ export default class FPPModelManager {
     }
   }
     public getComponents() {
-        return this.components;
+      return this.components;
     }
   /**
    * Add a new port type to the current model
@@ -312,7 +312,7 @@ export default class FPPModelManager {
       properties: {
         ["type"]: cpName,
         ["namespace"]: namespace,
-      }
+      },
     };
 
     this.instances.push(item);
@@ -330,7 +330,7 @@ export default class FPPModelManager {
     const item: IFPPTopology[] = [];
     item.push({
       name: defaultName,
-      connections: []
+      connections: [],
     });
 
     this.topologies = this.topologies.concat(item);
@@ -382,7 +382,7 @@ export default class FPPModelManager {
         ["number"]: 1,
         ["type"]: porttype.namespace + "." + porttype.name,
         ["role"]: "",
-      }
+      },
     }
 
     comp.ports.push(port);
@@ -406,7 +406,7 @@ export default class FPPModelManager {
     const halfConnection: IFPPConnection = {
       from: {
         inst: instance,
-      }
+      },
     }
     topology.connections.push(halfConnection);
     return true;
@@ -415,11 +415,13 @@ export default class FPPModelManager {
   public updateAttributes(type: string, attrs: {[attrname: string]: string}): boolean {
     // @TODO: daiyi
     this.instances.forEach((i) => {
-      if(i.name === "Ref.eventLogger") {
-        // console.log("update attributes:");
-        // console.dir(attrs);
-        
+      if (i.name === attrs["OldName"]) {
+        console.log("Before",i);
+        i.name = attrs["NewName"];
         i.properties["type"] = attrs["Type"];
+        i.properties["namespace"] = attrs["NameSpace"];
+        i.properties["base_id_window"] = attrs["BaseID"];
+        console.log("After",i);
       }
     })
     return true;
@@ -578,7 +580,7 @@ export default class FPPModelManager {
         namespace: ele.$.namespace,
         arg: args,
       }
-      res.push(pt)
+      res.push(pt);
     })
 
     return res;
