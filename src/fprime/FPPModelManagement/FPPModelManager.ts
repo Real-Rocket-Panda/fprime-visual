@@ -374,10 +374,10 @@ export default class FPPModelManager {
     // existing port
     const newPortname = porttype.name.charAt(0).toLowerCase() + porttype.name.slice(1);
     if(comp.ports.find((i) => i.name === newPortname)) return false;
-    console.log("In addPortToComponent");
+    // console.log("In addPortToComponent");
     
-    console.dir(porttype);
-    console.dir(comp);
+    // console.dir(porttype);
+    // console.dir(comp);
 
     const port: IFPPPort = {
       name: newPortname,
