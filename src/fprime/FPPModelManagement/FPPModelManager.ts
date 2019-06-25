@@ -579,7 +579,7 @@ export default class FPPModelManager {
         name: ele.$.name,
         namespace: ele.$.namespace,
         arg: args,
-      }
+      };
       res.push(pt);
     })
 
