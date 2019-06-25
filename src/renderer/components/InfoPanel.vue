@@ -1,7 +1,7 @@
 <template v-slot:header xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-container class="info-panel">
         <v-autocomplete
-                v-model="compName"
+                v-model="compType"
                 :items="compNames"
                 label="Type"
         ></v-autocomplete>
@@ -18,11 +18,16 @@
     import Vue from "vue";
     import view from "@/store/view";
     import CyManager from "@/store/CyManager";
+import fprime from "../../fprime";
+import { ViewType } from "../../fprime/FPPModelManagement/FPPModelManager";
     export default Vue.extend({
         name: "info-panel",
         data(){
             return{
-                compName: "",
+                // @TODO: compName & baseid
+                compName: "Ref.eventLogger",
+                compBaseID: -1,
+                compType: "",
                 compNameSpace: "",
                 compNames:[""],
                 compNameSpaces:[""],
@@ -57,12 +62,22 @@
         // Get the information of the selected component and assign it to the v-model of the selector.
         methods:{
             showComponentInfo(compType :string, compNamespace: string){
-                this.compName = compType;
+                this.compType = compType;
                 this.compNameSpace = compNamespace;
             },
             updateComponentInfo(){
-                if(this.compName && this.compNameSpace){
-                    CyManager.cyUpdateComponentInfo(this.compName, this.compNameSpace);
+                if(this.compType && this.compNameSpace){
+                    // CyManager.cyUpdateComponentInfo(this.compType, this.compNameSpace);
+                    // 1 update model
+                    const result = fprime.viewManager.updateAttributes(ViewType.InstanceCentric, 
+                    {
+                        ["Type"] : this.compType,
+                        ["NameSpace"] : this.compNameSpace
+                    });
+                    if(result) {
+                        // 2 content: rerender
+                        this.$root.$emit("updateContent", this.compName);
+                    }
                 }
                 else{
                     alert("Please use valid input!");

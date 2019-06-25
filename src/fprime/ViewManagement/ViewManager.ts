@@ -520,4 +520,8 @@ export default class ViewManager {
   public addInstanceToTopo(instname: string, toponame: string): boolean {
     return this.modelManager.addInstanceToTopo(instname, toponame);
   }
+
+  public updateAttributes(type: string, attrs: {[attrname: string]: string}): boolean {
+    return this.modelManager.updateAttributes(type, attrs);
+  }
 }

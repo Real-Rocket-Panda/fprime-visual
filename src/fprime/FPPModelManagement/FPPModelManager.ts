@@ -412,6 +412,18 @@ export default class FPPModelManager {
     return true;
   }
 
+  public updateAttributes(type: string, attrs: {[attrname: string]: string}): boolean {
+    // @TODO: daiyi
+    this.instances.forEach((i) => {
+      if(i.name === "Ref.eventLogger") {
+        // console.log("update attributes:");
+        // console.dir(attrs);
+        
+        i.properties["type"] = attrs["Type"];
+      }
+    })
+    return true;
+  }
   /**
    * Output the model into the selected folder
    */
