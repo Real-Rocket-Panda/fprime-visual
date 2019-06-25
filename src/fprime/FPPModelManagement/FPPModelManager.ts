@@ -18,7 +18,7 @@ export enum ViewType {
 export interface IFPPPortType {
   name: string;
   namespace: string;
-  arg: { [key: string]: string };
+  arg: { [key: string]: {value: string, pass_by: string} };
 }
 
 /**
@@ -418,10 +418,39 @@ export default class FPPModelManager {
   public writeToFile(folderPath: string) {
       const tab: string = "    ";
 
+      console.dir(this.porttypes);
+
       let dataTypes: { [key: string]: string; } = {};
       // TODO: Data Types
-      let portTypes: { [key: string]: string; } = {};
-      // TODO: Data Types
+
+      this.porttypes.forEach((e: IFPPPortType) => {
+          let portTypePath: string = folderPath + "\\" + e.namespace;
+          if (!fs.existsSync(portTypePath)) {
+              fs.mkdirSync(portTypePath);
+          }
+          portTypePath += "\\" + e.name + ".fpp";
+          let portTypeContent: string = "";
+          // namespace
+          portTypeContent += "namespace " + e.namespace + "\n\n";
+          // component name
+          portTypeContent += "porttype " + e.name + " {\n";
+          // arg
+          for (const key in e.arg) {
+              const value = e.arg[key].value;
+              portTypeContent += tab + "arg " + key + ":" + value;
+              if (e.arg[key].pass_by) {
+                  portTypeContent += " { pass_by = " + e.arg[key].pass_by + " }";
+              }
+              portTypeContent += "\n";
+          }
+          // closing bracket
+          portTypeContent += "}";
+          fs.writeFile(portTypePath, portTypeContent, (err) => {
+              if (err) {
+                  throw err;
+              }
+          });
+      });
 
 
       this.components.forEach((e: IFPPComponent) => {
@@ -438,8 +467,9 @@ export default class FPPModelManager {
           componentContent += "namespace " + e.namespace + "\n\n";
           // component name
           componentContent += "component " + componentName + " {\n";
-          // TODO: kind
-
+          if (e.kind) {
+              componentContent += tab + "kind = " + e.kind + "\n";
+          }
           // ports
           for (const port of e.ports) {
               // get type
@@ -479,6 +509,8 @@ export default class FPPModelManager {
           const instanceType: string = e.properties["type"];
           // write the instance name first
           instanceContent[instanceNameSpace] += tab + "instance " + instanceName + ":" + instanceType + " {\n";
+          // write base_id
+          instanceContent[instanceNameSpace] += tab + tab + "base_id = " + e.base_id + "\n";
           // write each instance's properties
           for (const key in e.properties) {
               if (key === "type" || key === "namespace") {
@@ -557,16 +589,16 @@ export default class FPPModelManager {
     }
 
     porttypes.forEach((ele: any) => {
-      const args : {[p:string]: string} = {} 
+      const args: {[key: string]: {value: string, pass_by: string}} = {}
       ele.arg.forEach((a: any) => {
-        args[a.name] = a.type;
-      })
+        args[a.$.name] = {value: a.$.type, pass_by: a.$.pass_by};
+      });
       const pt: IFPPPortType = {
         name: ele.$.name,
         namespace: ele.$.namespace,
         arg: args,
-      }
-      res.push(pt)
+      };
+      res.push(pt);
     })
 
     return res;
