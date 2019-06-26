@@ -91,22 +91,35 @@ import { ViewType } from "../../fprime/FPPModelManagement/FPPModelManager";
                 this.OldCompAttributes.NameSpace = compNamespace;
             },
             updateComponentInfo(){
+
                 if(this.compAttributes.Type && this.compAttributes.NameSpace && this.compAttributes.Name && this.compAttributes.BaseID){
                     // CyManager.cyUpdateComponentInfo(this.compType, this.compNameSpace);
                     // 1 update model
-                    const result = fprime.viewManager.updateAttributes(ViewType.InstanceCentric, 
-                    {
-                        ["Type"] : this.compAttributes.Type,
-                        ["NameSpace"] : this.compAttributes.NameSpace,
-                        ["Name"] : this.compAttributes.Name,
-                        ["BaseID"] : this.compAttributes.BaseID,
-                        ["NewName"] : this.compAttributes.NameSpace + "." + this.compAttributes.Name,
-                        ["OldName"] : this.OldCompAttributes.NameSpace + "." + this.OldCompAttributes.Name
-                    });
-                    if(result) {
-                        // 2 content: rerender
-                        console.log(this.compAttributes.NameSpace + "." + this.compAttributes.Name);
-                        this.$root.$emit("updateContent", this.compAttributes.NameSpace + "." + this.compAttributes.Name);
+                    const oldName = this.OldCompAttributes.NameSpace + "." + this.OldCompAttributes.Name;
+                    const newName = this.compAttributes.NameSpace + "." + this.compAttributes.Name;
+                    // First update the viewList.
+                    const non_existed = view.UpdateViewList(oldName,newName);
+                    if(non_existed) {
+                        const result = fprime.viewManager.updateAttributes(ViewType.InstanceCentric,
+                            {
+                                ["Type"]: this.compAttributes.Type,
+                                ["NameSpace"]: this.compAttributes.NameSpace,
+                                ["Name"]: this.compAttributes.Name,
+                                ["BaseID"]: this.compAttributes.BaseID,
+                                ["NewName"]: this.compAttributes.NameSpace + "." + this.compAttributes.Name,
+                                ["OldName"]: this.OldCompAttributes.NameSpace + "." + this.OldCompAttributes.Name
+                            });
+                        if (result) {
+                            // 2 content: rerender
+                            console.log("Old:", this.OldCompAttributes);
+                            console.log("New:", this.compAttributes);
+                            this.$root.$emit("updateContent", newName);
+                            this.OldCompAttributes.NameSpace = newName.split(".")[0];
+                            this.OldCompAttributes.Name = newName.split(".")[1];
+                        }
+                    }
+                    else{
+                        alert("The name you want to change has already been in the model!");
                     }
                 }
                 else{

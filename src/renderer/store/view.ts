@@ -40,7 +40,29 @@ export default {
       };
     });
   },
-
+  /**
+   * This function first checks whether the new name user wants to change is already
+   * existed in the model. If it is, return false. Else, update the item in the viewlist
+   * with the new name.
+   * @param oldName
+   * @param newName
+   * @constructor
+   */
+ UpdateViewList(oldName: string, newName: string) {
+    const existed =
+        Object.keys(views)
+            .map((key) => views[key])
+            .reduce((x, y) => x.concat(y))
+            .filter((i) => i.name === newName);
+    if(existed.length > 0){
+      return false;
+    }
+    const cur =
+       opened
+           .filter((i) => i.name === oldName)[0];
+    cur.name = newName;
+    return true;
+ },
   /**
    * Open a given view in the tab. If the view is not opened, find the
    * corresponding IViewListItem and push it to the opened list.

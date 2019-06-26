@@ -108,7 +108,7 @@ export default class ViewDescriptor {
    * @param model The mocked model data
    */
   public static buildFrom(model: IFPPModel): ViewDescriptor {
-    console.log(model);
+    //console.log(model);
     
     const view = new ViewDescriptor();
 
@@ -227,7 +227,7 @@ export default class ViewDescriptor {
       }
     });
 
-    console.dir(view);
+    //console.dir(view);
     
     return view;
   }
