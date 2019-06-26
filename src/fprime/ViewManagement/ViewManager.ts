@@ -504,9 +504,9 @@ export default class ViewManager {
       this.modelManager.deleteComponent(name);
     } else if (type === ViewType.InstanceCentric) {
       this.modelManager.deleteInstance(name);
-    } else if (type == ViewType.Function) {
+    } else if (type === ViewType.Function) {
       this.modelManager.deleteTopology(name);
-    } else if (type == ViewType.PortType) {
+    } else if (type === ViewType.PortType) {
       this.modelManager.deletePortType(name);
     }
     // remove in the view list
