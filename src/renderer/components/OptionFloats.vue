@@ -39,7 +39,8 @@ export default Vue.extend({
             else {
                 this.showDisplayPort = false;
             }
-            this.$root.$emit("updateContent", this.$route.params.viewName, this.showDisplayPort);
+            if(from.params.viewType !== ViewType.PortType)
+                this.$root.$emit("updateContent", this.$route.params.viewName, this.showDisplayPort);
         }
     }
 })
