@@ -82,6 +82,7 @@
     "cytoscape-cose-bilkent": "^4.0.0",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-edge-bend-editing": "^1.5.4",
+    "cytoscape-edgehandles": "^3.5.1",
     "cytoscape-klay": "^3.1.1",
     "cytoscape-popper": "^1.0.1",
     "jquery": "^3.3.1",
