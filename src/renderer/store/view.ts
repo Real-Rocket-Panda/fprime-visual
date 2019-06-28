@@ -1,5 +1,5 @@
 import fprime from "fprime";
-import { IViewList, IViewListItem} from "fprime/ViewManagement/ViewManager";
+import ViewManager, { IViewList, IViewListItem} from "fprime/ViewManagement/ViewManager";
 const views: IViewList = fprime.viewManager.ViewList;
 const opened: IViewListItem[] = [];
 export default {
@@ -12,6 +12,10 @@ export default {
      * The opened views. This is the data source for ViewTabs.vue component.
      */
     opened,
+    /**
+     * The filterPort option. Used for option floats component.
+     */
+    filterPort: fprime.viewManager.filterPorts,
   },
   /**
    * GetViewList returns a JSON object with type:

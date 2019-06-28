@@ -169,7 +169,7 @@ export default class FPPModelManager {
     return viewlist;
   }
 
-  public query(viewName: string, viewType: string): any {
+  public query(viewName: string, viewType: string, filterPorts?: boolean): any {
     switch (viewType) {
       case ViewType.Function: {
         const cons: IFPPConnection[] = this.topologies.filter(
@@ -183,8 +183,10 @@ export default class FPPModelManager {
             ins.push(Object.assign({}, c.to.inst));
           }
         });
-
-        ins = this.filterUnusedPorts(ins, cons);
+        if(!filterPorts) {
+          ins = this.filterUnusedPorts(ins, cons);
+        }
+        
         return {
           instances: ins,
           connections: cons,
@@ -219,7 +221,9 @@ export default class FPPModelManager {
           });
         });
         ins.push(Object.assign({}, root));
-        ins = this.filterUnusedPorts(ins, cons);
+        if(filterPorts) {
+          ins = this.filterUnusedPorts(ins, cons);
+        }
         return {
           instances: ins,
           connections: cons,
@@ -400,13 +404,13 @@ export default class FPPModelManager {
     
     let instance = this.instances.find((i) => i.name === instname);
     if(instance == undefined) return false;
-    console.log("find instance");
-    console.log(instance);
+    // console.log("find instance");
+    // console.log(instance);
     
     let topology = this.topologies.find((i) => i.name === toponame);
     if(topology == undefined) return false;
-    console.log("find topo");
-    console.log(topology);
+    // console.log("find topo");
+    // console.log(topology);
     
     const halfConnection: IFPPConnection = {
       from: {
