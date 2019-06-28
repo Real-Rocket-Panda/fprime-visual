@@ -35,12 +35,11 @@ export default Vue.extend({
             if(from.params.viewType === ViewType.Function ||
             from.params.viewType === ViewType.InstanceCentric) {
                 this.showDisplayPort = true;
+                this.$root.$emit("updateContent", this.$route.params.viewName, this.showDisplayPort);
             }
             else {
                 this.showDisplayPort = false;
             }
-            if(from.params.viewType !== ViewType.PortType)
-                this.$root.$emit("updateContent", this.$route.params.viewName, this.showDisplayPort);
         }
     }
 })
