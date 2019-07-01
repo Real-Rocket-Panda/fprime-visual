@@ -5,6 +5,7 @@ import nodeResize from "rp-cytoscape-node-resize";
 import dagre from "cytoscape-dagre";
 import cola from "cytoscape-cola";
 import klay from "cytoscape-klay";
+import edgehandles from "cytoscape-edgehandles";
 import konva from "konva";
 import jquery from "jquery";
 import automove from "rp-automove";
@@ -20,6 +21,7 @@ cytoscape.use(automove);
 nodeResize(cytoscape, jquery, konva);
 cytoscape.use(dagre);
 cytoscape.use(popper);
+cytoscape.use(edgehandles);
 
 const boundingBoxOpt = {
   includeOverlays: false,
@@ -348,6 +350,7 @@ class CyManager {
     this.appendAnalysisStyle();
     this.addTooltips();
     this.showComponentInfo();
+    this.enableEgdeHandles();
     fprime.viewManager.updateViewDescriptorFor(this.viewName,
       this.getDescriptor());
   }
@@ -468,6 +471,29 @@ class CyManager {
           });
           return tippy;
         });
+  }
+
+  private enableEgdeHandles() {
+    if(this.cy) {
+      // the default values of each option are outlined below:
+      let defaults = {
+        handleNodes: '.fprime-port-out',
+        edgeType: function( sourceNode:  any , targetNode:  any  ){
+          if(sourceNode.hasClass('fprime-port-out') && targetNode.hasClass('fprime-port-in')) {
+            return 'flat';
+          }
+          else return null;
+        },
+        complete: function( sourceNode:  any , targetNode:  any , addedEles :  any ){
+          // fired when edgehandles is done and elements are added
+          console.log("Edge Type source: ");
+          console.dir(sourceNode);
+          console.log("Edge Type target: ");
+          console.dir(targetNode);
+        },
+      };
+      var eh = (this.cy! as any).edgehandles(defaults);
+    }
   }
 
   /**

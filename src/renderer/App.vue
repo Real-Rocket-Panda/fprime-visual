@@ -78,6 +78,7 @@
       <!-- app main content -->
       <v-content id="view-main-content">
         <info-panel id="info-panel"></info-panel>
+        <option-floats></option-floats>
         <router-view :height="25"></router-view>
         <message-panel :offset="24"></message-panel>
       </v-content>
@@ -97,6 +98,7 @@
   import ColorPicker from "./components/ColorPicker.vue";
   import ToolbarSelector from "./components/ToolbarSelector.vue";
   import InfoPanel from "./components/InfoPanel.vue";
+  import OptionFloats from "./components/OptionFloats.vue";
   import {remote} from "electron";
   import fprime from "fprime";
   import panel, {PanelName} from "@/store/panel";
@@ -112,7 +114,8 @@
       MessagePanel,
       ColorPicker,
       ToolbarSelector,
-      InfoPanel
+      InfoPanel,
+      OptionFloats
     },
     data() {
       return {
@@ -206,7 +209,7 @@
         // Refresh the current open view
         const viewName = this.$route.params.viewName;
         if (viewName) {
-          const render = fprime.viewManager.render(viewName)!;
+          const render = fprime.viewManager.render(viewName, view.state.filterPort)!;
           CyManager.startUpdate(viewName, render);
           CyManager.endUpdate();
         }
@@ -221,7 +224,7 @@
         const viewName = this.$route.params.viewName;
         if (viewName) {
           fprime.viewManager.refresh(viewName);
-          const render = fprime.viewManager.render(viewName)!;
+          const render = fprime.viewManager.render(viewName, view.state.filterPort)!;
           CyManager.startUpdate(viewName, render);
           CyManager.endUpdate();
         }

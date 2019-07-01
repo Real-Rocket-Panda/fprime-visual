@@ -14,6 +14,8 @@ import fprime from "fprime";
 import { Route } from "vue-router";
 import CyManager from "@/store/CyManager";
 import { ViewType } from "../../fprime/FPPModelManagement/FPPModelManager";
+import view from "../store/view";
+import { IRenderJSON } from "../../fprime/ViewManagement/ViewDescriptor";
 
 export default Vue.extend({
   props: ["offset"],
@@ -30,7 +32,7 @@ export default Vue.extend({
       this.parentHeight = window.innerHeight - 40 - 24 - this.offset;
     },
     updateCytoscape() {
-      const render = fprime.viewManager.render(this.viewName)!;
+      const render = fprime.viewManager.render(this.viewName, view.state.filterPort)!;
       if(render!=null)
         CyManager.startUpdate(this.viewName, render);
     },
@@ -53,8 +55,13 @@ export default Vue.extend({
     allowDrop(event: any) {
       event.preventDefault();
     },
-    updateContent(name: string) {
-      const render = fprime.viewManager.rerender(name);
+    updateContent(name: string, filterPorts?: boolean) {
+      var render: IRenderJSON;
+      if(filterPorts !== undefined) {
+        render = fprime.viewManager.rerender(name, filterPorts);
+      } else {
+        render = fprime.viewManager.rerender(name, view.state.filterPort);
+      }
         CyManager.startUpdate(this.viewName, render);
         CyManager.endUpdate();
     }
@@ -64,8 +71,8 @@ export default Vue.extend({
     CyManager.init(document.getElementById("cytoscape")!);
     this.updateCytoscape();
     // mount updateContent calling from viewlist 
-    this.$root.$on('updateContent', (name: string) => {
-      this.updateContent(name);
+    this.$root.$on('updateContent', (name: string, filterPorts?: boolean) => {
+      this.updateContent(name, filterPorts);
     });
   },
   beforeDestroy() {
