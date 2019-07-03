@@ -483,16 +483,25 @@ class CyManager {
             return 'flat';
           }
           else return null;
-        },
-        complete: function( sourceNode:  any , targetNode:  any , addedEles :  any ){
-          // fired when edgehandles is done and elements are added
-          console.log("Edge Type source: ");
-          console.dir(sourceNode);
-          console.log("Edge Type target: ");
-          console.dir(targetNode);
-        },
+        }
       };
       var eh = (this.cy! as any).edgehandles(defaults);
+      (this.cy! as any) .on('ehstart', (event: any, sourceNode: any) => {
+        (this.cy!.style() as any).selector('.fprime-port-in').style({
+          'border-color': 'red'
+        }).update();
+      });
+      (this.cy! as any) .on('ehstop', (event: any, sourceNode: any) => {
+        (this.cy!.style() as any).selector('.fprime-port-in').style({
+          'border-color': "rgb(158,173,145)"
+        }).update();
+      });
+      (this.cy! as any) .on('ehcomplete', (event: any, sourceNode: any, targetNode: any, addedEles: any) => {
+        console.log(this.cy!.elements('edge').data());
+        
+        
+        fprime.viewManager.addConnection(this.viewName, sourceNode.id(), targetNode.id());
+      });
     }
   }
 

@@ -421,6 +421,46 @@ export default class FPPModelManager {
     return true;
   }
 
+  public addConnection(toponame: string, from_inst: string, from_port: string, 
+    to_inst: string, to_port: string): boolean {
+      const topology = this.topologies.find((i) => i.name === toponame);
+      if(topology == undefined) return false;
+      
+      const source = this.instances.find((i) => i.name === from_inst);
+      if(source == undefined) return false;
+      
+      const target = this.instances.find((i) => i.name === to_inst);
+      if(target == undefined) return false;
+
+      const newConn: IFPPConnection = {
+        from: {
+          inst: source,
+          port: this.getPortByInstance(source, from_port),
+        },
+        to: {
+          inst: target,
+          port: this.getPortByInstance(target, to_port),
+        }
+      }
+      
+      // query if there are existing connection
+      console.log("iterate connections");
+      
+      const res = topology.connections.filter((con) => {
+        return con.from.inst.name === from_inst && con.from.port!.name === from_port &&
+        con.to!.inst.name === to_inst && con.to!.port!.name === to_port;
+      });
+      if(res.length > 0) {
+        console.log("existing connection");
+        return false;
+      }
+
+      console.log("new connection");
+      console.dir(newConn);
+      topology.connections.push(newConn);
+      return true;
+    }
+
   public updateAttributes(type: string, attrs: {[attrname: string]: string}): boolean {
     // @TODO: daiyi
     this.instances.forEach((i) => {
