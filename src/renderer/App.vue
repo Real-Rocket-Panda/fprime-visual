@@ -278,10 +278,12 @@
        */
       loadAnalysisInfo() {
         const viewName = this.$route.params.viewName;
-        if (!viewName) {
+        const viewType = this.$route.params.viewType;
+        if (!viewName || !viewType) {
           return;
         }
         CyManager.startUpdate(viewName, {
+          viewType: viewType,
           needLayout: false,
           descriptor: CyManager.getDescriptor(),
           elesHasPosition: [],
@@ -295,10 +297,12 @@
        */
       changeLayout() {
         const viewName = this.$route.params.viewName;
-        if (!viewName) {
+        const viewType = this.$route.params.viewType;
+        if (!viewName || !viewType) {
           return;
         }
         CyManager.startUpdate(viewName, {
+          viewType: viewType,
           needLayout: true,
           descriptor: CyManager.getDescriptor(),
           elesHasPosition: [],

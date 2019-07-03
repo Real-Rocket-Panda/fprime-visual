@@ -88,6 +88,7 @@ export interface ICytoscapeJSON {
  * this object provide further information like needLayout.
  */
 export interface IRenderJSON {
+  viewType: string;
   needLayout: boolean;
   descriptor: ICytoscapeJSON;
   elesHasPosition: string[];
@@ -107,10 +108,11 @@ export default class ViewDescriptor {
    * Build the graph of a view descriptor from the given model data.
    * @param model The mocked model data
    */
-  public static buildFrom(model: IFPPModel): ViewDescriptor {
+  public static buildFrom(model: IFPPModel, viewType: string): ViewDescriptor {
     //console.log(model);
     
     const view = new ViewDescriptor();
+    view.viewType = viewType;
 
     // For all the instances in a model
     model.instances.forEach((i) => {
@@ -280,6 +282,7 @@ export default class ViewDescriptor {
 
   private descriptor: { [id: string]: IStyle };
   private graph: IGraph;
+  private viewType: string;
 
   public get Descriptor() {
     return this.descriptor;
@@ -307,6 +310,7 @@ export default class ViewDescriptor {
   constructor() {
     this.descriptor = {};
     this.graph = { nodes: {}, edges: {} };
+    this.viewType = "";
   }
 
   /**
@@ -314,6 +318,7 @@ export default class ViewDescriptor {
    * cytoscape as our front-end renderer.
    */
   public generateCytoscapeJSON(): IRenderJSON {
+    const viewType = this.viewType;
     const descriptor = this.descriptor;
     const graph = this.graph;
     const elesHasPosition: string[] = [];
@@ -378,6 +383,7 @@ export default class ViewDescriptor {
         });
 
     return {
+      viewType,
       needLayout,
       elesHasPosition,
       elesNoPosition,
