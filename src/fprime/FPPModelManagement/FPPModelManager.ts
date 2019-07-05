@@ -84,7 +84,6 @@ export default class FPPModelManager {
   private components: IFPPComponent[] = [];
   private porttypes: IFPPPortType[] = [];
   private keywords: string[] = ["base_id", "name"];
-  private text: { [fileName: string]: string } = {};  // Text (fpp)
 
   /**
    *

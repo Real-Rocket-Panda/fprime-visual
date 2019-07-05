@@ -3,7 +3,6 @@ import fprime from "fprime";
 export enum PanelName {
   Output = "Output",
   Analysis = "Analysis",
-  Editor = "Editor",
 }
 
 export default {
@@ -13,7 +12,7 @@ export default {
      */
     show: false,
     /**
-     * The name of the current panel. Should be either "Output" or "Analysis" or "TextEditor"
+     * The name of the current panel. Should be either "Output" or "Analysis"
      */
     curPanel: PanelName.Output,
     /**
@@ -51,14 +50,5 @@ export default {
     this.showPanel(PanelName.Analysis);
     document.getElementById("msg-analysis-tab")!.firstElementChild!
       .dispatchEvent(new Event("click"));
-  },
-
-  /**
-   * Open the text editor panel
-   */
-  showEditor() {
-    this.showPanel(PanelName.Editor);
-    document.getElementById("msg-editor-tab")!.firstElementChild!
-        .dispatchEvent(new Event("click"));
   },
 };

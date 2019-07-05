@@ -107,7 +107,7 @@ export default class ViewManager {
   /**
    * The output message to show on the output panel.
    */
-  private outputMessage = { compile: "", analysis: "", editor: ""};
+  private outputMessage = { compile: "", analysis: "" };
 
   public get OutputMessage() {
     return this.outputMessage;
