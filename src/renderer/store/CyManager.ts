@@ -141,7 +141,7 @@ class CyManager {
           name: layoutConfig.Name,
           stop: () => {
             this.placeAllPort();
-            this.commonFuncEntries();
+            this.commonFuncEntries(render.viewType);
             this.cy!.fit(undefined, 10);
             // Show the viewport again
             this.container!.style.visibility = "visible";
@@ -206,7 +206,7 @@ class CyManager {
           this.cy!.nodes(nodes).layout(layoutOption).run();
         }
       } else {
-        this.commonFuncEntries();
+        this.commonFuncEntries(render.viewType);
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
         // Show the viewport again
@@ -343,14 +343,14 @@ class CyManager {
    *  Being called by CyManager when initiate the graph.
    */
 
-  private commonFuncEntries(): void {
+  private commonFuncEntries(viewType: string): void {
     this.removeInvisibleEdge();
     this.movebackAllPort();
     this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
     this.showComponentInfo();
-    this.enableEgdeHandles();
+    this.enableEgdeHandles(viewType);
     fprime.viewManager.updateViewDescriptorFor(this.viewName,
       this.getDescriptor());
   }
@@ -473,8 +473,15 @@ class CyManager {
         });
   }
 
-  private enableEgdeHandles() {
+  private enableEgdeHandles(viewType: string) {
     if(this.cy) {
+      if(viewType !== "Function View") {
+        var eh = (this.cy! as any).edgehandles();
+        console.log("destroy");
+        
+        if(eh) eh.destroy();
+        return;
+      }
       // the default values of each option are outlined below:
       let defaults = {
         handleNodes: '.fprime-port-out',
