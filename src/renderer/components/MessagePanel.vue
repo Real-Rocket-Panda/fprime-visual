@@ -14,6 +14,7 @@
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Output</span>
       </v-tab>
+      
       <v-tab
         ripple
         id="msg-analysis-tab"
@@ -22,13 +23,30 @@
       >
           <span class="ml-3 mr-3" style="text-transform: none;">Analysis</span>
       </v-tab>
+
+      <v-tab
+        ripple
+        id="msg-editor-tab"
+        :key="editor"
+        @click="editorPanel"
+      >
+          <span class="ml-3 mr-3" style="text-transform: none;">Editor</span>
+      </v-tab>
+      
       <v-tab :style="{ display: 'none' }"></v-tab>
+
       <v-tab-item :key="output">
         <p>{{ compilerOutput }}</p>
       </v-tab-item>
+
       <v-tab-item :key="analysis">
         <p>{{ analysisOutput }}</p>
       </v-tab-item>
+
+      <v-tab-item :key="editor">
+        <text-editor></text-editor>
+      </v-tab-item>
+
     </v-tabs>
   </div>
 </template>
@@ -36,16 +54,30 @@
 <script lang="ts">
 import Vue from "vue";
 import panel, { PanelName } from "@/store/panel";
+import TextEditor from "./TextEditor.vue";
+// require component
+const codemirror = require('vue-codemirror');
+Vue.use(codemirror);
+// require styles
+import 'codemirror/lib/codemirror.css'
+
 
 export default Vue.extend({
   props: ["offset"],
   name: "message-panel",
+  components: {
+    codemirror,
+    TextEditor,
+  },
   methods: {
     outputPanel() {
       this.state.curPanel = PanelName.Output;
     },
     analysisPanel() {
       this.state.curPanel = PanelName.Analysis;
+    },
+    editorPanel() {
+      this.state.curPanel = PanelName.Editor;
     },
     onResize() {
       this.panelWidth = this.$el.parentElement!.clientWidth;
@@ -62,6 +94,7 @@ export default Vue.extend({
       curtab: 2,
       output: PanelName.Output,
       analysis: PanelName.Analysis,
+      editor: PanelName.Editor,
       panelWidth: 0,
     };
   },
@@ -74,7 +107,10 @@ export default Vue.extend({
     },
     analysisOutput(): string {
       return this.state.outputMessage.analysis;
-    }
+    },
+    editorOutput(): string {
+      return this.state.outputMessage.editor;
+    },
   }
 });
 </script>
