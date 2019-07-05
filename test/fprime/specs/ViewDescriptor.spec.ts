@@ -188,10 +188,9 @@ describe("ViewDescriptor", () => {
         .to.equal(edges[key].from.id + "-" + edges[key].to.id);
     });
 
-    expect(ViewDescriptor.buildFrom(mockModel, "")).to.deep.equal({
+    expect(ViewDescriptor.buildFrom(mockModel)).to.deep.equal({
       descriptor: {},
       graph,
-      viewType: "",
     });
   });
 

@@ -202,28 +202,19 @@ export default class ViewManager {
   public render(viewName: string, filterPorts?: boolean,
                 forceLayout: boolean = false): IRenderJSON | null {
     // Check if the name is in the view list
-    const viewType = Object.keys(this.viewList)
-    .find((key) => {
-      return this.viewList[key].filter((i) => {
-        return i.name === viewName;
-      }).length > 0;
-    })
-    console.log("RENDER: find view type " + viewType);
-    
     const views =
       Object.keys(this.viewList)
         .map((key) => this.viewList[key])
         .reduce((x, y) => x.concat(y))
         .map((x) => x.name);
     // No such view
-    if (views.indexOf(viewName) === -1 || viewType == undefined) {
+    if (views.indexOf(viewName) === -1) {
       return null;
     }
     // Find the Cytoscape JSON if already exists.
     if (this.cytoscapeJSONs[viewName] && 
       (filterPorts == undefined || this.filterPorts === filterPorts)) {
       return {
-        viewType: viewType,
         needLayout: forceLayout,
         elesHasPosition: this.cytoscapeJSONs[viewName]
           .elements.nodes.map((i) => i.data.id),
@@ -437,7 +428,7 @@ export default class ViewManager {
       .filter((x) => x.name === viewName)[0];
     const model = this.modelManager.query(view.name, view.type, filterPorts);
     // Generate the graph part of the view descriptor
-    const descriptor = ViewDescriptor.buildFrom(model, view.type);
+    const descriptor = ViewDescriptor.buildFrom(model);
     // Load the styledescriptor part of the view descriptor from file
     const styles = this.styleManager.loadStyleFor(viewName, this.configManager);
     descriptor.CSSStyles = styles;

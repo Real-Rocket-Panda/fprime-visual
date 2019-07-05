@@ -56,9 +56,6 @@ export default Vue.extend({
       event.preventDefault();
     },
     updateContent(name: string, filterPorts?: boolean) {
-      console.log("call update content, name: " + name + 
-      " filterPorts: " + filterPorts);
-      
       var render: IRenderJSON;
       if(filterPorts !== undefined) {
         render = fprime.viewManager.rerender(name, filterPorts);
