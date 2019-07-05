@@ -78,7 +78,7 @@ class CyManager {
    */
   public init(container: HTMLElement) {
     this.container = container;
-    this.cy = cytoscape({ container });
+    this.cy = cytoscape({ container, wheelSensitivity: 0.2 });
     this.cyutil = new CyUtil(this.cy);
     // Setup the resize function
     this.resize();
