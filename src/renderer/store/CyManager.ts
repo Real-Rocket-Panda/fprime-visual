@@ -475,16 +475,9 @@ class CyManager {
 
   private enableEgdeHandles(viewType: string) {
     if(this.cy) {
-      if(viewType !== "Function View") {
-        var eh = (this.cy! as any).edgehandles();
-        console.log("destroy");
-        
-        if(eh) eh.destroy();
-        return;
-      }
       // the default values of each option are outlined below:
       let defaults = {
-        handleNodes: '.fprime-port-out',
+        handleNodes: '.fprime-port-connect',
         edgeType: function( sourceNode:  any , targetNode:  any  ){
           if(sourceNode.hasClass('fprime-port-out') && targetNode.hasClass('fprime-port-in')) {
             return 'flat';
@@ -504,8 +497,7 @@ class CyManager {
         }).update();
       });
       (this.cy! as any) .on('ehcomplete', (event: any, sourceNode: any, targetNode: any, addedEles: any) => {
-        console.log(this.cy!.elements('edge').data());
-        
+        console.log(sourceNode.data());
         
         fprime.viewManager.addConnection(this.viewName, sourceNode.id(), targetNode.id());
       });

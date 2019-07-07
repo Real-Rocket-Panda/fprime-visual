@@ -229,7 +229,7 @@ export default class ViewDescriptor {
       }
     });
 
-    //console.dir(view);
+    // console.dir(view.graph);
     
     return view;
   }
@@ -355,7 +355,7 @@ export default class ViewDescriptor {
               label_hloc: "center",
               label_vloc: "center",
             },
-            classes: this.generateNodeClasses(n),
+            classes: this.generateNodeClasses(n, viewType === "Function View"),
           } as any;
           const s = descriptor["#" + n.id];
           if (s && s.style.x && s.style.y) {
@@ -430,7 +430,7 @@ export default class ViewDescriptor {
    * Generate the classes fields in cytoscape json of each node.
    * @param node The INode in view descriptor
    */
-  private generateNodeClasses(node: INode): string {
+  private generateNodeClasses(node: INode, canConnect: boolean): string {
     const prop = node.properties;
     switch (node.type) {
       case NodeType.Instance: {
@@ -446,6 +446,7 @@ export default class ViewDescriptor {
           prop.type ? `fprime-port-${escapeDot(prop.type)}` : "",
           prop.kind ? `fprime-port-${prop.kind}` : "",
           prop.direction ? `fprime-port-${prop.direction}` : "",
+          canConnect && prop.direction === "out" ? `fprime-port-connect` : "",
         ].filter((i) => i !== "").join(" ");
       }
 

@@ -423,6 +423,10 @@ export default class FPPModelManager {
 
   public addConnection(toponame: string, from_inst: string, from_port: string, 
     to_inst: string, to_port: string): boolean {
+      if(from_inst === to_inst) {
+        console.log("can't drag connection on one instance");
+        return false;
+      }
       const topology = this.topologies.find((i) => i.name === toponame);
       if(topology == undefined) return false;
       
@@ -444,8 +448,6 @@ export default class FPPModelManager {
       }
       
       // query if there are existing connection
-      console.log("iterate connections");
-      
       const res = topology.connections.filter((con) => {
         return con.from.inst.name === from_inst && con.from.port!.name === from_port &&
         con.to!.inst.name === to_inst && con.to!.port!.name === to_port;
