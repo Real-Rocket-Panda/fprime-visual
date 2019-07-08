@@ -490,6 +490,7 @@ export default class FPPModelManager {
       var id = findIndex(topology.connections, (i: IFPPConnection) => {
         return i.from.inst === source || i.to!.inst === source;
       })
+      // generate an empty connection for the instance
       if(id === -1) topology.connections.push(
         {
           from: {
@@ -498,6 +499,7 @@ export default class FPPModelManager {
         }
       );
 
+      // same for target
       id = findIndex(topology.connections, (i: IFPPConnection) => {
         return i.from.inst === target || i.to!.inst === target;
       })

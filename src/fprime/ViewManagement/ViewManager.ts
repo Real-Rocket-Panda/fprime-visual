@@ -258,6 +258,8 @@ export default class ViewManager {
     this.viewDescriptors[viewName] = viewDescriptor;
     // Convert the view descriptor to the render JSON (cytoscape format)
     const json = this.generateRenderJSONFrom(viewDescriptor);
+    // TODO: need to change this
+    json.needLayout = false;
     return json;
   }
 
@@ -441,6 +443,8 @@ export default class ViewManager {
     // Load the styledescriptor part of the view descriptor from file
     const styles = this.styleManager.loadStyleFor(viewName, this.configManager);
     descriptor.CSSStyles = styles;
+    // console.log("style loaded");
+    // console.log(styles);
     return descriptor;
   }
 

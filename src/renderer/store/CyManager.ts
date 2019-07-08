@@ -119,6 +119,7 @@ class CyManager {
    * @param config The config for cytoscape.
    */
   public startUpdate(viewName: string, render: IRenderJSON) {
+    if(!this.container) return;
     this.viewName = viewName;
     // Hide the viewport for usability concern
     this.container!.style.visibility = "hidden";
