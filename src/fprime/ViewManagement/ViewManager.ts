@@ -546,4 +546,12 @@ export default class ViewManager {
       split1[0] + "." + split1[1], split1[2],
       split2[0] + "." + split2[1], split2[2] )
   }
+
+  public removeConnection(view: string, from: string, to: string):  boolean {
+    let split1 = from.split('_', 3);
+    let split2 = to.split('_', 3);
+    return this.modelManager.removeConnection(view, 
+      split1[0] + "." + split1[1], split1[2],
+      split2[0] + "." + split2[1], split2[2] )
+  }
 }

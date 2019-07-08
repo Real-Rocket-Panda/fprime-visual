@@ -508,29 +508,29 @@ class CyManager {
   }
 
   private configMenu() {
+    var module = {viewName: this.viewName};
     var options = {
       menuItems: [
         {
           id: 'remove', // ID of menu item
           content: 'remove', // Display content of menu item
-          tooltipText: 'remove', // Tooltip text for menu item
+          tooltipText: 'remove the connection', // Tooltip text for menu item
           // Filters the elements to have this menu item on cxttap
           // If the selector is not truthy no elements will have this menu item on cxttap
           selector: 'edge', 
           onClickFunction: function (event: any) { // The function to be executed on click
             console.log('remove element');
             var target = event.target || event.cyTarget;
-            console.log(target.data().id)
+            console.log(target.data())
             target.remove();
+            fprime.viewManager.removeConnection(module.viewName, target.data().source, target.data().target);
           },
         },
       ],
       menuItemClasses: ['custom-menu-item'],
       contextMenuClasses: ['custom-context-menu']
     };
-    var instance = (this.cy! as any).contextMenus( options );
-    console.log("menu is active: " + instance.isActive());
-    
+    (this.cy! as any).contextMenus( options );
   }
 
   /**

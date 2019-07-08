@@ -1,6 +1,7 @@
 import IConfig from "../Common/Config";
 import DataImporter, { IOutput } from "../DataImport/DataImporter";
 import fs from 'fs';
+import {remove, findIndex} from 'lodash'
 
 /**
  * 
@@ -449,8 +450,9 @@ export default class FPPModelManager {
       
       // query if there are existing connection
       const res = topology.connections.filter((con) => {
-        return con.from.inst.name === from_inst && con.from.port!.name === from_port &&
-        con.to!.inst.name === to_inst && con.to!.port!.name === to_port;
+        return con.from.port && con.to 
+        && con.from.inst.name === from_inst && con.from.port.name === from_port 
+        && con.to.inst.name === to_inst && con.to.port.name === to_port;
       });
       if(res.length > 0) {
         console.log("existing connection");
@@ -460,6 +462,53 @@ export default class FPPModelManager {
       console.log("new connection");
       console.dir(newConn);
       topology.connections.push(newConn);
+      return true;
+    }
+
+  public removeConnection(toponame: string, from_inst: string, from_port: string, 
+    to_inst: string, to_port: string): boolean {
+      console.log("rm conn topo:" + toponame + " from: " + from_inst + " " + from_port
+        + " to: " + to_inst + " " + to_port);
+      
+      if(from_inst === to_inst) return false;
+      const topology = this.topologies.find((i) => i.name === toponame);
+      if(topology == undefined) return false;
+      
+      const source = this.instances.find((i) => i.name === from_inst);
+      if(source == undefined) return false;
+      
+      const target = this.instances.find((i) => i.name === to_inst);
+      if(target == undefined) return false;
+
+      remove(topology.connections, (i: IFPPConnection) => {
+        return i.from.port && i.to 
+        && i.from.inst === source && i.from.port.name === from_port
+        && i.to.inst === target && i.to.port.name === to_port;
+      });
+      // check if the inst has another conn
+      // if not, keep the inst exist in the topo
+      var id = findIndex(topology.connections, (i: IFPPConnection) => {
+        return i.from.inst === source || i.to!.inst === source;
+      })
+      if(id === -1) topology.connections.push(
+        {
+          from: {
+            inst: source
+          }
+        }
+      );
+
+      id = findIndex(topology.connections, (i: IFPPConnection) => {
+        return i.from.inst === target || i.to!.inst === target;
+      })
+      if(id === -1) topology.connections.push(
+        {
+          from: {
+            inst: target
+          }
+        }
+      );
+
       return true;
     }
 
