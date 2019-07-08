@@ -92,6 +92,7 @@
     "sprintf-js": "^1.1.1",
     "tippy.js": "^2.5.3",
     "vue": "^2.6.10",
+    "vue-codemirror": "^4.0.6",
     "vue-color": "^2.4.6",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.6",
