@@ -79,6 +79,7 @@
     "css": "^2.2.4",
     "cytoscape": "^3.2.13",
     "cytoscape-cola": "^2.2.3",
+    "cytoscape-context-menus": "^3.0.6",
     "cytoscape-cose-bilkent": "^4.0.0",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-edge-bend-editing": "^1.6.1",

@@ -13,6 +13,7 @@ import { CyUtil } from "@/store/CyUtil";
 import fprime from "fprime";
 import Tippy from "tippy.js";
 import popper from "cytoscape-popper";
+import contextMenus from 'cytoscape-context-menus';
 import { IRenderJSON } from "fprime/ViewManagement/ViewDescriptor";
 cytoscape.use(coseBilkent);
 cytoscape.use(cola);
@@ -22,6 +23,7 @@ nodeResize(cytoscape, jquery, konva);
 cytoscape.use(dagre);
 cytoscape.use(popper);
 cytoscape.use(edgehandles);
+contextMenus( cytoscape, jquery ); 
 
 const boundingBoxOpt = {
   includeOverlays: false,
@@ -141,7 +143,7 @@ class CyManager {
           name: layoutConfig.Name,
           stop: () => {
             this.placeAllPort();
-            this.commonFuncEntries(render.viewType);
+            this.commonFuncEntries();
             this.cy!.fit(undefined, 10);
             // Show the viewport again
             this.container!.style.visibility = "visible";
@@ -206,7 +208,7 @@ class CyManager {
           this.cy!.nodes(nodes).layout(layoutOption).run();
         }
       } else {
-        this.commonFuncEntries(render.viewType);
+        this.commonFuncEntries();
         // Manually fit the viewport if the view does not need layout.
         this.cy!.fit(undefined, 10);
         // Show the viewport again
@@ -343,14 +345,15 @@ class CyManager {
    *  Being called by CyManager when initiate the graph.
    */
 
-  private commonFuncEntries(viewType: string): void {
+  private commonFuncEntries(): void {
     this.removeInvisibleEdge();
     this.movebackAllPort();
     this.stickPort();
     this.appendAnalysisStyle();
     this.addTooltips();
     this.showComponentInfo();
-    this.enableEgdeHandles(viewType);
+    this.enableEgdeHandles();
+    this.configMenu();
     fprime.viewManager.updateViewDescriptorFor(this.viewName,
       this.getDescriptor());
   }
@@ -473,7 +476,7 @@ class CyManager {
         });
   }
 
-  private enableEgdeHandles(viewType: string) {
+  private enableEgdeHandles() {
     if(this.cy) {
       // the default values of each option are outlined below:
       let defaults = {
@@ -502,6 +505,32 @@ class CyManager {
         fprime.viewManager.addConnection(this.viewName, sourceNode.id(), targetNode.id());
       });
     }
+  }
+
+  private configMenu() {
+    var options = {
+      menuItems: [
+        {
+          id: 'remove', // ID of menu item
+          content: 'remove', // Display content of menu item
+          tooltipText: 'remove', // Tooltip text for menu item
+          // Filters the elements to have this menu item on cxttap
+          // If the selector is not truthy no elements will have this menu item on cxttap
+          selector: 'edge', 
+          onClickFunction: function (event: any) { // The function to be executed on click
+            console.log('remove element');
+            var target = event.target || event.cyTarget;
+            console.log(target.data().id)
+            target.remove();
+          },
+        },
+      ],
+      menuItemClasses: ['custom-menu-item'],
+      contextMenuClasses: ['custom-context-menu']
+    };
+    var instance = (this.cy! as any).contextMenus( options );
+    console.log("menu is active: " + instance.isActive());
+    
   }
 
   /**

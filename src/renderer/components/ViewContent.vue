@@ -100,4 +100,18 @@ export default Vue.extend({
   height: 100%;
   width: 100%;
 }
+
+.custom-context-menu {
+  z-index: 9999;
+  position: absolute;
+}
+.custom-menu-item {
+  background-color: #eee;
+  padding: 4px;
+  margin: 2px;
+  border-color: rgba(0,0,0,0.14);
+  border-style: solid;
+  font-family: sans-serif;
+  font-size: small;
+}
 </style>
