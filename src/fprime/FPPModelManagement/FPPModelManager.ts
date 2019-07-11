@@ -514,6 +514,23 @@ export default class FPPModelManager {
       return true;
     }
 
+  public removeInstance(toponame: string, instname: string): boolean {
+    console.log("rm instance from the topo");
+    const topology = this.topologies.find((i) => i.name === toponame);
+    if(topology == undefined) return false;
+    
+    const inst = this.instances.find((i) => i.name === instname);
+    if(inst == undefined) return false;
+
+    // delete all related connections contains inst
+    topology.connections = topology.connections.filter((con) => {
+      if(con.from.inst === inst) return false;
+      else if (con.to && con.to.inst === inst) return false;
+      else return true;
+    })
+    return true;
+  }
+
   public updateAttributes(type: string, attrs: {[attrname: string]: string}): boolean {
     // @TODO: daiyi
     this.instances.forEach((i) => {

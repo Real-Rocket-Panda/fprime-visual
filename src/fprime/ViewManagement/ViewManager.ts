@@ -208,7 +208,6 @@ export default class ViewManager {
         return i.name === viewName;
       }).length > 0;
     })
-    console.log("RENDER: find view type " + viewType);
     
     const views =
       Object.keys(this.viewList)
@@ -443,8 +442,6 @@ export default class ViewManager {
     // Load the styledescriptor part of the view descriptor from file
     const styles = this.styleManager.loadStyleFor(viewName, this.configManager);
     descriptor.CSSStyles = styles;
-    // console.log("style loaded");
-    // console.log(styles);
     return descriptor;
   }
 
@@ -557,5 +554,10 @@ export default class ViewManager {
     return this.modelManager.removeConnection(view, 
       split1[0] + "." + split1[1], split1[2],
       split2[0] + "." + split2[1], split2[2] )
+  }
+
+  public removeInstance(view: string, inst_name: string): boolean {
+    // remove instance and all related connection from the model
+    return this.modelManager.removeInstance(view, inst_name);
   }
 }

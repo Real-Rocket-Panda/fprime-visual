@@ -489,18 +489,18 @@ class CyManager {
           else return null;
         }
       };
-      var eh = (this.cy! as any).edgehandles(defaults);
-      (this.cy! as any) .on('ehstart', (event: any, sourceNode: any) => {
+      (this.cy! as any).edgehandles(defaults);
+      (this.cy! as any) .on('ehstart', (_0: any, _1: any) => {
         (this.cy!.style() as any).selector('.fprime-port-in').style({
           'border-color': 'red'
         }).update();
       });
-      (this.cy! as any) .on('ehstop', (event: any, sourceNode: any) => {
+      (this.cy! as any) .on('ehstop', (_0: any, _1: any) => {
         (this.cy!.style() as any).selector('.fprime-port-in').style({
           'border-color': "rgb(158,173,145)"
         }).update();
       });
-      (this.cy! as any) .on('ehcomplete', (event: any, sourceNode: any, targetNode: any, addedEles: any) => {
+      (this.cy! as any) .on('ehcomplete', (_0: any, sourceNode: any, targetNode: any, _3: any) => {
         console.log(sourceNode.data());
         
         fprime.viewManager.addConnection(this.viewName, sourceNode.id(), targetNode.id());
@@ -508,8 +508,12 @@ class CyManager {
     }
   }
 
+  /*
+   * This function config a right-click menu on all the edges and component nodes in function view.
+   * In the menu, a remove function is provided to delete the edge and component nodes directly.
+   */
   private configMenu() {
-    var module = {viewName: this.viewName};
+    var module = {cyManager: this};
     var options = {
       menuItems: [
         {
@@ -518,13 +522,18 @@ class CyManager {
           tooltipText: 'remove the connection', // Tooltip text for menu item
           // Filters the elements to have this menu item on cxttap
           // If the selector is not truthy no elements will have this menu item on cxttap
-          selector: 'edge', 
+          selector: '.fprime-instance, .port-port', 
           onClickFunction: function (event: any) { // The function to be executed on click
-            console.log('remove element');
             var target = event.target || event.cyTarget;
-            console.log(target.data())
-            target.remove();
-            fprime.viewManager.removeConnection(module.viewName, target.data().source, target.data().target);
+            if(target.classes().includes('port-port')) {
+              target.remove();
+              fprime.viewManager.removeConnection(module.cyManager.viewName, target.data().source, target.data().target);
+            } else if (target.classes().includes('fprime-instance')) {
+              fprime.viewManager.removeInstance(module.cyManager.viewName, target.data().label);
+              var render = fprime.viewManager.rerender(module.cyManager.viewName);
+              module.cyManager.startUpdate(module.cyManager.viewName, render);
+              module.cyManager.endUpdate();
+            }
           },
         },
       ],
@@ -539,7 +548,7 @@ class CyManager {
    * @param type
    * @param namespace
    */
-  public cyShowComponentInfo(type: string, namespace: string, name: string, baseid: string):void{
+  public cyShowComponentInfo(_0: string, _1: string, _2: string, _3: string):void{
 
   }
 
@@ -563,7 +572,7 @@ class CyManager {
       });
   }
 
-  public cyUpdateComponentInfo(compName: string, compNameSpace: string):void{
+  public cyUpdateComponentInfo(_0: string, _1: string):void{
 
   }
   private constructHtml(data: any): string {
